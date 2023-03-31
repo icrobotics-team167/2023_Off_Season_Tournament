@@ -14,13 +14,9 @@ public interface TankDriveBase {
 
     void setLowGear();
 
-    void setLowerGear(boolean lowerGear);
-
     boolean isHighGear();
 
     boolean isLowGear();
-
-    boolean isLowerGear();
 
     // Auto
     void stop();
@@ -37,9 +33,4 @@ public interface TankDriveBase {
 
     // Utility
     double metersPerSecondToRPM(double metersPerSecond);
-    
-    void setNonSlowHighGear();
-
-    void setNonSlowLowGear();
-
 }

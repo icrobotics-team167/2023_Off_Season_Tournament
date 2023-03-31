@@ -201,28 +201,6 @@ public class SparkTankDriveBase implements TankDriveBase {
     }
 
     /**
-     * Sets whether or not to move at a slower speed or not.
-     * 
-     * @param lowerGear Whether or not to move at slow mode. true for slower mode,
-     *                  false for normal mode.
-     */
-    @Override
-    public void setLowerGear(boolean lowerGear) {
-        if (lowerGear) {
-            speedMultiplier = slowSpeed;
-            setLowGear();
-        } else {
-            speedMultiplier = normalSpeed;
-            if (nonSlowHighGear) {
-                setHighGear();
-            } else {
-                setLowGear();
-            }
-        }
-        SmartDashboard.putBoolean("SparkTankDriveBase.lowerGear", lowerGear);
-    }
-
-    /**
      * @return Whether or not the drivetrain is on high gear or not.
      */
     @Override
@@ -236,14 +214,6 @@ public class SparkTankDriveBase implements TankDriveBase {
     @Override
     public boolean isLowGear() {
         return !highGear;
-    }
-
-    /**
-     * @return Whether or not the drivetrain is on slow mode or not.
-     */
-    @Override
-    public boolean isLowerGear() {
-        return speedMultiplier != 1;
     }
 
     /**
@@ -357,15 +327,5 @@ public class SparkTankDriveBase implements TankDriveBase {
         }
         SmartDashboard.putNumber("SparkTankDriveBase.voltageMultiplier", output);
         return output;
-    }
-
-    @Override
-    public void setNonSlowHighGear() {
-        nonSlowHighGear = true;
-    }
-
-    @Override
-    public void setNonSlowLowGear() {
-        nonSlowHighGear = false;
     }
 }

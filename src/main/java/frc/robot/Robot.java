@@ -32,7 +32,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotInit() {
-        AutoRoutines defaultRoutine = AutoRoutines.BALANCE_CAUTIOUS;
+        AutoRoutines defaultRoutine = AutoRoutines.NOTHING;
         for (AutoRoutines routine : AutoRoutines.values()) {
             if (routine != defaultRoutine) {
                 autoChooser.addOption(routine.name, routine);
@@ -47,12 +47,6 @@ public class Robot extends TimedRobot {
 
         Controller primaryController = null;
         switch (Config.Settings.PRIMARY_CONTROLLER_TYPE) {
-            case XB:
-                primaryController = new XBController(Config.Ports.PRIMARY_CONTROLLER);
-                break;
-            case PS:
-                primaryController = new PSController(Config.Ports.PRIMARY_CONTROLLER);
-                break;
             case JOYSTICK:
                 primaryController = new ThrustMasterController(Config.Ports.PRIMARY_CONTROLLER);
                 break;
@@ -62,12 +56,6 @@ public class Robot extends TimedRobot {
         }
         Controller secondaryController = null;
         switch (Config.Settings.SECONDARY_CONTROLLER_TYPE) {
-            case XB:
-                secondaryController = new XBController(Config.Ports.SECONDARY_CONTROLLER);
-                break;
-            case PS:
-                secondaryController = new PSController(Config.Ports.SECONDARY_CONTROLLER);
-                break;
             case JOYSTICK:
                 secondaryController = new ThrustMasterController(Config.Ports.SECONDARY_CONTROLLER);
                 break;
@@ -92,7 +80,7 @@ public class Robot extends TimedRobot {
         } else if (primaryController != null && secondaryController == null) {
             controls = new SingleController(primaryController);
         } else if (Config.Settings.PRIMARY_CONTROLLER_TYPE == ControllerType.JOYSTICK) {
-            // If the first contorller is a JOYSTICK type, assume we have three joysticks.
+            // If the first contorller is a JOYSTICK type, assume we have four joysticks.
             controls = new DeltaJoystickController(primaryController, secondaryController, tertiaryController, quaternaryController);
         } else if (primaryController != null && secondaryController != null) {
             controls = new DoubleController(primaryController, secondaryController);

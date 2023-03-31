@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.SPI;
 import frc.robot.routines.Action;
 import frc.robot.subsystems.Subsystems;
-import frc.robot.subsystems.turret.TurretPosition;
 import frc.robot.util.PeriodicTimer;
 import frc.robot.util.MovingAverage;
 import frc.robot.util.PID;
@@ -34,8 +33,6 @@ public class DriveStraight extends Action {
     private double P = 0.01;
     private double I = 0.0;
     private double D = 0.008;
-
-    private TurretPosition targetState = null;
 
     private MovingAverage angleFilter;
 
@@ -71,19 +68,6 @@ public class DriveStraight extends Action {
         angleFilter = new MovingAverage(25, false);
     }
 
-    /**
-     * Modifies DriveStraight to move the arm as well
-     * 
-     * @param target A turret position that the arm wants to move to
-     * @return Returns a new version of DriveStraight that wants to move the arm to
-     *         the target.
-     */
-    public DriveStraight withTurret(TurretPosition target) {
-        targetState = target;
-        turretDone = false;
-        return this;
-    }
-
     public DriveStraight withIntake() {
         runIntake = true;
         return this;
@@ -102,7 +86,6 @@ public class DriveStraight extends Action {
 
     // new code starts here:
     public void periodic() {
-        // SmartDashboard.putBoolean("DriveStraight.intake", this.runIntake);
         if (timeoutSeconds >= 0 && timer.hasElapsed(timeoutSeconds)) { // If the timeout isn't a sentinel value and the
                                                                        // timeout has happened
             // Stop the routine and stop the robot
@@ -118,30 +101,7 @@ public class DriveStraight extends Action {
         pidOutput = MathUtil.clamp(pidOutput, -1, 1);
 
         // Move the robot
-        if (driveDone) {
-            Subsystems.driveBase.stop();
-        } else {
-            driveDone = isDistanceReached();
-            Subsystems.driveBase.tankDrive(speed - pidOutput, speed + pidOutput);
-        }
-
-        // Move the arm if specified to
-        if (targetState != null && !turretDone) {
-            turretDone = Subsystems.turret.moveTo(targetState);
-        } else {
-            Subsystems.turret.stop();
-        }
-
-        if (runIntake) {
-            Subsystems.claw.intake();
-        } else {
-            Subsystems.claw.stop();
-        }
-    }
-
-    @Override
-    public boolean isDone() {
-        return driveDone && turretDone;
+        Subsystems.driveBase.tankDrive(speed - pidOutput, speed + pidOutput);
     }
 
     /**
@@ -151,10 +111,8 @@ public class DriveStraight extends Action {
      * 
      * @return If the target distance has been reached or not
      */
-    private boolean isDistanceReached() {
-        // Calculates whether the drive base has stopped moving by checking how far it
-        // has driven compared
-        // to how far it wants to drive
+    @Override
+    public boolean isDone() {
         double leftEncoderPosition = Subsystems.driveBase.getLeftEncoderPosition();
         double rightEncoderPosition = Subsystems.driveBase.getRightEncoderPosition();
         if (speed > 0) {
@@ -171,8 +129,6 @@ public class DriveStraight extends Action {
     @Override
     public void done() {
         Subsystems.driveBase.stop();
-        Subsystems.turret.stop();
-        Subsystems.claw.stop();
     }
 
 }
