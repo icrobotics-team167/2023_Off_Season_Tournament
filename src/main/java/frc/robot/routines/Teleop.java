@@ -6,11 +6,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Config;
 import frc.robot.controls.controlschemes.ControlScheme;
 import frc.robot.subsystems.*;
-import frc.robot.subsystems.drive.TankDriveBase;
+import frc.robot.subsystems.drive.SwerveDriveBase;
 
 public class Teleop {
     private ControlScheme controls;
-    private TankDriveBase driveBase;
+    private SwerveDriveBase driveBase;
 
     private LimeLight limeLight;
     private AHRS navx = Subsystems.navx;
@@ -23,7 +23,7 @@ public class Teleop {
     }
 
     public void init() {
-        driveBase.resetEncoders();
+        driveBase.resetPosition();
 
     }
 
@@ -32,13 +32,6 @@ public class Teleop {
             driveBase.setHighGear();
         } else if (controls.doSwitchLowGear()) {
             driveBase.setLowGear();
-        }
-        if (Config.Settings.TANK_DRIVE) {
-            driveBase.tankDrive(controls.getTankLeftSpeed(),
-                    controls.getTankRightSpeed());
-        } else {
-            driveBase.arcadeDrive(controls.getArcadeThrottle() * 0.8,
-                    controls.getArcadeWheel() * .5);
         }
 
         if (controls.toggleLimelight()) {

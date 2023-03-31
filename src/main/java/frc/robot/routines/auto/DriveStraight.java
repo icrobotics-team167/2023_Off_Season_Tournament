@@ -18,13 +18,6 @@ public class DriveStraight extends Action {
     private double meters;
     private double speed;
     private double timeoutSeconds;
-    private double leftEncoderInitialPosition;
-    private double rightEncoderInitialPosition;
-
-    private boolean turretDone = true;
-    private boolean driveDone;
-
-    private boolean runIntake = false;
 
     private PeriodicTimer timer;
     private double startAngle;
@@ -60,8 +53,6 @@ public class DriveStraight extends Action {
         meters = Units.inchesToMeters(inches);
         this.speed = speed;
         this.timeoutSeconds = timeoutSeconds;
-        leftEncoderInitialPosition = 0;
-        rightEncoderInitialPosition = 0;
 
         timer = new PeriodicTimer();
 
@@ -69,15 +60,11 @@ public class DriveStraight extends Action {
     }
 
     public DriveStraight withIntake() {
-        runIntake = true;
         return this;
     }
 
     @Override
     public void init() {
-        Subsystems.driveBase.setBrake();
-        leftEncoderInitialPosition = Subsystems.driveBase.getLeftEncoderPosition();
-        rightEncoderInitialPosition = Subsystems.driveBase.getRightEncoderPosition();
         startAngle = navx.getAngle();
         timer.reset();
         pidController = new PID(P, I, D, timer.get(), startAngle);
@@ -101,7 +88,7 @@ public class DriveStraight extends Action {
         pidOutput = MathUtil.clamp(pidOutput, -1, 1);
 
         // Move the robot
-        Subsystems.driveBase.tankDrive(speed - pidOutput, speed + pidOutput);
+        Subsystems.driveBase.drive(pidOutput, speed, 0);
     }
 
     /**
@@ -113,17 +100,8 @@ public class DriveStraight extends Action {
      */
     @Override
     public boolean isDone() {
-        double leftEncoderPosition = Subsystems.driveBase.getLeftEncoderPosition();
-        double rightEncoderPosition = Subsystems.driveBase.getRightEncoderPosition();
-        if (speed > 0) {
-            return leftEncoderPosition - leftEncoderInitialPosition >= meters
-                    || rightEncoderPosition - rightEncoderInitialPosition >= meters;
-        } else if (speed < 0) {
-            return leftEncoderPosition - leftEncoderInitialPosition <= -meters
-                    || rightEncoderPosition - rightEncoderInitialPosition <= -meters;
-        } else {
-            return true;
-        }
+        // TODO: Implement isDone()
+        throw new UnsupportedOperationException("Unimplemented method \"isDone\"");
     }
 
     @Override

@@ -40,14 +40,8 @@ public class NullController extends ControlScheme {
         return false;
     }
 
-    // @Override
-    public boolean doLimitOverride() {
-        return false;
-    }
-
     @Override
     public boolean toggleLimelight() {
-        // TODO Auto-generated method stub
         return false;
     }
 }

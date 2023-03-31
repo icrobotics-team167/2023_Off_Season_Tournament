@@ -74,14 +74,14 @@ public class Robot extends TimedRobot {
             quaternaryController = new ThrustMasterController(Config.Ports.QUATERNARY_CONTROLLER);
         }
 
-
         if (primaryController == null && secondaryController == null) {
             controls = new NullController();
         } else if (primaryController != null && secondaryController == null) {
             controls = new SingleController(primaryController);
         } else if (Config.Settings.PRIMARY_CONTROLLER_TYPE == ControllerType.JOYSTICK) {
             // If the first contorller is a JOYSTICK type, assume we have four joysticks.
-            controls = new DeltaJoystickController(primaryController, secondaryController, tertiaryController, quaternaryController);
+            controls = new DeltaJoystickController(primaryController, secondaryController, tertiaryController,
+                    quaternaryController);
         } else if (primaryController != null && secondaryController != null) {
             controls = new DoubleController(primaryController, secondaryController);
         } else {
@@ -116,9 +116,8 @@ public class Robot extends TimedRobot {
     public void autonomousInit() {
         auto = autoChooser.getSelected().actions;
         limeLight.setVisionMode();
-        Subsystems.driveBase.resetEncoders();
+        Subsystems.driveBase.resetPosition();
         Subsystems.driveBase.setLowGear();
-        Subsystems.driveBase.setBrake();
         auto.exec();
         // System.out.println("Auto selected: " + autoChooser.getSelected().name);
     }

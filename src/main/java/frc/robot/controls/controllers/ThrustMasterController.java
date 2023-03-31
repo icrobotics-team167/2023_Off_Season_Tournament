@@ -2,7 +2,6 @@ package frc.robot.controls.controllers;
 
 import edu.wpi.first.wpilibj.Joystick;
 
-//TODO: Implement deadzones for these controllers
 public class ThrustMasterController implements Controller {
     Joystick joystick;
     private int port;
