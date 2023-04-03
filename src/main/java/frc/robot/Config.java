@@ -28,11 +28,6 @@ public class Config {
     }
 
     public static final class Tolerances {
-
-        // Threshold for a controller trigger to count as pressed (on XB controllers
-        // only)
-        public static final double XB_TRIGGER_PRESSED_THRESHOLD = 0.5;
-
         // Primary controller deadzone size
         public static final double PRIMARY_CONTROLLER_DEADZONE_SIZE = 0.125;
 
@@ -50,9 +45,9 @@ public class Config {
 
         // Controllers
         public static final int PRIMARY_CONTROLLER = 0;
-        public static final int SECONDARY_CONTROLLER = 1; // if applicable
-        public static final int TERTIARY_CONTROLLER = 2; // if applicable
-        public static final int QUATERNARY_CONTROLLER = 3; // if applicable
+        public static final int SECONDARY_CONTROLLER = 1;
+        public static final int TERTIARY_CONTROLLER = 2;
+        public static final int QUATERNARY_CONTROLLER = 3;
 
 
         // main control system components
