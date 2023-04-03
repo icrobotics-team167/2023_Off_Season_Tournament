@@ -1,5 +1,6 @@
 package frc.robot.util;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class PID {
@@ -7,8 +8,8 @@ public class PID {
     private double proportionalCoefficient = 0.0;
     private double integralCoeficcient = 0.0;
     private double derivativeCoefficient = 0.0;
-
-    private double initialControlOutput;
+    private double derivativePower = 1.0;
+    private double minDerivativeError = 180;
 
     private double lastTime;
     private double lastError;
@@ -35,11 +36,12 @@ public class PID {
      */
     public PID(double proportionalCoefficient, double integralCoefficient, double derivativeCoefficient, double time,
             double target) {
-        this(proportionalCoefficient, integralCoefficient, derivativeCoefficient, time, target, 0);
+        this(proportionalCoefficient, integralCoefficient, derivativeCoefficient, 0, 180, time, target);
     }
 
     /**
-     * Constructs a new PID controller instance.
+     * Constructs a new PID controller instance, with a dynamic derivative
+     * coefficient.
      * 
      * @param proportionalCoefficient Proportional value. If you're not at the
      *                                target angle, get there. Higher values make it
@@ -48,20 +50,30 @@ public class PID {
      *                                the target angle, (AKA the bigger the sum
      *                                of the error) get there faster. Higher values
      *                                increase the speed at which it accelerates.
-     * @param derivativeCoefficient   Derivative value. If you're getting there too
-     *                                fast or too slow, adjust the speed. Higher
-     *                                values adjust more aggressively.
+     * @param derivativeCoefficient   The max derivative value. If you're getting
+     *                                there too fast or too slow, adjust the speed.
+     *                                Higher values adjust more aggressively. The
+     *                                lower the error to the target, the more the
+     *                                dampening takes effect.
+     * @param derivativePower         How much to dampen, depending on the error.
+     *                                Higher values make it so that dampening only
+     *                                has a noticable effect closer to the target.
+     *                                Setting this to 0 makes it so that the
+     *                                derivative stays constant.
+     *                                Going above ~20 is not recommended.
+     * @param minDerivativeError      The error value in which, if the error becomes
+     *                                greater than this, the derivative coefficient
+     *                                becomes 0.
      * @param time                    The current time. Used to calulate delta time.
      * @param target                  The target for the PID controller.
-     * @param initControlOut          The initial control input when transitioning
-     *                                from manual input. Probably shouldn't use.
      */
-    public PID(double proportionalCoefficient, double integralCoefficient, double derivativeCoefficient, double time,
-            double target, double initControlOut) {
+    public PID(double proportionalCoefficient, double integralCoefficient, double derivativeCoefficient,
+            double derivativePower, double minDerivativeError, double time, double target) {
         this.proportionalCoefficient = proportionalCoefficient;
         this.integralCoeficcient = integralCoefficient;
         this.derivativeCoefficient = derivativeCoefficient;
-        initialControlOutput = initControlOut;
+        this.derivativePower = derivativePower;
+        this.minDerivativeError = minDerivativeError;
         lastTime = time;
         lastError = 0.0;
         errorSum = 0.0;
@@ -90,9 +102,12 @@ public class PID {
         // Calculate the values for the proportional, the integral, and the deriative
         double proportional = currentError * proportionalCoefficient;
         double integral = integralCoeficcient * errorSum;
-        double derivative = (-1) * derivativeCoefficient * (deltaError);
+        double derivative = derivativeCoefficient
+                * -MathUtil.clamp(
+                        Math.pow((minDerivativeError - Math.abs(deltaError)) / minDerivativeError, derivativePower), 0,
+                        1);
 
-        double output = proportional + integral + derivative + initialControlOutput;
+        double output = proportional + integral + derivative;
         lastError = currentError;
         lastTime = currentTime;
 
