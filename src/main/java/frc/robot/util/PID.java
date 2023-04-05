@@ -8,7 +8,7 @@ public class PID {
     private double proportionalCoefficient = 0.0;
     private double integralCoeficcient = 0.0;
     private double derivativeCoefficient = 0.0;
-    private double derivativePower = 1.0;
+    private double derivativePower = 0.0;
     private double minDerivativeError = 180;
 
     private double lastTime;
@@ -91,9 +91,6 @@ public class PID {
     public double compute(double currentValue, double currentTime) {
         double currentError = target - currentValue;
         double deltaError = lastError - currentError;
-        if (Math.abs(deltaError) > 1) {
-            deltaError = 0;
-        }
         // double deltaTime = currentTime - lastTime;
 
         // Adds current error to errorSum for integral calculations
@@ -132,5 +129,14 @@ public class PID {
      */
     public void resetIntegralSum() {
         errorSum = 0.0;
+    }
+
+    /**
+     * Sets the target.
+     * @param target The new target
+     */
+    public void setTarget(double target) {
+        errorSum = 0.0;
+        this.target = target;
     }
 }
