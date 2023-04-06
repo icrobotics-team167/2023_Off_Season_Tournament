@@ -1,15 +1,14 @@
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.controls.controllers.ControllerType;
 
 public class Config {
 
     public static final class Settings {
 
-        // Control Scheme
-        public static final boolean TANK_DRIVE = false;
-
-        public static final boolean EXPONENTIAL_JOYSTICKS = false;
+        // Joysticks
+        public static final boolean EXPONENTIAL_JOYSTICKS = true;
         public static final double JOYSTICKS_EXPONENT = 2;
 
         // Controllers
@@ -17,7 +16,6 @@ public class Config {
         public static final ControllerType SECONDARY_CONTROLLER_TYPE = ControllerType.JOYSTICK;
         public static final ControllerType TERTIARY_CONTROLLER_TYPE = ControllerType.JOYSTICK;
         public static final ControllerType QUATERNARY_CONTROLLER_TYPE = ControllerType.JOYSTICK;
-
 
         // Dead zones
         public static final boolean PRIMARY_DEADZONE_ENABLED = true;
@@ -49,48 +47,40 @@ public class Config {
         public static final int TERTIARY_CONTROLLER = 2;
         public static final int QUATERNARY_CONTROLLER = 3;
 
-
         // main control system components
         // public static final int RoboRio = 0
         // public static final int PDP = 1
         // public static final int PH = 2
 
         // Spark tank motor controller ports
-        public static final class SparkTank {
+        public static final class SwerveDrive {
             // Pneumatics Control Hub CAN Address
             public static final int PH = 2;
 
             // Drivebase CAN bus Addresses
-            public static final int LEFT_1 = 6;
-            public static final int LEFT_2 = 7;
-            public static final int LEFT_3 = 8;
-            public static final int RIGHT_1 = 3;
-            public static final int RIGHT_2 = 4;
-            public static final int RIGHT_3 = 5;
+            public static final int FRONT_LEFT_DRIVE = 1;
+            public static final int FRONT_LEFT_TURN = 2;
+            public static final int FRONT_RIGHT_DRIVE = 3;
+            public static final int FRONT_RIGHT_TURN = 4;
+            public static final int BACK_LEFT_DRIVE = 5;
+            public static final int BACK_LEFT_TURN = 6;
+            public static final int BACK_RIGHT_DRIVE = 7;
+            public static final int BACK_RIGHT_TURN = 8;
+
+            public static final Translation2d FRONT_LEFT_POS = new Translation2d(0, 0);
+            public static final Translation2d FRONT_RIGHT_POS = new Translation2d(0, 0);
+            public static final Translation2d BACK_LEFT_POS = new Translation2d(0, 0);
+            public static final Translation2d BACK_RIGHT_POS = new Translation2d(0, 0);
+
+            public static final int FRONT_LEFT_ENCODER_PORT = 1;
+            public static final int FRONT_RIGHT_ENCODER_PORT = 2;
+            public static final int BACK_LEFT_ENCODER_PORT = 3;
+            public static final int BACK_RIGHT_ENCODER_PORT = 4;
 
             // Pneumatic Hub Ports
             // Drivebase PH Ports
             public static final int LOW_GEAR = 1; // shifter cylinder out = high gear
         }
-
-        public static final class Arm {
-            // Arm CAN bus Addresses
-            // TEMPORARY VALUES
-            public static final int EXTEND_RETRACT = 12;
-            public static final int SWIVEL = 9;
-            public static final int PIVOT_1 = 10;
-            public static final int PIVOT_2 = 11;
-            public static final int CLAW = 13;
-
-            // public static final int CLOSE_CLAW = 2;
-
-            // Digital Limit Switches
-            // Temporary Values
-            public static final int EXTEND_RETRACT_SWITCH = 0;
-            public static final int SWIVEL_SWITCH = 1;
-            public static final int PIVOT_SWITCH = 2;
-        }
-
     }
 
 }
