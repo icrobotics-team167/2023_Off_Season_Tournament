@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.util.MathUtils;
 import frc.robot.util.PID;
 import frc.robot.util.PeriodicTimer;
@@ -18,9 +19,10 @@ public class SwerveModule {
     private final CANSparkMax driveMotor;
     private final CANSparkMax turnMotor;
     private final DutyCycleEncoder turnEncoder;
+    private final int turnEncoderPort;
 
     public PID turnPID;
-    public final double turnP = 1.0 / 180.0;
+    public final double turnP = 1.0 / 90.0;
     public final double turnI = 0;
     public final double turnD = 0.5;
     public final double turnDPower = 15;
@@ -32,6 +34,7 @@ public class SwerveModule {
         this.turnMotor = new CANSparkMax(turnMotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
 
         this.turnEncoder = new DutyCycleEncoder(turnEncoderDIOPort); // Assumes we're using a absolute encoder
+        this.turnEncoderPort = turnEncoderDIOPort;
 
         driveMotor.setSmartCurrentLimit(60);
         driveMotor.setSecondaryCurrentLimit(80);
@@ -46,19 +49,18 @@ public class SwerveModule {
     /**
      * Moves the swerve module.
      * 
-     * <p>NOTE: Although the name of the speed parameter in SwerveModuleState is
-     * "speedMetersPerSecond," the speed variable uses a speed from -1 to 1 (I'm too
-     * lazy to make a m/s to power percentage method)
-     * 
      * @param state The desired SwerveModuleState
      */
     public void move(SwerveModuleState state) {
-        // TODO: Find out if turnEncoder.getAbsolutePosition is from 0 to 360 or -180 to 180
-        state = SwerveModuleState.optimize(state, new Rotation2d(turnEncoder.getAbsolutePosition()));
+        // TODO: Find out if turnEncoder.getAbsolutePosition is from 0 to 360 or -180 to
+        // 180
+        state = SwerveModuleState.optimize(state, new Rotation2d(getAngle()));
         turnPID.setTarget(state.angle.getDegrees());
         turnMotor.set(turnPID.compute(turnEncoder.getAbsolutePosition(), pidTimer.get()));
-        state.speedMetersPerSecond = MathUtil.clamp(state.speedMetersPerSecond, -1, 1);
-        driveMotor.set(state.speedMetersPerSecond);
+        driveMotor.set(speedMetersPerSecondToMotorPower(state.speedMetersPerSecond));
+
+        SmartDashboard.putNumber("Module " + turnEncoderPort + " current angle", getAngle());
+        SmartDashboard.putNumber("Module " + turnEncoderPort + " desired angle", state.angle.getDegrees());
     }
 
     public void stop() {
@@ -72,5 +74,15 @@ public class SwerveModule {
 
     public double getAngle() {
         return turnEncoder.getAbsolutePosition();
+    }
+
+    public SwerveModuleState getState() {
+        // TODO: Implement getState()
+        throw new UnsupportedOperationException("Unimplemented method \"getState\"");
+    }
+
+    private double speedMetersPerSecondToMotorPower(double speedMetersPerSecond) {
+        // TODO: Implement speedMetersPerSecondToMotorPower()
+        throw new UnsupportedOperationException("Unimplemented method \"speedMetersPerSecondToMotorPower\"");
     }
 }
