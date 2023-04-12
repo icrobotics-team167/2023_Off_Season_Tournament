@@ -7,10 +7,10 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.*;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.util.PeriodicTimer;
-import frc.robot.util.PID;
 
 public class SwerveModule {
     private final CANSparkMax driveMotor;
@@ -19,11 +19,10 @@ public class SwerveModule {
     private final DutyCycleEncoder turnEncoder;
     private final int turnEncoderPort;
 
-    private PID turnPID;
+    private PIDController turnPID;
     private final double TURN_P = 1.0 / 90.0;
     private final double TURN_I = 0;
     private final double TURN_D = 0.5;
-    private final double TURN_D_POWER = 15;
     private PeriodicTimer pidTimer;
 
     private double distanceDrivenMeters;
@@ -44,7 +43,7 @@ public class SwerveModule {
 
         pidTimer = new PeriodicTimer();
         pidTimer.reset();
-        turnPID = new PID(TURN_P, TURN_I, TURN_D, TURN_D_POWER, 180, pidTimer.get(), 0);
+        turnPID = new PIDController(TURN_P, TURN_I, TURN_D);
 
         distanceDrivenMeters = 0;
     }
@@ -55,11 +54,16 @@ public class SwerveModule {
      * @param state The desired SwerveModuleState
      */
     public void move(SwerveModuleState state) {
+        // Optimize the module state
         state = SwerveModuleState.optimize(state, Rotation2d.fromDegrees(getAngle()));
-        turnPID.setTarget(state.angle.getDegrees());
-        turnMotor.set(turnPID.compute(getAngle(), pidTimer.get()));
+        // Calculate a PID for the turn motor, clamp the pid to -1/1, and set the motor
+        // power to that
+        turnMotor.set(MathUtil.clamp(turnPID.calculate(getAngle(), state.angle.getDegrees()), -1, 1));
+        // Calculate rive motor power from a speed in m/s, and set the motor power to
+        // that
         driveMotor.set(speedMetersPerSecondToMotorPower(state.speedMetersPerSecond));
 
+        // Calculate distance driven by the module for odometry/kinematics
         distanceDrivenMeters = motorEncoderToMeters(driveEncoder.getPosition());
 
         SmartDashboard.putNumber("Module " + turnEncoderPort + " current angle", getAngle());
