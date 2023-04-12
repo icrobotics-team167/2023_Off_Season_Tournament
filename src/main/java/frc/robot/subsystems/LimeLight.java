@@ -126,9 +126,8 @@ public class LimeLight {
 
     /**
      * If a valid target exists, gets its size on the LimeLight's FOV
-     * TODO: Figure out if the min/max is 0-1 or 0-100
      * 
-     * @return The size of the target, from 0 (No target) to 1/100 (Target takes up
+     * @return The size of the target, from 0 (No target) to 100 (Target takes up
      *         the entire FOV)
      */
     public double getTargetAreaOfVision() {

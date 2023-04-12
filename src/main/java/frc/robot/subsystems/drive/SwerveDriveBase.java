@@ -30,14 +30,14 @@ public class SwerveDriveBase {
 
     private SwerveDriveBase() {
         modules = new SwerveModule[] {
-                new SwerveModule(Config.Ports.SwerveDrive.FRONT_LEFT_POS, Config.Ports.SwerveDrive.FRONT_LEFT_DRIVE,
-                        Config.Ports.SwerveDrive.FRONT_LEFT_TURN, Config.Ports.SwerveDrive.FRONT_LEFT_ENCODER_PORT),
-                new SwerveModule(Config.Ports.SwerveDrive.FRONT_RIGHT_POS, Config.Ports.SwerveDrive.FRONT_RIGHT_DRIVE,
-                        Config.Ports.SwerveDrive.FRONT_RIGHT_TURN, Config.Ports.SwerveDrive.FRONT_RIGHT_ENCODER_PORT),
-                new SwerveModule(Config.Ports.SwerveDrive.BACK_LEFT_POS, Config.Ports.SwerveDrive.BACK_LEFT_DRIVE,
-                        Config.Ports.SwerveDrive.BACK_LEFT_TURN, Config.Ports.SwerveDrive.BACK_LEFT_ENCODER_PORT),
-                new SwerveModule(Config.Ports.SwerveDrive.BACK_RIGHT_POS, Config.Ports.SwerveDrive.BACK_RIGHT_DRIVE,
-                        Config.Ports.SwerveDrive.BACK_RIGHT_TURN, Config.Ports.SwerveDrive.BACK_RIGHT_ENCODER_PORT),
+                new SwerveModule(Config.Ports.SwerveDrive.FRONT_LEFT_DRIVE, Config.Ports.SwerveDrive.FRONT_LEFT_TURN,
+                        Config.Ports.SwerveDrive.FRONT_LEFT_ENCODER),
+                new SwerveModule(Config.Ports.SwerveDrive.FRONT_RIGHT_DRIVE, Config.Ports.SwerveDrive.FRONT_RIGHT_TURN,
+                        Config.Ports.SwerveDrive.FRONT_RIGHT_ENCODER),
+                new SwerveModule(Config.Ports.SwerveDrive.BACK_LEFT_DRIVE, Config.Ports.SwerveDrive.BACK_LEFT_TURN,
+                        Config.Ports.SwerveDrive.BACK_LEFT_ENCODER),
+                new SwerveModule(Config.Ports.SwerveDrive.BACK_RIGHT_DRIVE, Config.Ports.SwerveDrive.BACK_RIGHT_TURN,
+                        Config.Ports.SwerveDrive.BACK_RIGHT_ENCODER),
         };
         modulePositions = new SwerveModulePosition[] {
                 new SwerveModulePosition(),
@@ -50,7 +50,7 @@ public class SwerveDriveBase {
                 Config.Ports.SwerveDrive.FRONT_RIGHT_POS,
                 Config.Ports.SwerveDrive.BACK_LEFT_POS,
                 Config.Ports.SwerveDrive.BACK_RIGHT_POS);
-        odometry = new SwerveDriveOdometry(kinematics, new Rotation2d(0), modulePositions);
+        odometry = new SwerveDriveOdometry(kinematics, new Rotation2d(), modulePositions);
     }
 
     /**
@@ -64,34 +64,26 @@ public class SwerveDriveBase {
      *                      negative is counterclockwise.
      */
     public void drive(double xSpeed, double ySpeed, double rotationSpeed) {
-        // TODO: Implement drive()
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, rotationSpeed);
         SwerveModuleState[] moduleStates = kinematics.toSwerveModuleStates(chassisSpeeds);
 
         for (int i = 0; i < modules.length; i++) {
             modules[i].move(moduleStates[i]);
+            modulePositions[i] = modules[i].getPosition();
         }
 
-        odometry.update(new Rotation2d(Units.degreesToRadians(Subsystems.navx.getAngle())), modulePositions);
-        throw new UnsupportedOperationException("Unimplemented method \"drive\"");
+        odometry.update(Rotation2d.fromDegrees(Subsystems.navx.getAngle()), modulePositions);
     }
 
     public void stop() {
         drive(0, 0, 0);
     }
 
-    public void setLowGear() {
-        // TODO: Implement setLowGear()
-        throw new UnsupportedOperationException("Unimplemented method \"setLowGear\"");
-    }
-
-    public void setHighGear() {
-        // TODO: Implement setHighGear()
-        throw new UnsupportedOperationException("Unimplemented method \"setHighGear\"");
-    }
-
     public void resetPosition() {
-        // TODO: Implement resetPosition()
-        throw new UnsupportedOperationException("Unimplemented method \"resetPosition\"");
+        for (int i = 0; i < modules.length; i++) {
+            modules[i].resetPosition();
+            modulePositions[i] = modules[i].getPosition();
+        }
+        odometry.update(Rotation2d.fromDegrees(Subsystems.navx.getAngle()), modulePositions);
     }
 }

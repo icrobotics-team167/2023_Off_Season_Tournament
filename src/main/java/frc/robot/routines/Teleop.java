@@ -28,11 +28,6 @@ public class Teleop {
     }
 
     public void periodic() {
-        if (controls.doSwitchHighGear()) {
-            driveBase.setHighGear();
-        } else if (controls.doSwitchLowGear()) {
-            driveBase.setLowGear();
-        }
 
         if (controls.toggleLimelight()) {
             limeLight.toggleMode();

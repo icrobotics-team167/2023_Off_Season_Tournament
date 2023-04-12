@@ -43,8 +43,6 @@ public class Robot extends TimedRobot {
         }
         SmartDashboard.putData("Autonomous Routines", autoChooser);
 
-        Subsystems.driveBase.setLowGear();
-
         Controller primaryController = null;
         switch (Config.Settings.PRIMARY_CONTROLLER_TYPE) {
             case JOYSTICK:
@@ -117,7 +115,6 @@ public class Robot extends TimedRobot {
         auto = autoChooser.getSelected().actions;
         limeLight.setVisionMode();
         Subsystems.driveBase.resetPosition();
-        Subsystems.driveBase.setLowGear();
         auto.exec();
         // System.out.println("Auto selected: " + autoChooser.getSelected().name);
     }
@@ -131,7 +128,6 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         teleop.init();
         limeLight.setCameraMode();
-        Subsystems.driveBase.setHighGear();
     }
 
     @Override
