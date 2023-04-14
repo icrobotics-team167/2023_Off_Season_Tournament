@@ -24,39 +24,22 @@ public class DeltaJoystickController extends ControlScheme {
     }
 
     @Override
-    public double getTankLeftSpeed() {
-
-        return 0;
-    }
-
-    @Override
-    public double getTankRightSpeed() {
-
-        return 0;
-    }
-
-    @Override
-    public double getArcadeThrottle() {
-        return Math.abs(primary.getLeftStickY()) >= Config.Tolerances.PRIMARY_CONTROLLER_DEADZONE_SIZE
-                ? primary.getLeftStickY()
+    public double getSwerveX() {
+        return primary.getLeftStickX() >= Config.Tolerances.PRIMARY_CONTROLLER_DEADZONE_SIZE ? primary.getLeftStickX()
                 : 0;
     }
 
     @Override
-    public double getArcadeWheel() {
-        return -(Math.abs(secondary.getLeftStickX()) >= Config.Tolerances.SECONDARY_CONTROLLER_DEADZONE_SIZE
+    public double getSwerveY() {
+        return primary.getLeftStickY() >= Config.Tolerances.PRIMARY_CONTROLLER_DEADZONE_SIZE ? primary.getLeftStickY()
+                : 0;
+    }
+
+    @Override
+    public double getSwerveTurn() {
+        return secondary.getLeftStickX() >= Config.Tolerances.PRIMARY_CONTROLLER_DEADZONE_SIZE
                 ? secondary.getLeftStickX()
-                : 0);
-    }
-
-    @Override
-    public boolean doSwitchLowGear() {
-        return primary.getLeftTrigger();
-    }
-
-    @Override
-    public boolean doSwitchHighGear() {
-        return secondary.getLeftTrigger();
+                : 0;
     }
 
     @Override

@@ -11,56 +11,22 @@ public class SingleController extends ControlScheme {
         primary = controller;
     }
 
-    // Drive
-
     @Override
-    public double getTankLeftSpeed() {
-        double speed = primary.getLeftStickY();
-        if (Config.Settings.PRIMARY_DEADZONE_ENABLED
-                && Math.abs(speed) < Math.abs(Config.Tolerances.PRIMARY_CONTROLLER_DEADZONE_SIZE)) {
-            speed = 0;
-        }
-        return speed;
+    public double getSwerveX() {
+        return primary.getLeftStickX() >= Config.Tolerances.PRIMARY_CONTROLLER_DEADZONE_SIZE ? primary.getLeftStickX()
+                : 0;
     }
 
     @Override
-    public double getTankRightSpeed() {
-        double speed = primary.getRightStickY();
-        if (Config.Settings.PRIMARY_DEADZONE_ENABLED
-                && Math.abs(speed) < Math.abs(Config.Tolerances.PRIMARY_CONTROLLER_DEADZONE_SIZE)) {
-            speed = 0;
-        }
-        return speed;
+    public double getSwerveY() {
+        return primary.getLeftStickY() >= Config.Tolerances.PRIMARY_CONTROLLER_DEADZONE_SIZE ? primary.getLeftStickY()
+                : 0;
     }
 
     @Override
-    public double getArcadeThrottle() {
-        double speed = primary.getLeftStickY();
-        if (Config.Settings.PRIMARY_DEADZONE_ENABLED
-                && Math.abs(speed) < Math.abs(Config.Tolerances.PRIMARY_CONTROLLER_DEADZONE_SIZE)) {
-            speed = 0;
-        }
-        return speed;
-    }
-
-    @Override
-    public double getArcadeWheel() {
-        double wheel = primary.getRightStickX();
-        if (Config.Settings.PRIMARY_DEADZONE_ENABLED
-                && Math.abs(wheel) < Math.abs(Config.Tolerances.PRIMARY_CONTROLLER_DEADZONE_SIZE)) {
-            wheel = 0;
-        }
-        return wheel;
-    }
-
-    @Override
-    public boolean doSwitchHighGear() {
-        return primary.getRightTrigger();
-    }
-
-    @Override
-    public boolean doSwitchLowGear() {
-        return primary.getRightBumper();
+    public double getSwerveTurn() {
+        return primary.getRightStickX() >= Config.Tolerances.PRIMARY_CONTROLLER_DEADZONE_SIZE ? primary.getRightStickX()
+                : 0;
     }
 
     @Override

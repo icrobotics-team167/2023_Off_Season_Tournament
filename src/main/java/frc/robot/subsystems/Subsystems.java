@@ -12,8 +12,7 @@ public class Subsystems {
     public static final LimeLight limeLight;
 
     static {
-        // driveBase = SwerveDriveBase.getInstance();
-        driveBase = null;
+        driveBase = SwerveDriveBase.getInstance();
         navx = new AHRS(SPI.Port.kMXP);
         limeLight = LimeLight.getInstance();
     }

@@ -4,20 +4,11 @@ public abstract class ControlScheme {
 
     // Driving (Primary controller)
 
-    // Tank Drive
-    public abstract double getTankLeftSpeed();
+    public abstract double getSwerveX();
 
-    public abstract double getTankRightSpeed();
+    public abstract double getSwerveY();
 
-    // Arcade Drive
-    public abstract double getArcadeThrottle();
-
-    public abstract double getArcadeWheel();
-
-    // Gearing
-    public abstract boolean doSwitchLowGear();
-
-    public abstract boolean doSwitchHighGear();
+    public abstract double getSwerveTurn();
 
     public abstract boolean doSlowMode();
 
