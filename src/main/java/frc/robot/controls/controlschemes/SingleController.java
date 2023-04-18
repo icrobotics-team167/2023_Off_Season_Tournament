@@ -3,10 +3,21 @@ package frc.robot.controls.controlschemes;
 import frc.robot.Config;
 import frc.robot.controls.controllers.Controller;
 
+/**
+ * <p>
+ * A control scheme with 1 game controller.
+ * <p>
+ * Does not have secondary driver functionality due to a lack of buttons.
+ */
 public class SingleController extends ControlScheme {
 
     private Controller primary;
 
+    /**
+     * Constructs a new control scheme with 1 controller.
+     * 
+     * @param controller The controller.
+     */
     public SingleController(Controller controller) {
         primary = controller;
     }

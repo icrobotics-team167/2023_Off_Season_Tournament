@@ -4,6 +4,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Config;
 import frc.robot.controls.controllers.Controller;
 
+/**
+ * <p>
+ * A control scheme with 2 game controllers.
+ * <p>
+ * Usually used with 2 Xbox controllers.
+ */
 public class DoubleController extends ControlScheme {
 
     private Controller primary;

@@ -1,15 +1,9 @@
 package frc.robot.controls.controlschemes;
 
 /**
- * A control scheme where no controller is attached.
+ * A control scheme where no controller is attached. Fallback.
  */
 public class NullController extends ControlScheme {
-    /**
-     * Constructs a new control scheme with no controllers.
-     */
-    public NullController() {
-
-    }
 
     @Override
     public boolean doSlowMode() {

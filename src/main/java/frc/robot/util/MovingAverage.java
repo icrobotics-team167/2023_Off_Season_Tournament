@@ -3,6 +3,10 @@ package frc.robot.util;
 import java.util.LinkedList;
 import java.util.Queue;
 
+/**
+ * A moving average filter, to smooth out noisy inputs such as current draw or
+ * robot pitch.
+ */
 public class MovingAverage {
 
     private final int size;
@@ -10,10 +14,21 @@ public class MovingAverage {
     private Queue<Double> inputs;
 
     /**
-     * Constructs a moving average filter
+     * Constructs a moving average filter.
      * 
-     * @param size     How many ticks to store inputs for
-     * @param weighted Whether or not to weight recent data more
+     * @param size How many ticks to store inputs for. 1 tick = 1/50th of a
+     *             second.
+     */
+    public MovingAverage(int size) {
+        this(size, false);
+    }
+
+    /**
+     * Constructs a moving average filter.
+     * 
+     * @param size     How many ticks to store inputs for. 1 tick = 1/50th of a
+     *                 second.
+     * @param weighted Whether or not to weight recent data more.
      */
     public MovingAverage(int size, boolean weighted) {
         this.size = size;

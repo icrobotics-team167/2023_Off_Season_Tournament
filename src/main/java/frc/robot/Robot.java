@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.controls.controllers.*;
@@ -23,7 +22,6 @@ public class Robot extends TimedRobot {
     private ControlScheme controls;
     private Action auto;
     private Teleop teleop;
-    private Compressor phCompressor;
     private LimeLight limeLight;
 
     public Robot() {
@@ -92,13 +90,6 @@ public class Robot extends TimedRobot {
             controls = new NullController();
         }
 
-        try {
-            phCompressor = new Compressor(2, PneumaticsModuleType.REVPH);
-            phCompressor.enableAnalog(100, 120);
-        } catch (RuntimeException ex) {
-            DriverStation.reportError("Error instantiating compressor: " + ex.getMessage(), true);
-        }
-
         limeLight = LimeLight.getInstance();
 
         Subsystems.setInitialStates();
@@ -107,7 +98,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotPeriodic() {
-        SmartDashboard.putNumber("Robot.phCompressor.pressure", phCompressor.getPressure());
         SmartDashboard.putNumber("Robot.batteryVoltage", RobotController.getBatteryVoltage());
     }
 

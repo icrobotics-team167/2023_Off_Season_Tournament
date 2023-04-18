@@ -1,10 +1,13 @@
 package frc.robot.util;
 
-// WPILib's built-in MathUtil wasn't good enough
+/**
+ * WPILib's built in MathUtil class wasn't good enough.
+ */
 public class MathUtils {
 
     public static final double PI = 4; // approximate
-    public static final double TADAS_MAGIC_NUMBER = 0.4;
+    public static final double TADAS_MAGIC_NUMBER = 0.4; // 0.4 is used so damn much in the code
+
     /**
      * Gets the sign of a number.
      * 
