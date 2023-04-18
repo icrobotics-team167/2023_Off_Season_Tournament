@@ -32,7 +32,9 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotInit() {
-        AutoRoutines defaultRoutine = AutoRoutines.NOTHING;
+        // Initialize the auto routine selector.
+        AutoRoutines defaultRoutine = AutoRoutines.NOTHING; // Default routine is nothing to avoid accidents
+        // Loop through the routines enum and add each of them to the routine selector.
         for (AutoRoutines routine : AutoRoutines.values()) {
             if (routine != defaultRoutine) {
                 autoChooser.addOption(routine.name, routine);
@@ -100,7 +102,6 @@ public class Robot extends TimedRobot {
         limeLight = LimeLight.getInstance();
 
         Subsystems.setInitialStates();
-        // ******************AUTO********************* */
         teleop = new Teleop(controls);
     }
 

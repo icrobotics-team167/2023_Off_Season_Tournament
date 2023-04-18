@@ -52,29 +52,54 @@ public class SwerveDriveBase {
     /**
      * Drives the robot.
      * 
-     * @param xSpeed        Forwards/backwards motion, in meters/second. Positive is
+     * @param xSpeed        Forwards/backwards velocity, in meters/second. Positive
+     *                      is
      *                      forwards, negative is backwards.
-     * @param ySpeed        Left/right motion, in meters/second. Positive is right,
+     * @param ySpeed        Left/right velocity, in meters/second. Positive is
+     *                      right,
      *                      negative is left.
-     * @param rotationSpeed Rotation, in in radians/second. Positive is clockwise,
+     * @param rotationSpeed Rotation velocity, in in radians/second. Positive is
+     *                      clockwise,
      *                      negative is counterclockwise.
      */
     public void drive(double xSpeed, double ySpeed, double rotationSpeed) {
-        ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, rotationSpeed);
+        // Exists so that I don't have to do ChassisSpeed stuff every time
+        drive(new ChassisSpeeds(xSpeed, ySpeed, rotationSpeed));
+    }
+
+    /**
+     * Drives the robot.
+     * 
+     * @param chassisSpeeds The desired motion of the robot, represented as a set of
+     *                      velocities
+     */
+    public void drive(ChassisSpeeds chassisSpeeds) {
+        // Generates desired states for the modules. May not be optimized.
         SwerveModuleState[] moduleStates = kinematics.toSwerveModuleStates(chassisSpeeds);
 
+        // Loop through every module
         for (int i = 0; i < modules.length; i++) {
+            // Move them to the desired state
             modules[i].move(moduleStates[i]);
+            // And update their odometry
             modulePositions[i] = modules[i].getPosition();
         }
 
+        // Update the whole chassis's odometry using the individual module's odometry
         odometry.update(Rotation2d.fromDegrees(Subsystems.navx.getAngle()), modulePositions);
     }
 
+    /**
+     * Stops the robot.
+     * Equivalent to running drive(0, 0, 0).
+     */
     public void stop() {
         drive(0, 0, 0);
     }
 
+    /**
+     * Resets the odometry of the robot.
+     */
     public void resetPosition() {
         for (int i = 0; i < modules.length; i++) {
             modules[i].resetPosition();

@@ -1,8 +1,18 @@
 package frc.robot.controls.controlschemes;
 
+/**
+ * <p>
+ * An abstraction layer for control schemes. See the other control scheme
+ * classes for implementation details.
+ * 
+ * <p>
+ * Implementation classes:
+ * {@link frc.robot.controls.controlschemes.DeltaJoystickController}
+ * {@link frc.robot.controls.controlschemes.NullController}
+ */
 public abstract class ControlScheme {
 
-    // Driving (Primary controller)
+    // Driving (Primary driver's controller)
 
     public abstract double getSwerveX();
 

@@ -67,7 +67,8 @@ public class Config {
             public static final int BACK_RIGHT_DRIVE = 7;
             public static final int BACK_RIGHT_TURN = 8;
 
-            // TODO: Measure positions of modules
+            // TODO: Measure actual positions of modules
+            // Measured in meters
             public static final Translation2d FRONT_LEFT_POS = new Translation2d(0, 0);
             public static final Translation2d FRONT_RIGHT_POS = new Translation2d(0, 0);
             public static final Translation2d BACK_LEFT_POS = new Translation2d(0, 0);

@@ -1,5 +1,6 @@
 package frc.robot.controls.controllers;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 
 public class ThrustMasterController implements Controller {
