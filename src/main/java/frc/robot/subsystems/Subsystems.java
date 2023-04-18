@@ -18,8 +18,6 @@ public class Subsystems {
     }
 
     public static void setInitialStates() {
-        // driveBase.resetEncoders();
-        // driveBase.setHighGear();
     }
 
 }

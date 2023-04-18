@@ -1,6 +1,5 @@
 package frc.robot.controls.controlschemes;
 
-import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.Config;
 import frc.robot.controls.controllers.Controller;
 

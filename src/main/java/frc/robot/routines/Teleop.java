@@ -1,10 +1,8 @@
 package frc.robot.routines;
 
 import com.kauailabs.navx.frc.AHRS;
-
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Config;
 import frc.robot.controls.controlschemes.ControlScheme;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.drive.SwerveDriveBase;
