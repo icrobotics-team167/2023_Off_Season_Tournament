@@ -3,64 +3,41 @@ package frc.robot.controls.controlschemes;
 import frc.robot.Config;
 import frc.robot.controls.controllers.Controller;
 
+/**
+ * <p>
+ * A control scheme with 1 game controller.
+ * <p>
+ * Does not have secondary driver functionality due to a lack of buttons.
+ */
 public class SingleController extends ControlScheme {
 
     private Controller primary;
 
+    /**
+     * Constructs a new control scheme with 1 controller.
+     * 
+     * @param controller The controller.
+     */
     public SingleController(Controller controller) {
         primary = controller;
     }
 
-    // Drive
-
     @Override
-    public double getTankLeftSpeed() {
-        double speed = primary.getLeftStickY();
-        if (Config.Settings.PRIMARY_DEADZONE_ENABLED
-                && Math.abs(speed) < Math.abs(Config.Tolerances.PRIMARY_CONTROLLER_DEADZONE_SIZE)) {
-            speed = 0;
-        }
-        return speed;
+    public double getSwerveX() {
+        return primary.getLeftStickX() >= Config.Tolerances.PRIMARY_CONTROLLER_DEADZONE_SIZE ? primary.getLeftStickX()
+                : 0;
     }
 
     @Override
-    public double getTankRightSpeed() {
-        double speed = primary.getRightStickY();
-        if (Config.Settings.PRIMARY_DEADZONE_ENABLED
-                && Math.abs(speed) < Math.abs(Config.Tolerances.PRIMARY_CONTROLLER_DEADZONE_SIZE)) {
-            speed = 0;
-        }
-        return speed;
+    public double getSwerveY() {
+        return primary.getLeftStickY() >= Config.Tolerances.PRIMARY_CONTROLLER_DEADZONE_SIZE ? primary.getLeftStickY()
+                : 0;
     }
 
     @Override
-    public double getArcadeThrottle() {
-        double speed = primary.getLeftStickY();
-        if (Config.Settings.PRIMARY_DEADZONE_ENABLED
-                && Math.abs(speed) < Math.abs(Config.Tolerances.PRIMARY_CONTROLLER_DEADZONE_SIZE)) {
-            speed = 0;
-        }
-        return speed;
-    }
-
-    @Override
-    public double getArcadeWheel() {
-        double wheel = primary.getRightStickX();
-        if (Config.Settings.PRIMARY_DEADZONE_ENABLED
-                && Math.abs(wheel) < Math.abs(Config.Tolerances.PRIMARY_CONTROLLER_DEADZONE_SIZE)) {
-            wheel = 0;
-        }
-        return wheel;
-    }
-
-    @Override
-    public boolean doSwitchHighGear() {
-        return primary.getRightTrigger();
-    }
-
-    @Override
-    public boolean doSwitchLowGear() {
-        return primary.getRightBumper();
+    public double getSwerveTurn() {
+        return primary.getRightStickX() >= Config.Tolerances.PRIMARY_CONTROLLER_DEADZONE_SIZE ? primary.getRightStickX()
+                : 0;
     }
 
     @Override

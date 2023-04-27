@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.controls.controllers.*;
@@ -23,7 +22,6 @@ public class Robot extends TimedRobot {
     private ControlScheme controls;
     private Action auto;
     private Teleop teleop;
-    private Compressor phCompressor;
     private LimeLight limeLight;
 
     public Robot() {
@@ -32,7 +30,9 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotInit() {
-        AutoRoutines defaultRoutine = AutoRoutines.NOTHING;
+        // Initialize the auto routine selector.
+        AutoRoutines defaultRoutine = AutoRoutines.NOTHING; // Default routine is nothing to avoid accidents
+        // Loop through the routines enum and add each of them to the routine selector.
         for (AutoRoutines routine : AutoRoutines.values()) {
             if (routine != defaultRoutine) {
                 autoChooser.addOption(routine.name, routine);
@@ -42,8 +42,6 @@ public class Robot extends TimedRobot {
 
         }
         SmartDashboard.putData("Autonomous Routines", autoChooser);
-
-        Subsystems.driveBase.setLowGear();
 
         Controller primaryController = null;
         switch (Config.Settings.PRIMARY_CONTROLLER_TYPE) {
@@ -74,14 +72,14 @@ public class Robot extends TimedRobot {
             quaternaryController = new ThrustMasterController(Config.Ports.QUATERNARY_CONTROLLER);
         }
 
-
         if (primaryController == null && secondaryController == null) {
             controls = new NullController();
         } else if (primaryController != null && secondaryController == null) {
             controls = new SingleController(primaryController);
         } else if (Config.Settings.PRIMARY_CONTROLLER_TYPE == ControllerType.JOYSTICK) {
             // If the first contorller is a JOYSTICK type, assume we have four joysticks.
-            controls = new DeltaJoystickController(primaryController, secondaryController, tertiaryController, quaternaryController);
+            controls = new DeltaJoystickController(primaryController, secondaryController, tertiaryController,
+                    quaternaryController);
         } else if (primaryController != null && secondaryController != null) {
             controls = new DoubleController(primaryController, secondaryController);
         } else {
@@ -92,23 +90,14 @@ public class Robot extends TimedRobot {
             controls = new NullController();
         }
 
-        try {
-            phCompressor = new Compressor(2, PneumaticsModuleType.REVPH);
-            phCompressor.enableAnalog(100, 120);
-        } catch (RuntimeException ex) {
-            DriverStation.reportError("Error instantiating compressor: " + ex.getMessage(), true);
-        }
-
         limeLight = LimeLight.getInstance();
 
         Subsystems.setInitialStates();
-        // ******************AUTO********************* */
         teleop = new Teleop(controls);
     }
 
     @Override
     public void robotPeriodic() {
-        SmartDashboard.putNumber("Robot.phCompressor.pressure", phCompressor.getPressure());
         SmartDashboard.putNumber("Robot.batteryVoltage", RobotController.getBatteryVoltage());
     }
 
@@ -116,9 +105,7 @@ public class Robot extends TimedRobot {
     public void autonomousInit() {
         auto = autoChooser.getSelected().actions;
         limeLight.setVisionMode();
-        Subsystems.driveBase.resetEncoders();
-        Subsystems.driveBase.setLowGear();
-        Subsystems.driveBase.setBrake();
+        Subsystems.driveBase.resetPosition();
         auto.exec();
         // System.out.println("Auto selected: " + autoChooser.getSelected().name);
     }
@@ -132,7 +119,6 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         teleop.init();
         limeLight.setCameraMode();
-        Subsystems.driveBase.setHighGear();
     }
 
     @Override

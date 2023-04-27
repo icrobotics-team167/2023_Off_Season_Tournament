@@ -2,6 +2,9 @@ package frc.robot.routines.auto;
 
 import frc.robot.routines.Action;
 
+/**
+ * A null action, as a fallback.
+ */
 public class NullAction extends Action {
 
     @Override

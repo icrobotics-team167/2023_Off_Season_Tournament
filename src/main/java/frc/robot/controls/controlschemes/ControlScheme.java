@@ -1,23 +1,26 @@
 package frc.robot.controls.controlschemes;
 
+/**
+ * <p>
+ * An abstraction layer for control schemes. See the other control scheme
+ * classes for implementation details.
+ * 
+ * <p>
+ * Implementation classes:
+ * {@link frc.robot.controls.controlschemes.DeltaJoystickController}
+ * {@link frc.robot.controls.controlschemes.DoubleController}
+ * {@link frc.robot.controls.controlschemes.SingleController}
+ * {@link frc.robot.controls.controlschemes.NullController}
+ */
 public abstract class ControlScheme {
 
-    // Driving (Primary controller)
+    // Driving (Primary driver's controller)
 
-    // Tank Drive
-    public abstract double getTankLeftSpeed();
+    public abstract double getSwerveX();
 
-    public abstract double getTankRightSpeed();
+    public abstract double getSwerveY();
 
-    // Arcade Drive
-    public abstract double getArcadeThrottle();
-
-    public abstract double getArcadeWheel();
-
-    // Gearing
-    public abstract boolean doSwitchLowGear();
-
-    public abstract boolean doSwitchHighGear();
+    public abstract double getSwerveTurn();
 
     public abstract boolean doSlowMode();
 

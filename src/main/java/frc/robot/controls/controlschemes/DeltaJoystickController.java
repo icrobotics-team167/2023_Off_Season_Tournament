@@ -1,62 +1,57 @@
 package frc.robot.controls.controlschemes;
 
-import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.Config;
 import frc.robot.controls.controllers.Controller;
 
 /**
+ * <p>
+ * A control scheme that uses 4 flightsim joysticks. Default control scheme.
+ * <p>
  * Delta is the fourth Greek letter and we have four joysticks.
  * Q.E.D.
  */
 public class DeltaJoystickController extends ControlScheme {
 
-    private Controller primary;
-    private Controller secondary;
-    private Controller tertiary;
-    private Controller quaternary;
+    private Controller primaryLeft;
+    private Controller primaryRight;
+    private Controller secondaryLeft;
+    private Controller secondaryRight;
 
-    public DeltaJoystickController(Controller primary, Controller secondary, Controller tertiary,
-            Controller quaternary) {
-        this.primary = primary;
-        this.secondary = secondary;
-        this.tertiary = tertiary;
-        this.quaternary = quaternary;
+    /**
+     * Constructs a new control scheme, with 4 flightsim joysticks.
+     * 
+     * @param primaryLeft    The primary driver's left stick.
+     * @param primaryRight   The primary driver's right stick.
+     * @param secondaryLeft  The secondary driver's left stick.
+     * @param secondaryRight The secondary driver's right stick.
+     */
+    public DeltaJoystickController(Controller primaryLeft, Controller primaryRight, Controller secondaryLeft,
+            Controller secondaryRight) {
+        this.primaryLeft = primaryLeft;
+        this.primaryRight = primaryRight;
+        this.secondaryLeft = secondaryLeft;
+        this.secondaryRight = secondaryRight;
     }
 
     @Override
-    public double getTankLeftSpeed() {
-
-        return 0;
-    }
-
-    @Override
-    public double getTankRightSpeed() {
-
-        return 0;
-    }
-
-    @Override
-    public double getArcadeThrottle() {
-        return Math.abs(primary.getLeftStickY()) >= Config.Tolerances.PRIMARY_CONTROLLER_DEADZONE_SIZE
-                ? primary.getLeftStickY()
+    public double getSwerveX() {
+        return primaryLeft.getLeftStickX() >= Config.Tolerances.PRIMARY_CONTROLLER_DEADZONE_SIZE
+                ? primaryLeft.getLeftStickX()
                 : 0;
     }
 
     @Override
-    public double getArcadeWheel() {
-        return -(Math.abs(secondary.getLeftStickX()) >= Config.Tolerances.SECONDARY_CONTROLLER_DEADZONE_SIZE
-                ? secondary.getLeftStickX()
-                : 0);
+    public double getSwerveY() {
+        return primaryLeft.getLeftStickY() >= Config.Tolerances.PRIMARY_CONTROLLER_DEADZONE_SIZE
+                ? primaryLeft.getLeftStickY()
+                : 0;
     }
 
     @Override
-    public boolean doSwitchLowGear() {
-        return primary.getLeftTrigger();
-    }
-
-    @Override
-    public boolean doSwitchHighGear() {
-        return secondary.getLeftTrigger();
+    public double getSwerveTurn() {
+        return primaryRight.getLeftStickX() >= Config.Tolerances.PRIMARY_CONTROLLER_DEADZONE_SIZE
+                ? primaryRight.getLeftStickX()
+                : 0;
     }
 
     @Override
@@ -67,7 +62,7 @@ public class DeltaJoystickController extends ControlScheme {
 
     @Override
     public boolean toggleLimelight() {
-        return secondary.getButtonPressedById(2);
+        return primaryRight.getButtonPressedById(2);
     }
 
 }

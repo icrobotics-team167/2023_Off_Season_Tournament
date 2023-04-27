@@ -1,12 +1,18 @@
 package frc.robot.controls.controllers;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 
-//TODO: Implement deadzones for these controllers
+/**
+ * Flightsim joysticks.
+ */
 public class ThrustMasterController implements Controller {
     Joystick joystick;
     private int port;
 
+    /**
+     * Constructs a flightsim joystick.
+     */
     public ThrustMasterController(int port) {
         joystick = new Joystick(port);
         this.port = port;

@@ -4,11 +4,19 @@ import frc.robot.routines.Action;
 import frc.robot.subsystems.Subsystems;
 import frc.robot.util.PeriodicTimer;
 
+/**
+ * An auto action that does waits for a specified period of time.
+ */
 public class Wait extends Action {
 
     private PeriodicTimer timer;
     private double seconds;
 
+    /**
+     * Constructs an action to wait for a specified period of time.
+     * 
+     * @param seconds The time to wait for, in seconds.
+     */
     public Wait(double seconds) {
         super();
         timer = new PeriodicTimer();

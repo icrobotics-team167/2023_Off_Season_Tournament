@@ -2,6 +2,10 @@ package frc.robot.util;
 
 import edu.wpi.first.wpilibj.Timer;
 
+/**
+ * A timer that uses the RoboRIO's system clock to calculate time for use in
+ * periodic functions.
+ */
 public class PeriodicTimer {
 
     private double startTime;
