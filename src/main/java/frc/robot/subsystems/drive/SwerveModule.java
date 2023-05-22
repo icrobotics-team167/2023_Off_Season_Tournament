@@ -34,7 +34,8 @@ public class SwerveModule {
 
     private final double WHEEL_DIAMETER = 4;
     // Assumes we have a Swerve Drive Specialties MK4i L2
-    private final double GEAR_RATIO = 6.75; // TODO: Figure out the actual module gear ratio
+    // TODO: Figure out the actual module gear ratio since our module is not a MK4i
+    private final double GEAR_RATIO = 6.75;
 
     /**
      * Constructs a new Swerve module.
@@ -127,7 +128,7 @@ public class SwerveModule {
     /**
      * Gets the current angle of the module.
      * 
-     * @return Current angle in degrees
+     * @return Current angle in degrees, from -180 to 180.
      */
     public double getAngle() {
         /*

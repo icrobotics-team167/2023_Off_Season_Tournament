@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import frc.robot.controls.controllers.ControllerType;
 
 /**
@@ -25,6 +26,14 @@ public class Config {
 
         // CPU period (seconds)
         public static final double CPU_PERIOD = 0.02;
+
+        public static final class SwerveDrive {
+            // TODO: Figure out max movement speeds
+            public static final double MAX_MOVE_SPEED = 1.0; // m/s;
+            public static final double MAX_TURN_SPEED = Units.rotationsToRadians(1); // rotations/s
+            public static final double MAX_TURN_ACCEL = 3.0; // Radians/s^2
+            public static final double SLOWMODE_MULT = 0.5; // 50%
+        }
     }
 
     /**
