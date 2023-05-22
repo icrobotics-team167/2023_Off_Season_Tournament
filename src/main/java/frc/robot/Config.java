@@ -85,10 +85,12 @@ public class Config {
 
             // TODO: Measure actual positions of modules
             // Measured in meters
-            public static final Translation2d FRONT_LEFT_POS = new Translation2d(0, 0);
-            public static final Translation2d FRONT_RIGHT_POS = new Translation2d(0, 0);
-            public static final Translation2d BACK_LEFT_POS = new Translation2d(0, 0);
-            public static final Translation2d BACK_RIGHT_POS = new Translation2d(0, 0);
+            public static final double robotLength = Units.inchesToMeters(23 - 2 * 3.25); // 16.5 in
+            public static final double robotWidth = Units.inchesToMeters(23 - 2 * 3.25); // 16.5 in
+            public static final Translation2d FRONT_LEFT_POS = new Translation2d(robotLength / 2.0, robotWidth / 2.0);
+            public static final Translation2d FRONT_RIGHT_POS = new Translation2d(robotLength / 2.0, -robotWidth / 2.0);
+            public static final Translation2d BACK_LEFT_POS = new Translation2d(-robotLength / 2.0, robotWidth / 2.0);
+            public static final Translation2d BACK_RIGHT_POS = new Translation2d(-robotLength / 2.0, -robotWidth / 2.0);
 
             // Duty cycle encoder DIO ports
             public static final int FRONT_LEFT_ENCODER = 1;
