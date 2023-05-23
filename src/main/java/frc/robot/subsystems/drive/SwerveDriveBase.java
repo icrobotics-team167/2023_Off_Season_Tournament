@@ -28,13 +28,13 @@ public class SwerveDriveBase {
     private SwerveDriveBase() {
         modules = new SwerveModule[] {
                 new SwerveModule(Config.Ports.SwerveDrive.FRONT_LEFT_DRIVE, Config.Ports.SwerveDrive.FRONT_LEFT_TURN,
-                        Config.Ports.SwerveDrive.FRONT_LEFT_ENCODER),
+                        0),
                 new SwerveModule(Config.Ports.SwerveDrive.FRONT_RIGHT_DRIVE, Config.Ports.SwerveDrive.FRONT_RIGHT_TURN,
-                        Config.Ports.SwerveDrive.FRONT_RIGHT_ENCODER),
+                        1),
                 new SwerveModule(Config.Ports.SwerveDrive.BACK_LEFT_DRIVE, Config.Ports.SwerveDrive.BACK_LEFT_TURN,
-                        Config.Ports.SwerveDrive.BACK_LEFT_ENCODER),
+                        2),
                 new SwerveModule(Config.Ports.SwerveDrive.BACK_RIGHT_DRIVE, Config.Ports.SwerveDrive.BACK_RIGHT_TURN,
-                        Config.Ports.SwerveDrive.BACK_RIGHT_ENCODER),
+                        3),
         };
         modulePositions = new SwerveModulePosition[] {
                 new SwerveModulePosition(),
