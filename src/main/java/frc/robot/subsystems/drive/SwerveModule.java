@@ -34,8 +34,7 @@ public class SwerveModule {
     private final double TURN_D = 0.5;
 
     private final double WHEEL_DIAMETER = 4;
-    // Assumes we have a Swerve Drive Specialties MK4i L2
-    // TODO: Figure out the actual module gear ratio since our module is not a MK4i
+    // Swerve Drive Specialties MK2
     private final double DRIVE_GEAR_RATIO = 8.31;
     private final double TURN_GEAR_RATIO = 18.0;
 
@@ -161,11 +160,6 @@ public class SwerveModule {
      * @return Current angle in degrees, from -180 to 180.
      */
     public double getAngle() {
-        /*
-         * TODO: Find out if getAbsolutePosition is from 0 to 360 or -180 to 180
-         * If it's the latter no need to do anything, if it's the former we have to
-         * subtract by 180
-         */
         return turnEncoder.getPosition();
     }
 

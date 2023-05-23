@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import frc.robot.controls.controllers.ControllerType;
+import frc.robot.util.MathUtils;
 
 /**
  * Configuration settings file.
@@ -31,8 +32,8 @@ public class Config {
             // TODO: Figure out max movement speeds
             public static final double MAX_MOVE_SPEED = 1.0; // m/s;
             public static final double MAX_TURN_SPEED = Units.rotationsToRadians(1); // rotations/s
-            public static final double MAX_TURN_ACCEL = 3.0; // Radians/s^2
-            public static final double SLOWMODE_MULT = 0.5; // 50%
+            public static final double MAX_TURN_ACCEL = 1; // Radians/s^2
+            public static final double SLOWMODE_MULT = MathUtils.TADAS_MAGIC_NUMBER; // 40%
         }
     }
 
