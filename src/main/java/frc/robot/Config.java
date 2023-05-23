@@ -28,6 +28,9 @@ public class Config {
         // CPU period (seconds)
         public static final double CPU_PERIOD = 0.02;
 
+        /**
+         * Drivebase speed limits.
+         */
         public static final class SwerveDrive {
             // TODO: Figure out max movement speeds
             public static final double MAX_MOVE_SPEED = 1.0; // m/s;
