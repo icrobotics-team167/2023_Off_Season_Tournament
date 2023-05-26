@@ -76,6 +76,7 @@ public class SwerveDriveBase {
         SwerveModuleState[] moduleStates = kinematics.toSwerveModuleStates(chassisSpeeds);
 
         // Loop through every module
+        // modules[0].move(moduleStates[0]);
         for (int i = 0; i < modules.length; i++) {
             // Move them to the desired state
             modules[i].move(moduleStates[i]);
@@ -85,6 +86,7 @@ public class SwerveDriveBase {
 
         // Update the whole chassis's odometry using the individual module's odometry
         odometry.update(Rotation2d.fromDegrees(Subsystems.navx.getAngle()), modulePositions);
+        // odometry.update(Rotation2d.fromDegrees(0), modulePositions);
 
         // DEBUG
         SmartDashboard.putNumber("SwerveDriveBase.xPosMeters", odometry.getPoseMeters().getX());
@@ -108,5 +110,6 @@ public class SwerveDriveBase {
             modulePositions[i] = modules[i].getPosition();
         }
         odometry.update(Rotation2d.fromDegrees(Subsystems.navx.getAngle()), modulePositions);
+        // odometry.update(Rotation2d.fromDegrees(0), modulePositions);
     }
 }

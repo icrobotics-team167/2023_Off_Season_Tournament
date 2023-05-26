@@ -29,9 +29,9 @@ public class SwerveModule {
     private final double DRIVE_FF = 0.025;
 
     private PIDController turnPID;
-    private final double TURN_P = 1.0 / 90.0;
+    private final double TURN_P = 1.0 / 180.0;
     private final double TURN_I = 0;
-    private final double TURN_D = 0.5;
+    private final double TURN_D = 0;
 
     private final double WHEEL_DIAMETER = 4;
     // Swerve Drive Specialties MK2
@@ -114,8 +114,10 @@ public class SwerveModule {
         state = SwerveModuleState.optimize(state, Rotation2d.fromDegrees(getAngle()));
         // Calculate a PID for the turn motor, clamp the pid to -1/1, and set the motor
         // power to that
-        // turnMotor.set(MathUtil.clamp(turnPID.calculate(getAngle(),
-        // state.angle.getDegrees()), -1, 1));
+        turnMotor.set(MathUtil.clamp(turnPID.calculate(getAngle(),
+                state.angle.getDegrees()), -1, 1));
+        SmartDashboard.putNumber("Module " + moduleName + " turnMotor power",
+                MathUtil.clamp(turnPID.calculate(getAngle(), state.angle.getDegrees()), -1, 1));
         // Give the drive motor's PID controller a target velocity and let it calculate
         // motor power from that
         // drivePID.setReference(state.speedMetersPerSecond,
