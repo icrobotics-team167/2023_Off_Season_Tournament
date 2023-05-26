@@ -17,13 +17,11 @@ public class Teleop {
     private static final double SLOWMODE_MULT = Config.Settings.SwerveDrive.SLOWMODE_MULT;
 
     private LimeLight limeLight;
-    private AHRS navx = Subsystems.navx;
+    // private AHRS navx = Subsystems.navx;
 
     public Teleop(ControlScheme controls) {
         this.controls = controls;
         driveBase = Subsystems.driveBase;
-
-        limeLight = LimeLight.getInstance();
     }
 
     public void init() {
