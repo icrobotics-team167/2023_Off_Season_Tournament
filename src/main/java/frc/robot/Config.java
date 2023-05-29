@@ -1,7 +1,9 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import frc.robot.controls.controllers.ControllerType;
+import frc.robot.util.MathUtils;
 
 /**
  * Configuration settings file.
@@ -25,6 +27,17 @@ public class Config {
 
         // CPU period (seconds)
         public static final double CPU_PERIOD = 0.02;
+
+        /**
+         * Drivebase speed limits.
+         */
+        public static final class SwerveDrive {
+            // TODO: Figure out max movement speeds
+            public static final double MAX_MOVE_SPEED = 1.0; // m/s;
+            public static final double MAX_TURN_SPEED = Units.rotationsToRadians(1); // rotations/s
+            public static final double MAX_TURN_ACCEL = 1; // Radians/s^2
+            public static final double SLOWMODE_MULT = MathUtils.TADAS_MAGIC_NUMBER; // 40%
+        }
     }
 
     /**
@@ -58,34 +71,29 @@ public class Config {
         // main control system components
         // public static final int RoboRio = 0
         // public static final int PDP = 1
-        // public static final int PH = 2
 
         /**
          * Drivebase ports.
          */
         public static final class SwerveDrive {
             // Drivebase CAN bus Addresses
-            public static final int FRONT_LEFT_DRIVE = 1;
-            public static final int FRONT_LEFT_TURN = 2;
-            public static final int FRONT_RIGHT_DRIVE = 3;
-            public static final int FRONT_RIGHT_TURN = 4;
-            public static final int BACK_LEFT_DRIVE = 5;
-            public static final int BACK_LEFT_TURN = 6;
-            public static final int BACK_RIGHT_DRIVE = 7;
-            public static final int BACK_RIGHT_TURN = 8;
+            public static final int FRONT_LEFT_DRIVE = 2;
+            public static final int FRONT_LEFT_TURN = 3;
+            public static final int FRONT_RIGHT_DRIVE = 4;
+            public static final int FRONT_RIGHT_TURN = 5;
+            public static final int BACK_LEFT_DRIVE = 9;
+            public static final int BACK_LEFT_TURN = 8;
+            public static final int BACK_RIGHT_DRIVE = 6;
+            public static final int BACK_RIGHT_TURN = 7;
 
             // TODO: Measure actual positions of modules
             // Measured in meters
-            public static final Translation2d FRONT_LEFT_POS = new Translation2d(0, 0);
-            public static final Translation2d FRONT_RIGHT_POS = new Translation2d(0, 0);
-            public static final Translation2d BACK_LEFT_POS = new Translation2d(0, 0);
-            public static final Translation2d BACK_RIGHT_POS = new Translation2d(0, 0);
-
-            // Duty cycle encoder DIO ports
-            public static final int FRONT_LEFT_ENCODER = 1;
-            public static final int FRONT_RIGHT_ENCODER = 2;
-            public static final int BACK_LEFT_ENCODER = 3;
-            public static final int BACK_RIGHT_ENCODER = 4;
+            public static final double robotLength = Units.inchesToMeters(23 - 2 * 3.25); // 16.5 in
+            public static final double robotWidth = Units.inchesToMeters(23 - 2 * 3.25); // 16.5 in
+            public static final Translation2d FRONT_LEFT_POS = new Translation2d(robotLength / 2.0, robotWidth / 2.0);
+            public static final Translation2d FRONT_RIGHT_POS = new Translation2d(-robotLength / 2.0, robotWidth / 2.0);
+            public static final Translation2d BACK_LEFT_POS = new Translation2d(robotLength / 2.0, -robotWidth / 2.0);
+            public static final Translation2d BACK_RIGHT_POS = new Translation2d(-robotLength / 2.0, -robotWidth / 2.0);
         }
     }
 

@@ -2,6 +2,7 @@ package frc.robot.controls.controlschemes;
 
 import frc.robot.Config;
 import frc.robot.controls.controllers.Controller;
+import frc.robot.util.MathUtils;
 
 /**
  * <p>
@@ -35,28 +36,21 @@ public class DeltaJoystickController extends ControlScheme {
 
     @Override
     public double getSwerveX() {
-        return primaryLeft.getLeftStickX() >= Config.Tolerances.PRIMARY_CONTROLLER_DEADZONE_SIZE
-                ? primaryLeft.getLeftStickX()
-                : 0;
+        return MathUtils.deadZone(primaryLeft.getLeftStickY(), Config.Tolerances.PRIMARY_CONTROLLER_DEADZONE_SIZE);
     }
 
     @Override
     public double getSwerveY() {
-        return primaryLeft.getLeftStickY() >= Config.Tolerances.PRIMARY_CONTROLLER_DEADZONE_SIZE
-                ? primaryLeft.getLeftStickY()
-                : 0;
+        return -MathUtils.deadZone(primaryLeft.getLeftStickX(), Config.Tolerances.PRIMARY_CONTROLLER_DEADZONE_SIZE);
     }
 
     @Override
     public double getSwerveTurn() {
-        return primaryRight.getLeftStickX() >= Config.Tolerances.PRIMARY_CONTROLLER_DEADZONE_SIZE
-                ? primaryRight.getLeftStickX()
-                : 0;
+        return -MathUtils.deadZone(primaryRight.getLeftStickX(), Config.Tolerances.SECONDARY_CONTROLLER_DEADZONE_SIZE);
     }
 
     @Override
     public boolean doSlowMode() {
-
         return false;
     }
 

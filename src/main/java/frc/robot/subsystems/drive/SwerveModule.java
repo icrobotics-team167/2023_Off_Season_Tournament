@@ -10,15 +10,16 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.AnalogEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class SwerveModule {
     private final CANSparkMax driveMotor;
     private final CANSparkMax turnMotor;
     private final RelativeEncoder driveEncoder;
-    private final DutyCycleEncoder turnEncoder;
-    private final int turnEncoderPort;
+    private final RelativeEncoder turnEncoder;
+    private final int moduleID;
+    private final String moduleName;
 
     // TODO: Tune PID values
     private SparkMaxPIDController drivePID;
@@ -28,23 +29,23 @@ public class SwerveModule {
     private final double DRIVE_FF = 0.025;
 
     private PIDController turnPID;
-    private final double TURN_P = 1.0 / 90.0;
+    private final double TURN_P = 1.0 / 180.0;
     private final double TURN_I = 0;
-    private final double TURN_D = 0.5;
+    private final double TURN_D = 0;
 
     private final double WHEEL_DIAMETER = 4;
-    // Assumes we have a Swerve Drive Specialties MK4i L2
-    private final double GEAR_RATIO = 6.75; // TODO: Figure out the actual module gear ratio
+    // Swerve Drive Specialties MK2
+    private final double DRIVE_GEAR_RATIO = 8.31;
+    private final double TURN_GEAR_RATIO = 18.0;
 
     /**
      * Constructs a new Swerve module.
      * 
-     * @param driveMotorID       The CAN ID of the drive motor.
-     * @param turnMotorID        The CAN ID of the turning motor.
-     * @param turnEncoderDIOPort The DIO port ID of the absolute encoder (Duty
-     *                           cycle)
+     * @param driveMotorID The CAN ID of the drive motor.
+     * @param turnMotorID  The CAN ID of the turning motor.
+     * @param moduleID     The module ID.
      */
-    public SwerveModule(int driveMotorID, int turnMotorID, int turnEncoderDIOPort) {
+    public SwerveModule(int driveMotorID, int turnMotorID, int moduleID) {
         // Set up motors
         this.driveMotor = new CANSparkMax(driveMotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
         this.turnMotor = new CANSparkMax(turnMotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -57,9 +58,10 @@ public class SwerveModule {
         // Set up drive motor encoder
         this.driveEncoder = driveMotor.getEncoder();
         // Convert from "rotations of motor" to "meters driven by wheel"
-        this.driveEncoder.setPositionConversionFactor(WHEEL_DIAMETER * Math.PI / GEAR_RATIO);
+        this.driveEncoder.setPositionConversionFactor(WHEEL_DIAMETER * Math.PI / DRIVE_GEAR_RATIO);
         // Convert from "rotations per minute of motor" to "meters per second of wheel"
-        this.driveEncoder.setVelocityConversionFactor(Units.inchesToMeters(WHEEL_DIAMETER * Math.PI / GEAR_RATIO / 60));
+        this.driveEncoder
+                .setVelocityConversionFactor(Units.inchesToMeters(WHEEL_DIAMETER * Math.PI / DRIVE_GEAR_RATIO / 60.0));
 
         // Set up the PID controller for the drive motor
         this.drivePID = this.driveMotor.getPIDController();
@@ -69,11 +71,38 @@ public class SwerveModule {
         this.drivePID.setFF(DRIVE_FF);
 
         // Set up turn encoder
-        this.turnEncoder = new DutyCycleEncoder(turnEncoderDIOPort); // Assumes we're using a absolute encoder
-        this.turnEncoderPort = turnEncoderDIOPort;
+        // TODO: Currently the Analog encoders don't work, so we're using NEO encoders.
+        // Not ideal...
+        // this.turnEncoder = new AnalogEncoder(turnEncoderDIOPort); // Assumes we're
+        // using a absolute encoder
+        this.turnEncoder = turnMotor.getEncoder();
+        this.moduleID = moduleID;
+        // Convert from "rotations of motor" to "degrees of module turn"
+        this.turnEncoder.setPositionConversionFactor(360.0 / TURN_GEAR_RATIO);
+        // Convert from "rotations per minute of motor" to "degrees per second of module
+        // turn"
+        this.turnEncoder.setVelocityConversionFactor(360.0 / TURN_GEAR_RATIO / 60.0);
 
         // Set up the PID controller for the turning motor
         turnPID = new PIDController(TURN_P, TURN_I, TURN_D);
+        turnPID.enableContinuousInput(-180, 180);
+
+        switch (moduleID) {
+            case 0:
+                moduleName = "Front Left";
+                break;
+            case 1:
+                moduleName = "Front Right";
+                break;
+            case 2:
+                moduleName = "Back Left";
+                break;
+            case 3:
+                moduleName = "Back Right";
+                break;
+            default:
+                moduleName = String.valueOf(moduleID);
+        }
     }
 
     /**
@@ -86,16 +115,19 @@ public class SwerveModule {
         state = SwerveModuleState.optimize(state, Rotation2d.fromDegrees(getAngle()));
         // Calculate a PID for the turn motor, clamp the pid to -1/1, and set the motor
         // power to that
-        turnMotor.set(MathUtil.clamp(turnPID.calculate(getAngle(), state.angle.getDegrees()), -1, 1));
+        turnMotor.set(MathUtil.clamp(turnPID.calculate(getAngle(),
+                state.angle.getDegrees()), -1, 1));
+        SmartDashboard.putNumber("Module " + moduleName + " turnMotor power",
+                MathUtil.clamp(turnPID.calculate(getAngle(), state.angle.getDegrees()), -1, 1));
         // Give the drive motor's PID controller a target velocity and let it calculate
         // motor power from that
         drivePID.setReference(state.speedMetersPerSecond, CANSparkMax.ControlType.kVelocity);
 
         // Debug statements
-        SmartDashboard.putNumber("Module " + turnEncoderPort + " current angle (degrees)", getAngle());
-        SmartDashboard.putNumber("Module " + turnEncoderPort + " desired angle (degrees)", state.angle.getDegrees());
-        SmartDashboard.putNumber("Module " + turnEncoderPort + " current velocity (m/s)", driveEncoder.getVelocity());
-        SmartDashboard.putNumber("Module " + turnEncoderPort + " desired velocity (m/s)", state.speedMetersPerSecond);
+        SmartDashboard.putNumber("Module " + moduleName + " current angle (degrees)", getAngle());
+        SmartDashboard.putNumber("Module " + moduleName + " desired angle (degrees)", state.angle.getDegrees());
+        SmartDashboard.putNumber("Module " + moduleName + " current velocity (m/s)", driveEncoder.getVelocity());
+        SmartDashboard.putNumber("Module " + moduleName + " desired velocity (m/s)", state.speedMetersPerSecond);
     }
 
     /**
@@ -127,15 +159,10 @@ public class SwerveModule {
     /**
      * Gets the current angle of the module.
      * 
-     * @return Current angle in degrees
+     * @return Current angle in degrees, from -180 to 180.
      */
     public double getAngle() {
-        /*
-         * TODO: Find out if getAbsolutePosition is from 0 to 360 or -180 to 180
-         * If it's the latter no need to do anything, if it's the former we have to
-         * subtract by 180
-         */
-        return turnEncoder.getAbsolutePosition();
+        return turnEncoder.getPosition();
     }
 
     /**
