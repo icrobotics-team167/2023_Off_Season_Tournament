@@ -17,8 +17,8 @@ public class SwerveModule {
     private final CANSparkMax driveMotor;
     private final CANSparkMax turnMotor;
     private final RelativeEncoder driveEncoder;
-    private final RelativeEncoder turnEncoder;
-    private final int moduleID;
+    private final AnalogEncoder turnEncoder;
+    private final int encoderID;
     private final String moduleName;
 
     // TODO: Tune PID values
@@ -29,23 +29,22 @@ public class SwerveModule {
     private final double DRIVE_FF = 0.025;
 
     private PIDController turnPID;
-    private final double TURN_P = 1.0 / 180.0;
+    private final double TURN_P = (1.0 / 180.0) / 5.0;
     private final double TURN_I = 0;
     private final double TURN_D = 0;
 
     private final double WHEEL_DIAMETER = 4;
     // Swerve Drive Specialties MK2
     private final double DRIVE_GEAR_RATIO = 8.31;
-    private final double TURN_GEAR_RATIO = 18.0;
 
     /**
      * Constructs a new Swerve module.
      * 
      * @param driveMotorID The CAN ID of the drive motor.
      * @param turnMotorID  The CAN ID of the turning motor.
-     * @param moduleID     The module ID.
+     * @param encoderID     The module ID.
      */
-    public SwerveModule(int driveMotorID, int turnMotorID, int moduleID) {
+    public SwerveModule(int driveMotorID, int turnMotorID, int encoderID) {
         // Set up motors
         this.driveMotor = new CANSparkMax(driveMotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
         this.turnMotor = new CANSparkMax(turnMotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -75,19 +74,14 @@ public class SwerveModule {
         // Not ideal...
         // this.turnEncoder = new AnalogEncoder(turnEncoderDIOPort); // Assumes we're
         // using a absolute encoder
-        this.turnEncoder = turnMotor.getEncoder();
-        this.moduleID = moduleID;
-        // Convert from "rotations of motor" to "degrees of module turn"
-        this.turnEncoder.setPositionConversionFactor(360.0 / TURN_GEAR_RATIO);
-        // Convert from "rotations per minute of motor" to "degrees per second of module
-        // turn"
-        this.turnEncoder.setVelocityConversionFactor(360.0 / TURN_GEAR_RATIO / 60.0);
+        this.turnEncoder = new AnalogEncoder(encoderID);
+        this.encoderID = encoderID;
 
         // Set up the PID controller for the turning motor
         turnPID = new PIDController(TURN_P, TURN_I, TURN_D);
         turnPID.enableContinuousInput(-180, 180);
 
-        switch (moduleID) {
+        switch (encoderID) {
             case 0:
                 moduleName = "Front Left";
                 break;
@@ -101,7 +95,7 @@ public class SwerveModule {
                 moduleName = "Back Right";
                 break;
             default:
-                moduleName = String.valueOf(moduleID);
+                moduleName = String.valueOf(encoderID);
         }
     }
 
@@ -115,10 +109,9 @@ public class SwerveModule {
         state = SwerveModuleState.optimize(state, Rotation2d.fromDegrees(getAngle()));
         // Calculate a PID for the turn motor, clamp the pid to -1/1, and set the motor
         // power to that
-        turnMotor.set(MathUtil.clamp(turnPID.calculate(getAngle(),
-                state.angle.getDegrees()), -1, 1));
-        SmartDashboard.putNumber("Module " + moduleName + " turnMotor power",
-                MathUtil.clamp(turnPID.calculate(getAngle(), state.angle.getDegrees()), -1, 1));
+        double turnPIDOutput = MathUtil.clamp(turnPID.calculate(getAngle(), state.angle.getDegrees()), -1, 1);
+        // turnMotor.set(turnPIDOutput);
+        SmartDashboard.putNumber("Module " + moduleName + " turnMotor power", turnPIDOutput);
         // Give the drive motor's PID controller a target velocity and let it calculate
         // motor power from that
         drivePID.setReference(state.speedMetersPerSecond, CANSparkMax.ControlType.kVelocity);
@@ -162,7 +155,7 @@ public class SwerveModule {
      * @return Current angle in degrees, from -180 to 180.
      */
     public double getAngle() {
-        return turnEncoder.getPosition();
+        return turnEncoder.getAbsolutePosition() * 360 - 180;
     }
 
     /**

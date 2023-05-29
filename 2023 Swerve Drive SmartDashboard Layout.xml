@@ -1,33 +1,55 @@
 <xml version="1.0">
 <dashboard>
+	<widget field="Module Back Right current angle (degrees)" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
+		<location x="880" y="384"/>
+		<width>208</width>
+		<height>304</height>
+	</widget>
+	<widget field="Module Back Left current angle (degrees)" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
+		<location x="464" y="384"/>
+		<width>208</width>
+		<height>304</height>
+	</widget>
+	<widget field="Module Front Right current angle (degrees)" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
+		<location x="880" y="84"/>
+		<width>208</width>
+	</widget>
+	<widget field="Teleop.navxYaw" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="21" y="1"/>
+	</widget>
 	<widget field="Module Front Left current angle (degrees)" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
-		<location x="474" y="84"/>
-		<width>182</width>
-		<height>300</height>
+		<location x="464" y="80"/>
+		<width>208</width>
+		<height>304</height>
 	</widget>
 	<widget field="Module Back Right desired angle (degrees)" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
-		<location x="656" y="384"/>
+		<location x="672" y="384"/>
+		<width>208</width>
+		<height>304</height>
 		<property name="Autoscale Y Values" value="false"/>
 		<property name="Minimum Y Value" value="-180"/>
 		<property name="Maximum Y Value" value="180"/>
 	</widget>
 	<widget field="Module Back Left desired angle (degrees)" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
 		<location x="256" y="384"/>
+		<width>208</width>
+		<height>304</height>
 		<property name="Autoscale Y Values" value="false"/>
 		<property name="Minimum Y Value" value="-180"/>
 		<property name="Maximum Y Value" value="180"/>
 	</widget>
 	<widget field="Module Front Right desired angle (degrees)" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
-		<location x="656" y="84"/>
-		<width>400</width>
-		<height>300</height>
+		<location x="672" y="80"/>
+		<width>208</width>
+		<height>304</height>
 		<property name="Autoscale Y Values" value="false"/>
 		<property name="Minimum Y Value" value="-180"/>
 		<property name="Maximum Y Value" value="180"/>
 	</widget>
 	<widget field="Module Front Left desired angle (degrees)" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
-		<location x="258" y="83"/>
-		<width>215</width>
+		<location x="258" y="80"/>
+		<width>206</width>
+		<height>303</height>
 		<property name="Autoscale Y Values" value="false"/>
 		<property name="Minimum Y Value" value="-180"/>
 		<property name="Maximum Y Value" value="180"/>
@@ -50,23 +72,11 @@
 		<property name="Maximum Y Value" value="15"/>
 	</widget>
 	<widget field="SwerveDriveBase.yPosMeters" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="336" y="64"/>
+		<location x="672" y="64"/>
 		<width>256</width>
 	</widget>
 	<widget field="SwerveDriveBase.xPosMeters" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="80" y="64"/>
-		<width>256</width>
-	</widget>
-	<widget field="Module Back Right current angle (degrees)" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="336" y="32"/>
-		<width>256</width>
-	</widget>
-	<widget field="Module Back Left current angle (degrees)" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="77" y="32"/>
-		<width>259</width>
-	</widget>
-	<widget field="Module Front Right current angle (degrees)" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="336" y="0"/>
+		<location x="256" y="61"/>
 		<width>256</width>
 	</widget>
 	<widget field="Autonomous Routines" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">

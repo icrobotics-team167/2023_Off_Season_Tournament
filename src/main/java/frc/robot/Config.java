@@ -94,6 +94,12 @@ public class Config {
             public static final Translation2d FRONT_RIGHT_POS = new Translation2d(-robotLength / 2.0, robotWidth / 2.0);
             public static final Translation2d BACK_LEFT_POS = new Translation2d(robotLength / 2.0, -robotWidth / 2.0);
             public static final Translation2d BACK_RIGHT_POS = new Translation2d(-robotLength / 2.0, -robotWidth / 2.0);
+
+            // Drivebase Analog Encoder Ports
+            public static final double FRONT_LEFT_ENCODER = 0;
+            public static final double FRONT_RIGHT_ENCODER = 1;
+            public static final double BACK_LEFT_ENCODER = 2;
+            public static final double BACK_RIGHT_ENCODER = 3;
         }
     }
 
