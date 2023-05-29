@@ -36,9 +36,9 @@ public class Teleop {
 
         double moveSpeed = controls.doSlowMode() ? MAX_MOVE_SPEED * SLOWMODE_MULT : MAX_MOVE_SPEED;
         double turnSpeed = controls.doSlowMode() ? MAX_TURN_SPEED * SLOWMODE_MULT : MAX_TURN_SPEED;
-        Subsystems.driveBase.drive(controls.getSwerveX() * moveSpeed, controls.getSwerveY() * moveSpeed,
+        Subsystems.driveBase.drive(controls.getSwerveVert() * moveSpeed, controls.getSwerveHoriz() * moveSpeed,
                 controls.getSwerveTurn() * turnSpeed);
-        
+
         // PUT DEBUG STATEMENTS BELOW THIS LINE
     }
 

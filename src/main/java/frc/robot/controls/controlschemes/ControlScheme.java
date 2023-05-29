@@ -16,9 +16,9 @@ public abstract class ControlScheme {
 
     // Driving (Primary driver's controller)
 
-    public abstract double getSwerveX();
+    public abstract double getSwerveHoriz();
 
-    public abstract double getSwerveY();
+    public abstract double getSwerveVert();
 
     public abstract double getSwerveTurn();
 
