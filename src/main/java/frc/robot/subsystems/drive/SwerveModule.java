@@ -85,6 +85,7 @@ public class SwerveModule {
 
         // Set up the PID controller for the turning motor
         turnPID = new PIDController(TURN_P, TURN_I, TURN_D);
+        turnPID.enableContinuousInput(-180, 180);
 
         switch (moduleID) {
             case 0:
@@ -120,8 +121,7 @@ public class SwerveModule {
                 MathUtil.clamp(turnPID.calculate(getAngle(), state.angle.getDegrees()), -1, 1));
         // Give the drive motor's PID controller a target velocity and let it calculate
         // motor power from that
-        // drivePID.setReference(state.speedMetersPerSecond,
-        // CANSparkMax.ControlType.kVelocity);
+        drivePID.setReference(state.speedMetersPerSecond, CANSparkMax.ControlType.kVelocity);
 
         // Debug statements
         SmartDashboard.putNumber("Module " + moduleName + " current angle (degrees)", getAngle());
