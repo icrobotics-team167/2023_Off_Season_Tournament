@@ -18,7 +18,6 @@ public class SwerveModule {
     private final CANSparkMax turnMotor;
     private final RelativeEncoder driveEncoder;
     private final AnalogEncoder turnEncoder;
-    private final int encoderID;
     private final String moduleName;
 
     // TODO: Tune PID values
@@ -70,12 +69,7 @@ public class SwerveModule {
         this.drivePID.setFF(DRIVE_FF);
 
         // Set up turn encoder
-        // TODO: Currently the Analog encoders don't work, so we're using NEO encoders.
-        // Not ideal...
-        // this.turnEncoder = new AnalogEncoder(turnEncoderDIOPort); // Assumes we're
-        // using a absolute encoder
         this.turnEncoder = new AnalogEncoder(encoderID);
-        this.encoderID = encoderID;
 
         // Set up the PID controller for the turning motor
         turnPID = new PIDController(TURN_P, TURN_I, TURN_D);
