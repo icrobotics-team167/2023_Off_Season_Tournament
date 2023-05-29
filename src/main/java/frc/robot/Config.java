@@ -91,8 +91,8 @@ public class Config {
             public static final double robotLength = Units.inchesToMeters(23 - 2 * 3.25); // 16.5 in
             public static final double robotWidth = Units.inchesToMeters(23 - 2 * 3.25); // 16.5 in
             public static final Translation2d FRONT_LEFT_POS = new Translation2d(robotLength / 2.0, robotWidth / 2.0);
-            public static final Translation2d FRONT_RIGHT_POS = new Translation2d(robotLength / 2.0, -robotWidth / 2.0);
-            public static final Translation2d BACK_LEFT_POS = new Translation2d(-robotLength / 2.0, robotWidth / 2.0);
+            public static final Translation2d FRONT_RIGHT_POS = new Translation2d(-robotLength / 2.0, robotWidth / 2.0);
+            public static final Translation2d BACK_LEFT_POS = new Translation2d(robotLength / 2.0, -robotWidth / 2.0);
             public static final Translation2d BACK_RIGHT_POS = new Translation2d(-robotLength / 2.0, -robotWidth / 2.0);
         }
     }

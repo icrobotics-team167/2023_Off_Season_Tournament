@@ -23,13 +23,13 @@ public class DoubleController extends ControlScheme {
     // Drive
 
     @Override
-    public double getSwerveHoriz() {
+    public double getSwerveX() {
         return primary.getLeftStickX() >= Config.Tolerances.PRIMARY_CONTROLLER_DEADZONE_SIZE ? primary.getLeftStickX()
                 : 0;
     }
 
     @Override
-    public double getSwerveVert() {
+    public double getSwerveY() {
         return primary.getLeftStickY() >= Config.Tolerances.PRIMARY_CONTROLLER_DEADZONE_SIZE ? primary.getLeftStickY()
                 : 0;
     }

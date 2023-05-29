@@ -17,12 +17,12 @@ public class NullController extends ControlScheme {
     }
 
     @Override
-    public double getSwerveHoriz() {
+    public double getSwerveX() {
         return 0;
     }
 
     @Override
-    public double getSwerveVert() {
+    public double getSwerveY() {
         return 0;
     }
 

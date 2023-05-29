@@ -18,6 +18,7 @@ public class Subsystems {
     }
 
     public static void setInitialStates() {
+        navx.reset();
     }
 
 }

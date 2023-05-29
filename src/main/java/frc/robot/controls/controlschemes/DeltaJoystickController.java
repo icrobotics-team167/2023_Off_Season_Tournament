@@ -35,18 +35,18 @@ public class DeltaJoystickController extends ControlScheme {
     }
 
     @Override
-    public double getSwerveHoriz() {
-        return MathUtils.deadZone(primaryLeft.getLeftStickX(), Config.Tolerances.PRIMARY_CONTROLLER_DEADZONE_SIZE);
+    public double getSwerveX() {
+        return MathUtils.deadZone(primaryLeft.getLeftStickY(), Config.Tolerances.PRIMARY_CONTROLLER_DEADZONE_SIZE);
     }
 
     @Override
-    public double getSwerveVert() {
-        return -MathUtils.deadZone(primaryLeft.getLeftStickY(), Config.Tolerances.PRIMARY_CONTROLLER_DEADZONE_SIZE);
+    public double getSwerveY() {
+        return -MathUtils.deadZone(primaryLeft.getLeftStickX(), Config.Tolerances.PRIMARY_CONTROLLER_DEADZONE_SIZE);
     }
 
     @Override
     public double getSwerveTurn() {
-        return MathUtils.deadZone(primaryRight.getLeftStickX(), Config.Tolerances.SECONDARY_CONTROLLER_DEADZONE_SIZE);
+        return -MathUtils.deadZone(primaryRight.getLeftStickX(), Config.Tolerances.SECONDARY_CONTROLLER_DEADZONE_SIZE);
     }
 
     @Override

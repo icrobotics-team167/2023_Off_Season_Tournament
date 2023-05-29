@@ -94,6 +94,23 @@ public class SwerveDriveBase {
     }
 
     /**
+     * Drives the robot relative to the driver station.
+     * 
+     * @param vx    Forwards/backwards velocity in m/s. Positive is away from the
+     *              station, negative is towards the station.
+     * @param vy    Left/right velocity in m/s. Positive is left relative to the
+     *              station, negative is right relative to the station.
+     * @param vr    Turning velocity in radians/s. Positive is counterclockwise,
+     *              negative is clockwise.
+     * @param angle The current robot angle, as measured by a gyroscope. 0 degrees
+     *              is facing away from the driver station. Positive is
+     *              counterclockwise, negative is clockwise.
+     */
+    public void fieldOrientedDrive(double vx, double vy, double vr, Rotation2d angle) {
+        drive(ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, vr, angle));
+    }
+
+    /**
      * Stops the robot.
      * Equivalent to running drive(0, 0, 0).
      */
