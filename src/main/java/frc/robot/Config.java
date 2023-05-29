@@ -94,12 +94,6 @@ public class Config {
             public static final Translation2d FRONT_RIGHT_POS = new Translation2d(robotLength / 2.0, -robotWidth / 2.0);
             public static final Translation2d BACK_LEFT_POS = new Translation2d(-robotLength / 2.0, robotWidth / 2.0);
             public static final Translation2d BACK_RIGHT_POS = new Translation2d(-robotLength / 2.0, -robotWidth / 2.0);
-
-            // Duty cycle encoder DIO ports
-            // public static final int FRONT_LEFT_ENCODER = 0;
-            // public static final int FRONT_RIGHT_ENCODER = 3;
-            // public static final int BACK_LEFT_ENCODER = 1;
-            // public static final int BACK_RIGHT_ENCODER = 2;
         }
     }
 
