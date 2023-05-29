@@ -81,10 +81,10 @@ public class Config {
             public static final int FRONT_LEFT_TURN = 3;
             public static final int FRONT_RIGHT_DRIVE = 4;
             public static final int FRONT_RIGHT_TURN = 5;
-            public static final int BACK_LEFT_DRIVE = 6;
-            public static final int BACK_LEFT_TURN = 7;
-            public static final int BACK_RIGHT_DRIVE = 8;
-            public static final int BACK_RIGHT_TURN = 9;
+            public static final int BACK_LEFT_DRIVE = 9;
+            public static final int BACK_LEFT_TURN = 8;
+            public static final int BACK_RIGHT_DRIVE = 6;
+            public static final int BACK_RIGHT_TURN = 7;
 
             // TODO: Measure actual positions of modules
             // Measured in meters
