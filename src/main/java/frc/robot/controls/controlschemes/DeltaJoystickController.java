@@ -51,7 +51,6 @@ public class DeltaJoystickController extends ControlScheme {
 
     @Override
     public boolean doSlowMode() {
-
         return false;
     }
 
