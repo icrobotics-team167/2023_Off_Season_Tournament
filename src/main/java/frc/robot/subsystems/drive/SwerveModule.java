@@ -75,6 +75,7 @@ public class SwerveModule {
         turnPID = new PIDController(TURN_P, TURN_I, TURN_D);
         turnPID.enableContinuousInput(-180, 180);
 
+        // Little switch statement for cleaner-looking SmartDashboard outputs
         switch (encoderID) {
             case 0:
                 moduleName = "Front Left";
