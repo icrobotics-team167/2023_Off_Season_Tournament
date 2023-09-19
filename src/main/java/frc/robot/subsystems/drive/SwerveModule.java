@@ -41,7 +41,7 @@ public class SwerveModule {
      * 
      * @param driveMotorID The CAN ID of the drive motor.
      * @param turnMotorID  The CAN ID of the turning motor.
-     * @param encoderID     The module ID.
+     * @param encoderID    The module ID.
      */
     public SwerveModule(int driveMotorID, int turnMotorID, int encoderID) {
         // Set up motors
@@ -105,7 +105,7 @@ public class SwerveModule {
         // Calculate a PID for the turn motor, clamp the pid to -1/1, and set the motor
         // power to that
         double turnPIDOutput = MathUtil.clamp(turnPID.calculate(getAngle(), state.angle.getDegrees()), -1, 1);
-        // turnMotor.set(turnPIDOutput);
+        turnMotor.set(turnPIDOutput);
         SmartDashboard.putNumber("Module " + moduleName + " turnMotor power", turnPIDOutput);
         // Give the drive motor's PID controller a target velocity and let it calculate
         // motor power from that
