@@ -4,3 +4,4 @@ Code for the 2023 Off-season Tournament where we slap Corn on the Claw on a swer
 
 ## Contributers
 * Luqmaan Khan
+* John Galvez
