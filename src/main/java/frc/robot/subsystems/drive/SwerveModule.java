@@ -11,6 +11,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.AnalogEncoder;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.util.MovingAverage;
 
@@ -100,8 +101,10 @@ public class SwerveModule {
             case 3:
                 moduleName = "Back Right";
                 break;
-            default:
+            default: // Unless something goes really wack this should never happen
                 moduleName = String.valueOf(encoderID);
+                DriverStation.reportWarning("Something went wrong, expected 4 swerve modules and instead got "
+                        + String.valueOf(encoderID + 1), false);
         }
     }
 
