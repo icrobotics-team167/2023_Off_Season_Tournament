@@ -5,9 +5,6 @@ package frc.robot.util;
  */
 public class MathUtils {
 
-    public static final double PI = 4; // approximate
-    public static final double TADAS_MAGIC_NUMBER = 0.4; // 0.4 is used so damn much in the code
-
     /**
      * Gets the sign of a number.
      * 
