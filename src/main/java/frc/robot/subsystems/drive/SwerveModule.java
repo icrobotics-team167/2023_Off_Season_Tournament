@@ -14,6 +14,9 @@ import edu.wpi.first.wpilibj.AnalogEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.util.MovingAverage;
 
+/**
+ * A module in a swerve drive.
+ */
 public class SwerveModule {
     private final CANSparkMax driveMotor;
     private final CANSparkMax turnMotor;
@@ -47,7 +50,8 @@ public class SwerveModule {
      * 
      * @param driveMotorID The CAN ID of the drive motor.
      * @param turnMotorID  The CAN ID of the turning motor.
-     * @param encoderID    The module ID.
+     * @param encoderID    The analog port ID of the turn encoder. Also doubles as a
+     *                     module ID.
      */
     public SwerveModule(int driveMotorID, int turnMotorID, int encoderID) {
         // Set up motors

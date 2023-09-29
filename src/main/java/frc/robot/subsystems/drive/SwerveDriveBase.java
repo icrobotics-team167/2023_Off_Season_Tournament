@@ -10,14 +10,22 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Config;
 import frc.robot.subsystems.Subsystems;
 
+/**
+ * A swerve drive.
+ */
 public class SwerveDriveBase {
     private static SwerveDriveBase instance;
 
     private SwerveModule[] modules;
     private SwerveDriveKinematics kinematics;
-    private SwerveModulePosition[] modulePositions;
+    private SwerveModulePosition[] moduleOdometry;
     private SwerveDriveOdometry odometry;
 
+    /**
+     * Only allows one instance of SwerveDriveBase to exist at once.
+     * 
+     * @return The instance. Will make a new instance if one doesn't exist already.
+     */
     public static SwerveDriveBase getInstance() {
         if (instance == null) {
             instance = new SwerveDriveBase();
@@ -26,6 +34,7 @@ public class SwerveDriveBase {
     }
 
     private SwerveDriveBase() {
+        // Set up swerve modules
         modules = new SwerveModule[] {
                 new SwerveModule(Config.Ports.SwerveDrive.FRONT_LEFT_DRIVE, Config.Ports.SwerveDrive.FRONT_LEFT_TURN,
                         0),
@@ -36,7 +45,8 @@ public class SwerveDriveBase {
                 new SwerveModule(Config.Ports.SwerveDrive.BACK_RIGHT_DRIVE, Config.Ports.SwerveDrive.BACK_RIGHT_TURN,
                         3),
         };
-        modulePositions = new SwerveModulePosition[] {
+        // Initialize odometry and kinematics
+        moduleOdometry = new SwerveModulePosition[] {
                 new SwerveModulePosition(),
                 new SwerveModulePosition(),
                 new SwerveModulePosition(),
@@ -47,7 +57,7 @@ public class SwerveDriveBase {
                 Config.Ports.SwerveDrive.FRONT_RIGHT_POS,
                 Config.Ports.SwerveDrive.BACK_LEFT_POS,
                 Config.Ports.SwerveDrive.BACK_RIGHT_POS);
-        odometry = new SwerveDriveOdometry(kinematics, new Rotation2d(), modulePositions);
+        odometry = new SwerveDriveOdometry(kinematics, new Rotation2d(), moduleOdometry);
     }
 
     /**
@@ -81,11 +91,11 @@ public class SwerveDriveBase {
             // Move them to the desired state
             modules[i].move(moduleStates[i]);
             // And update their odometry
-            modulePositions[i] = modules[i].getPosition();
+            moduleOdometry[i] = modules[i].getPosition();
         }
 
         // Update the whole chassis's odometry using the individual module's odometry
-        odometry.update(Rotation2d.fromDegrees(Subsystems.navx.getAngle()), modulePositions);
+        odometry.update(Rotation2d.fromDegrees(Subsystems.navx.getAngle()), moduleOdometry);
         // odometry.update(Rotation2d.fromDegrees(0), modulePositions);
 
         // DEBUG
@@ -124,9 +134,9 @@ public class SwerveDriveBase {
     public void resetPosition() {
         for (int i = 0; i < modules.length; i++) {
             modules[i].resetPosition();
-            modulePositions[i] = modules[i].getPosition();
+            moduleOdometry[i] = modules[i].getPosition();
         }
-        odometry.update(Rotation2d.fromDegrees(Subsystems.navx.getAngle()), modulePositions);
+        odometry.update(Rotation2d.fromDegrees(Subsystems.navx.getAngle()), moduleOdometry);
         // odometry.update(Rotation2d.fromDegrees(0), modulePositions);
     }
 }
