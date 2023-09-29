@@ -1,5 +1,8 @@
 package frc.robot.routines.auto;
 
+/**
+ * An enum to select states for autonomous actions.
+ */
 public enum AutoState {
     INIT, // Runs init(). Moves to PERIODIC after that.
     PERIODIC, // Runs periodic() every robot tick. Will move to DONE if isDone() == true (checked every tick)

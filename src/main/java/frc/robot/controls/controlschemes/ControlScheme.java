@@ -6,10 +6,8 @@ package frc.robot.controls.controlschemes;
  * classes for implementation details.
  * 
  * <p>
- * Implementation classes:
+ * Implemented by:
  * {@link frc.robot.controls.controlschemes.DeltaJoystickController}
- * {@link frc.robot.controls.controlschemes.DoubleController}
- * {@link frc.robot.controls.controlschemes.SingleController}
  * {@link frc.robot.controls.controlschemes.NullController}
  */
 public abstract class ControlScheme {

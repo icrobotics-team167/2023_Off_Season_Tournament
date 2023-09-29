@@ -3,7 +3,7 @@ package frc.robot.controls.controllers;
 import edu.wpi.first.wpilibj.Joystick;
 
 /**
- * Flightsim joysticks.
+ * A control scheme consisting of 4 flight sim joysticks.
  */
 public class ThrustMasterController implements Controller {
     Joystick joystick;

@@ -25,10 +25,16 @@ public class Teleop {
         driveBase = Subsystems.driveBase;
     }
 
+    /**
+     * Runs once at the start of teleop
+     */
     public void init() {
         driveBase.resetPosition();
     }
 
+    /**
+     * Runs every tick of teleop
+     */
     public void periodic() {
 
         double moveSpeed = controls.doSlowMode() ? MAX_MOVE_SPEED * SLOWMODE_MULT : MAX_MOVE_SPEED;

@@ -1,5 +1,14 @@
 package frc.robot.controls.controllers;
 
+/**
+ * <p>
+ * An abstraction layer for controller types. Pretty much useless now that we
+ * have actual joysticks and not just 2 xbox controllers.
+ * 
+ * <p>
+ * Implemented by:
+ * {@link frc.robot.controls.controllers.ThrustMasterController}
+ */
 public interface Controller {
 
     int getPort();
