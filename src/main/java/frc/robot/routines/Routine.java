@@ -24,9 +24,6 @@ public class Routine extends Action {
     @Override
     public void periodic() {
         if (currentAction != null) {
-            if (currentAction.getState() == AutoState.EXIT) {
-                state = AutoState.EXIT;
-            }
             if (currentAction.getState() == AutoState.FINISHED) {
                 currentAction = actions.poll();
                 if (currentAction == null) {

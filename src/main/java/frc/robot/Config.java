@@ -3,7 +3,6 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import frc.robot.controls.controllers.ControllerType;
-import frc.robot.util.MathUtils;
 
 /**
  * Configuration settings file.
