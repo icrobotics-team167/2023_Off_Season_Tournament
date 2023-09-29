@@ -74,7 +74,7 @@ public class SwerveModule {
         this.drivePID.setD(DRIVE_D);
         this.drivePID.setFF(DRIVE_FF);
 
-        // Set up turn encoder
+        // Set up turn encoder and angle filter
         this.turnEncoder = new AnalogEncoder(encoderID);
         angleFilter.clear();
 
@@ -152,7 +152,7 @@ public class SwerveModule {
     }
 
     /**
-     * Gets the current angle of the module.
+     * Gets the current angle of the module. Filtered to smooth out noise.
      * 
      * @return Current angle in degrees, from -180 to 180.
      */
