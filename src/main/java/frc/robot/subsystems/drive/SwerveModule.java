@@ -34,8 +34,8 @@ public class SwerveModule {
     private final double TURN_D = 0;
 
     private final double WHEEL_DIAMETER = 4;
-    // Swerve Drive Specialties MK2
-    private final double DRIVE_GEAR_RATIO = 8.31;
+    // Swerve Drive Specialties MK4i L2
+    private final double DRIVE_GEAR_RATIO = 6.75;
 
     // Filter angles since the analog encoders are a bit noisy, prolly could get
     // away with a smaller moving average size since the noise is on the smaller
