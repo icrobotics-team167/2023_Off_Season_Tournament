@@ -12,6 +12,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.AnalogEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.util.MovingAverage;
 
 public class SwerveModule {
     private final CANSparkMax driveMotor;
@@ -35,6 +36,11 @@ public class SwerveModule {
     private final double WHEEL_DIAMETER = 4;
     // Swerve Drive Specialties MK2
     private final double DRIVE_GEAR_RATIO = 8.31;
+
+    // Filter angles since the analog encoders are a bit noisy, prolly could get
+    // away with a smaller moving average size since the noise is on the smaller
+    // decimal points
+    private MovingAverage angleFilter = new MovingAverage(10, true);
 
     /**
      * Constructs a new Swerve module.
@@ -70,6 +76,7 @@ public class SwerveModule {
 
         // Set up turn encoder
         this.turnEncoder = new AnalogEncoder(encoderID);
+        angleFilter.clear();
 
         // Set up the PID controller for the turning motor
         turnPID = new PIDController(TURN_P, TURN_I, TURN_D);
@@ -150,7 +157,8 @@ public class SwerveModule {
      * @return Current angle in degrees, from -180 to 180.
      */
     public double getAngle() {
-        return turnEncoder.getAbsolutePosition() * 360 - 180;
+        angleFilter.add(turnEncoder.getAbsolutePosition() * 360 - 180);
+        return angleFilter.get();
     }
 
     /**
