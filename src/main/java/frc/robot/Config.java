@@ -36,7 +36,7 @@ public class Config {
             public static final double MAX_MOVE_SPEED = 1.0; // m/s;
             public static final double MAX_TURN_SPEED = Units.rotationsToRadians(1); // rotations/s
             public static final double MAX_TURN_ACCEL = 1; // Radians/s^2
-            public static final double SLOWMODE_MULT = MathUtils.TADAS_MAGIC_NUMBER; // 40%
+            public static final double SLOWMODE_MULT = 0.4; // 40%
         }
     }
 
