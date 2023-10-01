@@ -3,7 +3,8 @@ package frc.robot.controls.controllers;
 /**
  * <p>
  * An abstraction layer for controller types. Pretty much useless now that we
- * have actual joysticks and not just 2 xbox controllers.
+ * have a driver station that we're keeping consistent and not just whatever 2
+ * random controllers we pulled out of the Portal to the Cable Dimension.
  * 
  * <p>
  * Implemented by:
