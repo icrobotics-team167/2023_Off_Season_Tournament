@@ -33,7 +33,8 @@ public class SwerveModule {
     private final double DRIVE_FF = 0.025;
 
     private PIDController turnPID;
-    private final double TURN_P = (1.0 / 180.0) / 5.0;
+    // private final double TURN_P = (1.0 / 180.0) / 5.0;
+    private final double TURN_P = (1.0 / 180.0);
     private final double TURN_I = 0;
     private final double TURN_D = 0;
 
@@ -85,6 +86,7 @@ public class SwerveModule {
 
         // Set up the PID controller for the turning motor
         turnPID = new PIDController(TURN_P, TURN_I, TURN_D);
+        turnPID.setTolerance(5);
         turnPID.enableContinuousInput(-180, 180);
 
         // Little switch statement for cleaner-looking SmartDashboard outputs
@@ -118,8 +120,16 @@ public class SwerveModule {
         state = SwerveModuleState.optimize(state, Rotation2d.fromDegrees(getAngle()));
         // Calculate a PID for the turn motor, clamp the pid to -1/1, and set the motor
         // power to that
-        double turnPIDOutput = MathUtil.clamp(turnPID.calculate(getAngle(), state.angle.getDegrees()), -1, 1);
-        turnMotor.set(turnPIDOutput);
+        // if (turnPID.atSetpoint()) {
+        //     return;
+        // }
+        var pidOutput = turnPID.calculate(getAngle(), state.angle.getDegrees());
+
+        double turnPIDOutput = MathUtil.clamp(pidOutput, -1, 1);
+        if(turnPIDOutput < 0.01) {
+            turnPIDOutput = 0;
+        }
+        // turnMotor.set(turnPIDOutput);
         SmartDashboard.putNumber("Module " + moduleName + " turnMotor power", turnPIDOutput);
         // Give the drive motor's PID controller a target velocity and let it calculate
         // motor power from that
@@ -165,7 +175,9 @@ public class SwerveModule {
      */
     public double getAngle() {
         angleFilter.add(turnEncoder.getAbsolutePosition() * 360 - 180);
-        return angleFilter.get();
+        Rotation2d angleRotation = Rotation2d.fromDegrees(angleFilter.get());
+        // return angleFilter.get();
+        return angleRotation.rotateBy(Rotation2d.fromDegrees(-45)).getDegrees();
     }
 
     /**

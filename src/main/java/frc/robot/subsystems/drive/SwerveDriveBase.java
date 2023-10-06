@@ -86,7 +86,6 @@ public class SwerveDriveBase {
         SwerveModuleState[] moduleStates = kinematics.toSwerveModuleStates(chassisSpeeds);
 
         // Loop through every module
-        // modules[0].move(moduleStates[0]);
         for (int i = 0; i < modules.length; i++) {
             // Move them to the desired state
             modules[i].move(moduleStates[i]);

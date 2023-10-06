@@ -29,7 +29,7 @@ public class Teleop {
      * Runs once at the start of teleop
      */
     public void init() {
-        driveBase.resetPosition();
+     //   driveBase.resetPosition();
     }
 
     /**
@@ -42,6 +42,10 @@ public class Teleop {
         // Otherwise, keep max move/turn speed as is.
         double moveSpeed = controls.doSlowMode() ? MAX_MOVE_SPEED * SLOWMODE_MULT : MAX_MOVE_SPEED;
         double turnSpeed = controls.doSlowMode() ? MAX_TURN_SPEED * SLOWMODE_MULT : MAX_TURN_SPEED;
+        SmartDashboard.putNumber("Teleop.moveSpeed", moveSpeed);
+        SmartDashboard.putNumber("Teleop.turnSpeed", turnSpeed);
+
+
         Subsystems.driveBase.fieldOrientedDrive(controls.getSwerveY() * moveSpeed, // Forward/backwards velocity
                 controls.getSwerveX() * moveSpeed, // Left/right velocity
                 controls.getSwerveTurn() * turnSpeed, // Turn velocity
