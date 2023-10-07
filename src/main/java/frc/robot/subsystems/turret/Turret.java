@@ -14,7 +14,7 @@ public class Turret {
     private final double PIVOT_SENSITIVITY_THRESHOLD = 2;
     private final double EXTENSION_SENSITIVITY_THRESHOLD = 1;
 
-    public static Turret getinstance() {
+    public static Turret getInstance() {
         if (instance == null) {
             instance = new Turret();
         }
