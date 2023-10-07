@@ -86,37 +86,34 @@ public class DeltaJoystickController extends ControlScheme {
     @Override
     public boolean doLimitOverride() {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'doLimitOverride'");
+        return false;
     }
 
     @Override
     public boolean doResetTurret() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'doResetTurret'");
+        return quaternary.getButtonById(2);
     }
 
     @Override
     public boolean doAutoHigh() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'doAutoHigh'");
+        // return quaternary.getButtonById(8);    
+        return false;
     }
 
     @Override
     public boolean doAutoMid() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'doAutoMid'");
+        // return quaternary.getButtonById(9);
+        return false;
     }
 
     @Override
     public boolean doAutoPickup() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'doAutoPickup'");
+        return quaternary.getButtonById(10);    
     }
 
     @Override
     public boolean doPlayerStation() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'doPlayerStation'");
+        return quaternary.getButtonById(6);   
     }
 
 }

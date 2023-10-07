@@ -14,7 +14,7 @@ public class Turret {
     private final double PIVOT_SENSITIVITY_THRESHOLD = 2;
     private final double EXTENSION_SENSITIVITY_THRESHOLD = 1;
 
-    public static Turret getinstance() {
+    public static Turret getInstance() {
         if (instance == null) {
             instance = new Turret();
         }
@@ -59,7 +59,8 @@ public class Turret {
     public boolean moveTo(TurretPosition targetState, double speed) {
         boolean pivot = pivotToAngle(targetState.pivotAngle(), speed);
         boolean extend = extendToPosition(targetState.extensionPosition());
-        return pivot && extend;
+        return pivot && extend; 
+
     }
 
     public void stop() {
@@ -108,9 +109,5 @@ public class Turret {
     public void setLimitOverride(boolean newVal) {
         pivot.setLimitOverride(newVal);
         extendRetract.setLimitOverride(newVal);
-    }
-
-    public void setSlowMode(boolean slow) {
-        pivot.setSlowMode(slow);
     }
 }

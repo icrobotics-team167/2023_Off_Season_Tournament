@@ -13,7 +13,6 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.AnalogEncoder;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.util.MovingAverage;
 
 /**
  * A module in a swerve drive.
@@ -34,7 +33,6 @@ public class SwerveModule {
 
     private PIDController turnPID;
     private final double TURN_P = -(1.0 / 180.0);
-    // private final double TURN_P = (1.0 / 180.0);
     private final double TURN_I = 0;
     private final double TURN_D = 0;
 
@@ -43,12 +41,6 @@ public class SwerveModule {
     private final double DRIVE_GEAR_RATIO = 6.75;
 
     private double angleOffset;
-
-    // Filter angles since the analog encoders are a bit noisy, prolly could get
-    // away with a smaller moving average size since the noise is on the smaller
-    // decimal points
-    // private MovingAverage angleFilter = new MovingAverage(10, true);
-    // Unused
 
     /**
      * Constructs a new Swerve module.
@@ -88,9 +80,8 @@ public class SwerveModule {
         this.drivePID.setD(DRIVE_D);
         this.drivePID.setFF(DRIVE_FF);
 
-        // Set up turn encoder and angle filter
+        // Set up turn encoder
         this.turnEncoder = new AnalogEncoder(encoderID);
-        // angleFilter.clear();
 
         // Set up the PID controller for the turning motor
         turnPID = new PIDController(TURN_P, TURN_I, TURN_D);
@@ -191,7 +182,6 @@ public class SwerveModule {
      * @return Current angle in degrees, from -180 to 180.
      */
     public double getAngle() {
-        // return turnEncoder.getAbsolutePosition() * 360 - 180;
         double rawEncoder = turnEncoder.getAbsolutePosition();
         double rawAngle = rawEncoder * 360 - 180;
         return Rotation2d.fromDegrees(rawAngle).rotateBy(Rotation2d.fromDegrees(angleOffset)).getDegrees();

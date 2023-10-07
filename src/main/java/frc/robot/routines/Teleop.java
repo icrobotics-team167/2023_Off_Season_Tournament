@@ -8,6 +8,7 @@ import frc.robot.Config;
 import frc.robot.controls.controlschemes.ControlScheme;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.drive.SwerveDriveBase;
+import frc.robot.subsystems.turret.*;
 
 public class Teleop {
     private ControlScheme controls;
@@ -19,6 +20,12 @@ public class Teleop {
 
     // private LimeLight limeLight;
     private AHRS navx = Subsystems.navx;
+    private LimeLight limeLight = Subsystems.limeLight;
+    private Turret turret = Subsystems.turret;
+    private Claw claw = Subsystems.claw;
+
+    private TurretPosition targetState = null;
+    private TurretPosition holdState = TurretPosition.INITIAL;
 
     public Teleop(ControlScheme controls) {
         this.controls = controls;
@@ -69,36 +76,25 @@ public class Teleop {
         // Code so that u only have to press one button and it will automatically go to
         // it.
 
-        int swivelOffset = controls.getPositionOffset();
         if (controls.doResetTurret()) {
             targetState = TurretPosition.INITIAL;
         } else if (controls.doAutoPickup()) {
-            targetState = TurretPosition.INTAKE.withSwivel(turret.getPosition().swivelAngle()).addSwivelOffset(-swivelOffset);
+            targetState = TurretPosition.INTAKE;
         } else if (controls.doPlayerStation()) {
-            targetState = TurretPosition.PLAYER_STATION.withSwivel(turret.getPosition().swivelAngle()).addSwivelOffset(-swivelOffset);
+            targetState = TurretPosition.PLAYER_STATION;
         } else if (controls.doAutoHigh()) {
-            targetState = TurretPosition.HIGH_MID;
+            targetState = TurretPosition.HIGH;
         } else if (controls.doAutoMid()) {
-            targetState = TurretPosition.MID_MID;
-        } else if (controls.doAutoHighRight()) {
-            targetState = TurretPosition.HIGH_RIGHT;
-        } else if (controls.doAutoMidRight()) {
-            targetState = TurretPosition.MID_RIGHT;
-        } else if (controls.doAutoHighLeft()) {
-            targetState = TurretPosition.HIGH_LEFT;
-        } else if (controls.doAutoMidLeft()) {
-            targetState = TurretPosition.MID_LEFT;
-        } else if (controls.offsetUpdated()) {
-            targetState = TurretPosition.INITIAL;
-        }
-        double swivel = controls.doUnlockSwivel() ? controls.getArmSwivel() : 0;
-        if (Math.abs(controls.getArmPivot()) > 0 || Math.abs(swivel) > 0 || Math.abs(controls.getArmExtend()) > 0) {
+            targetState = TurretPosition.MID;
+        } 
+        
+        if (Math.abs(controls.getArmPivot()) > 0 || Math.abs(controls.getArmExtend()) > 0) {
             targetState = null;
-            turret.move(controls.getArmPivot(), swivel, controls.getArmExtend());
+            turret.move(controls.getArmPivot(), controls.getArmExtend());
             holdState = turret.getPosition();
         } else {
             if (targetState != null) {
-                turret.moveTo(targetState.addSwivelOffset(swivelOffset));
+                turret.moveTo(targetState);
             } else {
                 turret.moveTo(holdState);
             }
@@ -114,7 +110,6 @@ public class Teleop {
 
         // PUT DEBUG STATEMENTS HERE
         SmartDashboard.putNumber("Pivot.position", Subsystems.turret.getPosition().pivotAngle());
-        SmartDashboard.putNumber("Swivel.position", Subsystems.turret.getPosition().swivelAngle());
         SmartDashboard.putNumber("ExtendRetract.position", Subsystems.turret.getPosition().extensionPosition());
         SmartDashboard.putNumber("Navx.yaw", navx.getAngle());
         SmartDashboard.putNumber("Navx.pitch", navx.getPitch());
