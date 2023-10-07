@@ -29,7 +29,7 @@ public class Teleop {
      * Runs once at the start of teleop
      */
     public void init() {
-     //   driveBase.resetPosition();
+        driveBase.resetPosition();
     }
 
     /**
@@ -38,17 +38,24 @@ public class Teleop {
     public void periodic() {
 
         // Driving
-        // If slowmode is on, multiply max move/turn speed by slowmode's speed multiplier.
+        // If slowmode is on, multiply max move/turn speed by slowmode's speed
+        // multiplier.
         // Otherwise, keep max move/turn speed as is.
         double moveSpeed = controls.doSlowMode() ? MAX_MOVE_SPEED * SLOWMODE_MULT : MAX_MOVE_SPEED;
         double turnSpeed = controls.doSlowMode() ? MAX_TURN_SPEED * SLOWMODE_MULT : MAX_TURN_SPEED;
         SmartDashboard.putNumber("Teleop.moveSpeed", moveSpeed);
         SmartDashboard.putNumber("Teleop.turnSpeed", turnSpeed);
 
+        double forwardsVel = controls.getSwerveY() * moveSpeed;
+        double sideVel = controls.getSwerveX() * moveSpeed;
+        double turnVel = controls.getSwerveTurn() * turnSpeed;
+        SmartDashboard.putNumber("Teleop.forwardsVel", forwardsVel);
+        SmartDashboard.putNumber("Teleop.sideVel", sideVel);
+        SmartDashboard.putNumber("Teleop.turnVel", turnVel);
 
-        Subsystems.driveBase.fieldOrientedDrive(controls.getSwerveY() * moveSpeed, // Forward/backwards velocity
-                controls.getSwerveX() * moveSpeed, // Left/right velocity
-                controls.getSwerveTurn() * turnSpeed, // Turn velocity
+        Subsystems.driveBase.fieldOrientedDrive(forwardsVel, // Forward/backwards velocity
+                sideVel, // Left/right velocity
+                turnVel, // Turn velocity
                 Rotation2d.fromDegrees(-navx.getYaw())); // Current orientation
 
         // PUT DEBUG STATEMENTS BELOW THIS LINE

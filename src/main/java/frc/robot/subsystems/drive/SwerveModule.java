@@ -33,8 +33,8 @@ public class SwerveModule {
     private final double DRIVE_FF = 0.025;
 
     private PIDController turnPID;
-    // private final double TURN_P = (1.0 / 180.0) / 5.0;
-    private final double TURN_P = (1.0 / 180.0);
+    private final double TURN_P = -(1.0 / 180.0);
+    // private final double TURN_P = (1.0 / 180.0);
     private final double TURN_I = 0;
     private final double TURN_D = 0;
 
@@ -70,6 +70,9 @@ public class SwerveModule {
         turnMotor.setSmartCurrentLimit(40);
         turnMotor.setSecondaryCurrentLimit(60);
 
+        driveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        turnMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+
         // Set up drive motor encoder
         this.driveEncoder = driveMotor.getEncoder();
         // Convert from "rotations of motor" to "meters driven by wheel"
@@ -91,7 +94,7 @@ public class SwerveModule {
 
         // Set up the PID controller for the turning motor
         turnPID = new PIDController(TURN_P, TURN_I, TURN_D);
-        // turnPID.setTolerance(5);
+        turnPID.setTolerance(1.5);
         turnPID.enableContinuousInput(-180, 180);
 
         this.angleOffset = angleOffset;
@@ -139,19 +142,17 @@ public class SwerveModule {
         state = SwerveModuleState.optimize(state, Rotation2d.fromDegrees(getAngle()));
         // Calculate a PID for the turn motor, clamp the pid to -1/1, and set the motor
         // power to that
-        // if (turnPID.atSetpoint()) {
-        // return;
-        // }
         var pidOutput = turnPID.calculate(getAngle(), state.angle.getDegrees());
         double turnPIDOutput = MathUtil.clamp(pidOutput, -1, 1);
-        // if (turnPIDOutput < 0.01) {
-        //     turnPIDOutput = 0;
-        // }
-        // turnMotor.set(turnPIDOutput);
+        if (turnPID.atSetpoint()) {
+            turnPIDOutput = 0;
+        }
+        turnMotor.set(turnPIDOutput);
         SmartDashboard.putNumber("Module " + moduleName + " turnMotor power", turnPIDOutput);
         // Give the drive motor's PID controller a target velocity and let it calculate
         // motor power from that
         drivePID.setReference(state.speedMetersPerSecond, CANSparkMax.ControlType.kVelocity);
+        SmartDashboard.putNumber("Module " + moduleName + " driveMotor power", driveMotor.get());
 
         // Debug statements
         SmartDashboard.putNumber("Module " + moduleName + " current angle (degrees)", getAngle());

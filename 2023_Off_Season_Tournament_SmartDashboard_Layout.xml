@@ -1,23 +1,12 @@
 <xml version="1.0">
 <dashboard>
-	<widget field="Module Back Right turnPidOutput" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="101"/>
-	</widget>
-	<widget field="Module Back Left turnPidOutput" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="114" y="382"/>
-	</widget>
-	<widget field="Module Front Right turnPidOutput" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="88" y="248"/>
-		<height>19</height>
-	</widget>
-	<widget field="Module Front Left turnPidOutput" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="456" y="199"/>
-	</widget>
 	<widget field="Teleop.turnSpeed" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="689" y="420"/>
+		<location x="672" y="48"/>
+		<width>192</width>
 	</widget>
 	<widget field="Teleop.moveSpeed" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="757" y="121"/>
+		<location x="672" y="32"/>
+		<width>192</width>
 	</widget>
 	<widget field="Robot.batteryVoltage" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
 		<location x="1136" y="0"/>
@@ -26,7 +15,7 @@
 		<property name="Maximum Y Value" value="12"/>
 	</widget>
 	<widget field="Teleop.navxYaw" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="862" y="71"/>
+		<location x="672" y="64"/>
 		<width>192</width>
 	</widget>
 	<widget field="SwerveDriveBase.yPosMeters" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
@@ -38,36 +27,36 @@
 		<width>192</width>
 	</widget>
 	<widget field="Module Back Right desired angle (degrees)" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="400" y="80"/>
+		<location x="400" y="112"/>
 		<width>272</width>
 	</widget>
 	<widget field="Module Back Right current angle (degrees)" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="400" y="64"/>
+		<location x="400" y="96"/>
 		<width>272</width>
 	</widget>
 	<widget field="Module Back Right turnMotor power" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="400" y="48"/>
+		<location x="400" y="64"/>
 		<width>272</width>
 	</widget>
 	<widget field="Module Back Left desired angle (degrees)" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="128" y="80"/>
+		<location x="128" y="112"/>
 		<width>272</width>
 	</widget>
 	<widget field="Module Back Left current angle (degrees)" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="198" y="473"/>
+		<location x="128" y="96"/>
 		<width>272</width>
 	</widget>
 	<widget field="Module Back Left turnMotor power" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="128" y="48"/>
+		<location x="128" y="64"/>
 		<width>272</width>
 		<height>19</height>
 	</widget>
 	<widget field="Module Front Right desired angle (degrees)" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="400" y="32"/>
+		<location x="400" y="48"/>
 		<width>272</width>
 	</widget>
 	<widget field="Module Front Right current angle (degrees)" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="400" y="16"/>
+		<location x="400" y="32"/>
 		<width>272</width>
 	</widget>
 	<widget field="Module Front Right turnMotor power" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
@@ -75,12 +64,13 @@
 		<width>272</width>
 	</widget>
 	<widget field="Module Front Left desired angle (degrees)" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="128" y="32"/>
+		<location x="128" y="48"/>
 		<width>272</width>
 	</widget>
 	<widget field="Module Front Left current angle (degrees)" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="363" y="302"/>
+		<location x="128" y="32"/>
 		<width>272</width>
+		<height>20</height>
 	</widget>
 	<widget field="Module Front Left turnMotor power" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="128" y="0"/>
@@ -88,6 +78,33 @@
 	</widget>
 	<widget field="Autonomous Routines" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
 		<location x="1" y="0"/>
+	</widget>
+	<widget field="Module Back Right driveMotor power" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="400" y="80"/>
+		<width>272</width>
+	</widget>
+	<widget field="Module Back Left driveMotor power" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="128" y="80"/>
+		<width>271</width>
+	</widget>
+	<widget field="Module Front Right driveMotor power" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="400" y="16"/>
+		<width>272</width>
+	</widget>
+	<widget field="Module Front Left driveMotor power" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="128" y="16"/>
+		<width>272</width>
+	</widget>
+	<widget field="Teleop.turnVel" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="864" y="32"/>
+		<width>176</width>
+	</widget>
+	<widget field="Teleop.sideVel" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="864" y="16"/>
+		<width>176</width>
+	</widget>
+	<widget field="Teleop.forwardsVel" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="864" y="0"/>
 	</widget>
 </dashboard>
 <live-window>

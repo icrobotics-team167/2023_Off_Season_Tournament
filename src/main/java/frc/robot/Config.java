@@ -90,16 +90,23 @@ public class Config {
             // Measured in meters
             public static final double robotLength = Units.inchesToMeters(23 - 2 * 3.25); // 16.5 in
             public static final double robotWidth = Units.inchesToMeters(23 - 2 * 3.25); // 16.5 in
-            public static final Translation2d FRONT_LEFT_POS = new Translation2d(robotLength / 2.0, robotWidth / 2.0);
+            public static final Translation2d FRONT_LEFT_POS = new Translation2d(-robotLength / 2.0, -robotWidth / 2.0);
             public static final Translation2d FRONT_RIGHT_POS = new Translation2d(-robotLength / 2.0, robotWidth / 2.0);
             public static final Translation2d BACK_LEFT_POS = new Translation2d(robotLength / 2.0, -robotWidth / 2.0);
-            public static final Translation2d BACK_RIGHT_POS = new Translation2d(-robotLength / 2.0, -robotWidth / 2.0);
+            public static final Translation2d BACK_RIGHT_POS = new Translation2d(robotLength / 2.0, robotWidth / 2.0);
 
             // Drivebase Analog Encoder Ports
-            public static final double FRONT_LEFT_ENCODER = 0;
-            public static final double FRONT_RIGHT_ENCODER = 1;
-            public static final double BACK_LEFT_ENCODER = 2;
-            public static final double BACK_RIGHT_ENCODER = 3;
+            public static final int FRONT_LEFT_ENCODER = 0;
+            public static final int FRONT_RIGHT_ENCODER = 1;
+            public static final int BACK_LEFT_ENCODER = 2;
+            public static final int BACK_RIGHT_ENCODER = 3;
+
+            // Drivebase encoder offsets
+            // Dear build team, what the fuck.
+            public static final double FRONT_LEFT_OFFSET = -95;
+            public static final double FRONT_RIGHT_OFFSET = -53;
+            public static final double BACK_LEFT_OFFSET = -42;
+            public static final double BACK_RIGHT_OFFSET = 32;
         }
     }
 

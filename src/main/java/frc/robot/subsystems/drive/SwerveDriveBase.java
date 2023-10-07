@@ -37,13 +37,13 @@ public class SwerveDriveBase {
         // Set up swerve modules
         modules = new SwerveModule[] {
                 new SwerveModule(Config.Ports.SwerveDrive.FRONT_LEFT_DRIVE, Config.Ports.SwerveDrive.FRONT_LEFT_TURN,
-                        0),
+                        Config.Ports.SwerveDrive.FRONT_LEFT_ENCODER, Config.Ports.SwerveDrive.FRONT_LEFT_OFFSET),
                 new SwerveModule(Config.Ports.SwerveDrive.FRONT_RIGHT_DRIVE, Config.Ports.SwerveDrive.FRONT_RIGHT_TURN,
-                        1),
+                        Config.Ports.SwerveDrive.FRONT_RIGHT_ENCODER, Config.Ports.SwerveDrive.FRONT_RIGHT_OFFSET),
                 new SwerveModule(Config.Ports.SwerveDrive.BACK_LEFT_DRIVE, Config.Ports.SwerveDrive.BACK_LEFT_TURN,
-                        2),
+                        Config.Ports.SwerveDrive.BACK_LEFT_ENCODER, Config.Ports.SwerveDrive.BACK_LEFT_OFFSET),
                 new SwerveModule(Config.Ports.SwerveDrive.BACK_RIGHT_DRIVE, Config.Ports.SwerveDrive.BACK_RIGHT_TURN,
-                        3),
+                        Config.Ports.SwerveDrive.BACK_RIGHT_ENCODER, Config.Ports.SwerveDrive.BACK_RIGHT_OFFSET),
         };
         // Initialize odometry and kinematics
         moduleOdometry = new SwerveModulePosition[] {
