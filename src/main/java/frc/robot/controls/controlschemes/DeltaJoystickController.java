@@ -13,10 +13,10 @@ import frc.robot.util.MathUtils;
  */
 public class DeltaJoystickController extends ControlScheme {
 
-    private Controller primaryLeft;
-    private Controller primaryRight;
-    private Controller secondaryLeft;
-    private Controller secondaryRight;
+    private Controller primary;
+    private Controller secondary;
+    private Controller tertiary;
+    private Controller quaternary;
 
     /**
      * Constructs a new control scheme, with 4 flightsim joysticks.
@@ -28,35 +28,95 @@ public class DeltaJoystickController extends ControlScheme {
      */
     public DeltaJoystickController(Controller primaryLeft, Controller primaryRight, Controller secondaryLeft,
             Controller secondaryRight) {
-        this.primaryLeft = primaryLeft;
-        this.primaryRight = primaryRight;
-        this.secondaryLeft = secondaryLeft;
-        this.secondaryRight = secondaryRight;
+        this.primary = primaryLeft;
+        this.secondary = primaryRight;
+        this.tertiary = secondaryLeft;
+        this.quaternary = secondaryRight;
     }
 
     @Override
     public double getSwerveX() {
-        return MathUtils.deadZone(primaryLeft.getLeftStickX(), Config.Tolerances.PRIMARY_CONTROLLER_DEADZONE_SIZE);
+        return MathUtils.deadZone(primary.getLeftStickX(), Config.Tolerances.PRIMARY_CONTROLLER_DEADZONE_SIZE);
     }
 
     @Override
     public double getSwerveY() {
-        return MathUtils.deadZone(primaryLeft.getLeftStickY(), Config.Tolerances.PRIMARY_CONTROLLER_DEADZONE_SIZE);
+        return MathUtils.deadZone(primary.getLeftStickY(), Config.Tolerances.PRIMARY_CONTROLLER_DEADZONE_SIZE);
     }
 
     @Override
     public double getSwerveTurn() {
-        return -MathUtils.deadZone(primaryRight.getLeftStickX(), Config.Tolerances.SECONDARY_CONTROLLER_DEADZONE_SIZE);
+        return -MathUtils.deadZone(secondary.getLeftStickX(), Config.Tolerances.SECONDARY_CONTROLLER_DEADZONE_SIZE);
     }
 
     @Override
     public boolean doSlowMode() {
-        return primaryLeft.getLeftTrigger();
+        return primary.getLeftTrigger();
     }
 
     @Override
     public boolean toggleLimelight() {
-        return primaryRight.getButtonPressedById(2);
+        return secondary.getButtonPressedById(2);
+    }
+
+    @Override
+    public boolean intake() {
+        return quaternary.getButtonById(3);
+    }
+
+    @Override
+    public boolean outtake() {
+        return quaternary.getButtonById(4);
+    }
+
+    @Override
+    public double getArmPivot() {
+        return (Math.abs(tertiary.getLeftStickY()) >= Config.Tolerances.TERTIARY_CONTROLLER_DEADZONE_SIZE
+                ? tertiary.getLeftStickY()
+                : 0);
+    }
+
+    @Override
+    public double getArmExtend() {
+        return (Math.abs(quaternary.getLeftStickY()) >= Config.Tolerances.QUATERNARY_CONTROLLER_DEADZONE_SIZE
+                ? quaternary.getLeftStickY()
+                : 0);
+    }
+
+    @Override
+    public boolean doLimitOverride() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'doLimitOverride'");
+    }
+
+    @Override
+    public boolean doResetTurret() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'doResetTurret'");
+    }
+
+    @Override
+    public boolean doAutoHigh() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'doAutoHigh'");
+    }
+
+    @Override
+    public boolean doAutoMid() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'doAutoMid'");
+    }
+
+    @Override
+    public boolean doAutoPickup() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'doAutoPickup'");
+    }
+
+    @Override
+    public boolean doPlayerStation() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'doPlayerStation'");
     }
 
 }

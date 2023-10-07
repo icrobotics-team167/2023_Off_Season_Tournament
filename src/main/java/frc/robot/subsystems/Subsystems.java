@@ -11,12 +11,16 @@ public class Subsystems {
 
     public static final SwerveDriveBase driveBase;
     public static final AHRS navx;
-    // public static final LimeLight limeLight;
+    public static final LimeLight limeLight;
+    public static final Turret turret;
+    public static final Claw claw;
 
     static {
         driveBase = SwerveDriveBase.getInstance();
         navx = new AHRS(SPI.Port.kMXP);
-        // limeLight = LimeLight.getInstance();
+        limeLight = LimeLight.getInstance();
+        turret = Turret.getInstance();
+        claw = Claw.getInstance();
     }
 
     public static void setInitialStates() {
