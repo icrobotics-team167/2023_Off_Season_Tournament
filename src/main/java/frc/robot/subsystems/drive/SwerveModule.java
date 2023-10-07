@@ -42,10 +42,13 @@ public class SwerveModule {
     // Swerve Drive Specialties MK4i L2
     private final double DRIVE_GEAR_RATIO = 6.75;
 
+    private double angleOffset;
+
     // Filter angles since the analog encoders are a bit noisy, prolly could get
     // away with a smaller moving average size since the noise is on the smaller
     // decimal points
-    private MovingAverage angleFilter = new MovingAverage(10, true);
+    // private MovingAverage angleFilter = new MovingAverage(10, true);
+    // Unused
 
     /**
      * Constructs a new Swerve module.
@@ -54,8 +57,10 @@ public class SwerveModule {
      * @param turnMotorID  The CAN ID of the turning motor.
      * @param encoderID    The analog port ID of the turn encoder. Also doubles as a
      *                     module ID.
+     * @param angleOffset  The angle offset of the encoder, since the encoders
+     *                     aren't facing forwards.
      */
-    public SwerveModule(int driveMotorID, int turnMotorID, int encoderID) {
+    public SwerveModule(int driveMotorID, int turnMotorID, int encoderID, double angleOffset) {
         // Set up motors
         this.driveMotor = new CANSparkMax(driveMotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
         this.turnMotor = new CANSparkMax(turnMotorID, CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -82,12 +87,14 @@ public class SwerveModule {
 
         // Set up turn encoder and angle filter
         this.turnEncoder = new AnalogEncoder(encoderID);
-        angleFilter.clear();
+        // angleFilter.clear();
 
         // Set up the PID controller for the turning motor
         turnPID = new PIDController(TURN_P, TURN_I, TURN_D);
-        turnPID.setTolerance(5);
+        // turnPID.setTolerance(5);
         turnPID.enableContinuousInput(-180, 180);
+
+        this.angleOffset = angleOffset;
 
         // Little switch statement for cleaner-looking SmartDashboard outputs
         switch (encoderID) {
@@ -111,6 +118,18 @@ public class SwerveModule {
     }
 
     /**
+     * Constructs a new Swerve module.
+     * 
+     * @param driveMotorID The CAN ID of the drive motor.
+     * @param turnMotorID  The CAN ID of the turning motor.
+     * @param encoderID    The analog port ID of the turn encoder. Also doubles as a
+     *                     module ID.
+     */
+    public SwerveModule(int driveMotorID, int turnMotorID, int encoderID) {
+        this(driveMotorID, turnMotorID, encoderID, 0.0);
+    }
+
+    /**
      * Moves the swerve module.
      * 
      * @param state The desired SwerveModuleState
@@ -121,14 +140,13 @@ public class SwerveModule {
         // Calculate a PID for the turn motor, clamp the pid to -1/1, and set the motor
         // power to that
         // if (turnPID.atSetpoint()) {
-        //     return;
+        // return;
         // }
         var pidOutput = turnPID.calculate(getAngle(), state.angle.getDegrees());
-
         double turnPIDOutput = MathUtil.clamp(pidOutput, -1, 1);
-        if(turnPIDOutput < 0.01) {
-            turnPIDOutput = 0;
-        }
+        // if (turnPIDOutput < 0.01) {
+        //     turnPIDOutput = 0;
+        // }
         // turnMotor.set(turnPIDOutput);
         SmartDashboard.putNumber("Module " + moduleName + " turnMotor power", turnPIDOutput);
         // Give the drive motor's PID controller a target velocity and let it calculate
@@ -138,8 +156,6 @@ public class SwerveModule {
         // Debug statements
         SmartDashboard.putNumber("Module " + moduleName + " current angle (degrees)", getAngle());
         SmartDashboard.putNumber("Module " + moduleName + " desired angle (degrees)", state.angle.getDegrees());
-        SmartDashboard.putNumber("Module " + moduleName + " current velocity (m/s)", driveEncoder.getVelocity());
-        SmartDashboard.putNumber("Module " + moduleName + " desired velocity (m/s)", state.speedMetersPerSecond);
     }
 
     /**
@@ -174,10 +190,10 @@ public class SwerveModule {
      * @return Current angle in degrees, from -180 to 180.
      */
     public double getAngle() {
-        angleFilter.add(turnEncoder.getAbsolutePosition() * 360 - 180);
-        Rotation2d angleRotation = Rotation2d.fromDegrees(angleFilter.get());
-        // return angleFilter.get();
-        return angleRotation.rotateBy(Rotation2d.fromDegrees(-45)).getDegrees();
+        // return turnEncoder.getAbsolutePosition() * 360 - 180;
+        double rawEncoder = turnEncoder.getAbsolutePosition();
+        double rawAngle = rawEncoder * 360 - 180;
+        return Rotation2d.fromDegrees(rawAngle).rotateBy(Rotation2d.fromDegrees(angleOffset)).getDegrees();
     }
 
     /**
