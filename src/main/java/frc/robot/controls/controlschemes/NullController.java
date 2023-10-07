@@ -30,4 +30,54 @@ public class NullController extends ControlScheme {
     public double getSwerveTurn() {
         return 0;
     }
+
+    @Override
+    public boolean intake() {
+        return false;
+    }
+
+    @Override
+    public boolean outtake() {
+        return false;
+    }
+
+    @Override
+    public double getArmPivot() {
+        return 0;
+    }
+
+    @Override
+    public double getArmExtend() {
+        return 0;
+    }
+
+    @Override
+    public boolean doLimitOverride() {
+        return false;
+    }
+
+    @Override
+    public boolean doResetTurret() {
+        return false;
+    }
+
+    @Override
+    public boolean doAutoHigh() {
+        return false;
+    }
+
+    @Override
+    public boolean doAutoMid() {
+        return false;
+    }
+
+    @Override
+    public boolean doAutoPickup() {
+        return false;
+    }
+
+    @Override
+    public boolean doPlayerStation() {
+        return false;
+    }
 }
