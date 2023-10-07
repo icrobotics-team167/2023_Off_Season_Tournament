@@ -5,6 +5,9 @@ import edu.wpi.first.cscore.HttpCamera;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
+/**
+ * A Limelight Vision Camera.
+ */
 public class LimeLight {
     private static LimeLight instance;
 

@@ -2,19 +2,15 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.controls.controllers.*;
 import frc.robot.controls.controlschemes.*;
 import frc.robot.routines.Action;
-import frc.robot.routines.Routine;
 import frc.robot.routines.auto.*;
 import frc.robot.routines.Teleop;
 import frc.robot.subsystems.LimeLight;
 import frc.robot.subsystems.Subsystems;
-import java.time.Duration;
 
 public class Robot extends TimedRobot {
 
@@ -74,14 +70,10 @@ public class Robot extends TimedRobot {
 
         if (primaryController == null && secondaryController == null) {
             controls = new NullController();
-        } else if (primaryController != null && secondaryController == null) {
-            controls = new SingleController(primaryController);
         } else if (Config.Settings.PRIMARY_CONTROLLER_TYPE == ControllerType.JOYSTICK) {
             // If the first contorller is a JOYSTICK type, assume we have four joysticks.
             controls = new DeltaJoystickController(primaryController, secondaryController, tertiaryController,
                     quaternaryController);
-        } else if (primaryController != null && secondaryController != null) {
-            controls = new DoubleController(primaryController, secondaryController);
         } else {
             // Fallback
             // This should be unreachable in normal conditions

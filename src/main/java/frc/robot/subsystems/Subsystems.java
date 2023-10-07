@@ -2,9 +2,11 @@ package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.*;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.subsystems.drive.SwerveDriveBase;
 
+/**
+ * Initializes robot subsystems.
+ */
 public class Subsystems {
 
     public static final SwerveDriveBase driveBase;

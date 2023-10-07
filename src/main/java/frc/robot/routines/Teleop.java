@@ -3,7 +3,6 @@ package frc.robot.routines;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Config;
 import frc.robot.controls.controlschemes.ControlScheme;
@@ -26,17 +25,38 @@ public class Teleop {
         driveBase = Subsystems.driveBase;
     }
 
+    /**
+     * Runs once at the start of teleop
+     */
     public void init() {
         driveBase.resetPosition();
     }
 
+    /**
+     * Runs every tick of teleop
+     */
     public void periodic() {
 
+        // Driving
+        // If slowmode is on, multiply max move/turn speed by slowmode's speed
+        // multiplier.
+        // Otherwise, keep max move/turn speed as is.
         double moveSpeed = controls.doSlowMode() ? MAX_MOVE_SPEED * SLOWMODE_MULT : MAX_MOVE_SPEED;
         double turnSpeed = controls.doSlowMode() ? MAX_TURN_SPEED * SLOWMODE_MULT : MAX_TURN_SPEED;
-        Subsystems.driveBase.fieldOrientedDrive(controls.getSwerveY() * moveSpeed,
-                controls.getSwerveX() * moveSpeed,
-                controls.getSwerveTurn() * turnSpeed, Rotation2d.fromDegrees(-navx.getYaw()));
+        SmartDashboard.putNumber("Teleop.moveSpeed", moveSpeed);
+        SmartDashboard.putNumber("Teleop.turnSpeed", turnSpeed);
+
+        double forwardsVel = controls.getSwerveY() * moveSpeed;
+        double sideVel = controls.getSwerveX() * moveSpeed;
+        double turnVel = controls.getSwerveTurn() * turnSpeed;
+        SmartDashboard.putNumber("Teleop.forwardsVel", forwardsVel);
+        SmartDashboard.putNumber("Teleop.sideVel", sideVel);
+        SmartDashboard.putNumber("Teleop.turnVel", turnVel);
+
+        Subsystems.driveBase.fieldOrientedDrive(forwardsVel, // Forward/backwards velocity
+                sideVel, // Left/right velocity
+                turnVel, // Turn velocity
+                Rotation2d.fromDegrees(-navx.getYaw())); // Current orientation
 
         // PUT DEBUG STATEMENTS BELOW THIS LINE
         SmartDashboard.putNumber("Teleop.navxYaw", -navx.getYaw());
