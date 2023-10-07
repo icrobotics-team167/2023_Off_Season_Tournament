@@ -108,6 +108,18 @@ public class Config {
             public static final double BACK_LEFT_OFFSET = -42;
             public static final double BACK_RIGHT_OFFSET = 32;
         }
+
+        public static final class Arm {
+            // Arm CAN bus Addresses
+            // TEMPORARY VALUES
+            public static final int EXTEND_RETRACT = 12;
+            public static final int PIVOT_1 = 10;
+            public static final int PIVOT_2 = 11;
+            public static final int CLAW = 13;
+
+            // Digital Limit Switches
+            public static final int EXTEND_RETRACT_SWITCH = 0;
+        }
     }
 
 }
