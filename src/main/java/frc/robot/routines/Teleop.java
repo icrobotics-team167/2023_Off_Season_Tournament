@@ -25,7 +25,7 @@ public class Teleop {
     private Claw claw = Subsystems.claw;
 
     private TurretPosition targetState = null;
-    private TurretPosition holdState = null;
+    private TurretPosition holdState = TurretPosition.INITIAL;
 
     public Teleop(ControlScheme controls) {
         this.controls = controls;

@@ -59,7 +59,8 @@ public class Turret {
     public boolean moveTo(TurretPosition targetState, double speed) {
         boolean pivot = pivotToAngle(targetState.pivotAngle(), speed);
         boolean extend = extendToPosition(targetState.extensionPosition());
-        return pivot && extend;
+        return pivot && extend; 
+
     }
 
     public void stop() {
