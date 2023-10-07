@@ -110,8 +110,4 @@ public class Turret {
         pivot.setLimitOverride(newVal);
         extendRetract.setLimitOverride(newVal);
     }
-
-    public void setSlowMode(boolean slow) {
-        pivot.setSlowMode(slow);
-    }
 }

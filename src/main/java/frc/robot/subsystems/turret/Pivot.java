@@ -29,7 +29,6 @@ public class Pivot {
     private boolean overrideAngleLimits = false;
 
     private final double SLOW_TURN_MULT = 0.3;
-    private boolean slowMode = false;
 
     // Singleton
     public static Pivot instance;
@@ -92,9 +91,6 @@ public class Pivot {
      */
     public void move(double speed) {
         speed *= extensionSpeedMultiplier();
-        if (slowMode) {
-            speed *= SLOW_TURN_MULT;
-        }
         double motorOutput = MAX_TURN_SPEED * Math.abs(speed);
         // pivotMaster.set(-motorOutput*(Math.abs(speed)/speed));
         if (speed > 0 && !tooFarUp()) {
@@ -162,9 +158,5 @@ public class Pivot {
         }
         SmartDashboard.putNumber("Turret.extensionSpeedMultiplier", multiplier);
         return multiplier;
-    }
-
-    public void setSlowMode(boolean slow) {
-        slowMode = slow;
     }
 }
