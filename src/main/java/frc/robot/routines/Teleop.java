@@ -106,9 +106,6 @@ public class Teleop {
         // PUT DEBUG STATEMENTS HERE
         SmartDashboard.putNumber("Pivot.position", Subsystems.turret.getPosition().pivotAngle());
         SmartDashboard.putNumber("ExtendRetract.position", Subsystems.turret.getPosition().extensionPosition());
-        SmartDashboard.putNumber("Teleop.yaw", Subsystems.gyro.getYawDegrees());
-        SmartDashboard.putNumber("Teleop.pitch", Subsystems.gyro.getPitchDegrees());
-        SmartDashboard.putNumber("Teleop.roll", Subsystems.gyro.getRollDegrees());
     }
 
 }
