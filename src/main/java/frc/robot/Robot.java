@@ -90,10 +90,12 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotPeriodic() {
+        // Telemetry
         SmartDashboard.putNumber("Robot.batteryVoltage", RobotController.getBatteryVoltage());
         SmartDashboard.putNumber("Robot.yaw", Subsystems.gyro.getYawDegrees());
         SmartDashboard.putNumber("Robot.pitch", Subsystems.gyro.getPitchDegrees());
         SmartDashboard.putNumber("Robot.roll", Subsystems.gyro.getRollDegrees());
+        Subsystems.driveBase.sendTelemetry();
     }
 
     @Override

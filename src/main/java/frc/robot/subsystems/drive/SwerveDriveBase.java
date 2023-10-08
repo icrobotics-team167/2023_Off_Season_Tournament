@@ -138,4 +138,13 @@ public class SwerveDriveBase {
         odometry.update(Subsystems.gyro.getYaw(), moduleOdometry);
         // odometry.update(Rotation2d.fromDegrees(0), modulePositions);
     }
+
+    /**
+     * Sends module telemetry to SmartDashboard.
+     */
+    public void sendTelemetry() {
+        for (SwerveModule module : modules) {
+            module.sendTelemetry();
+        }
+    }
 }
