@@ -112,18 +112,6 @@ public class SwerveModule {
     }
 
     /**
-     * Constructs a new Swerve module.
-     * 
-     * @param driveMotorID The CAN ID of the drive motor.
-     * @param turnMotorID  The CAN ID of the turning motor.
-     * @param encoderID    The analog port ID of the turn encoder. Also doubles as a
-     *                     module ID.
-     */
-    public SwerveModule(int driveMotorID, int turnMotorID, int encoderID) {
-        this(driveMotorID, turnMotorID, encoderID, 0.0);
-    }
-
-    /**
      * Moves the swerve module.
      * 
      * @param state The desired SwerveModuleState
