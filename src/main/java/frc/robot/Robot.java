@@ -100,7 +100,6 @@ public class Robot extends TimedRobot {
     public void autonomousInit() {
         auto = autoChooser.getSelected().actions;
         limeLight.setVisionMode();
-        Subsystems.driveBase.resetPosition();
         auto.exec();
         // System.out.println("Auto selected: " + autoChooser.getSelected().name);
     }
