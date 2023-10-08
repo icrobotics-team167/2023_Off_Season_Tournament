@@ -72,6 +72,8 @@ public class Config {
         // public static final int RoboRio = 0
         // public static final int PDP = 1
 
+        public static final int PIGEON = 10;
+
         /**
          * Drivebase ports.
          */

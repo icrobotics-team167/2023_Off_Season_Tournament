@@ -18,8 +18,6 @@ public class Teleop {
     private static final double MAX_TURN_SPEED = Config.Settings.SwerveDrive.MAX_TURN_SPEED;
     private static final double SLOWMODE_MULT = Config.Settings.SwerveDrive.SLOWMODE_MULT;
 
-    // private LimeLight limeLight;
-    private AHRS navx = Subsystems.navx;
     private LimeLight limeLight = Subsystems.limeLight;
     private Turret turret = Subsystems.turret;
     private Claw claw = Subsystems.claw;
@@ -63,10 +61,7 @@ public class Teleop {
         Subsystems.driveBase.fieldOrientedDrive(forwardsVel, // Forward/backwards velocity
                 sideVel, // Left/right velocity
                 turnVel, // Turn velocity
-                Rotation2d.fromDegrees(-navx.getYaw())); // Current orientation
-
-        // PUT DEBUG STATEMENTS BELOW THIS LINE
-        SmartDashboard.putNumber("Teleop.navxYaw", -navx.getYaw());
+                Subsystems.gyro.getYaw()); // Current orientation
 
         if (controls.toggleLimelight()) {
             limeLight.toggleMode();
@@ -111,8 +106,9 @@ public class Teleop {
         // PUT DEBUG STATEMENTS HERE
         SmartDashboard.putNumber("Pivot.position", Subsystems.turret.getPosition().pivotAngle());
         SmartDashboard.putNumber("ExtendRetract.position", Subsystems.turret.getPosition().extensionPosition());
-        SmartDashboard.putNumber("Navx.yaw", navx.getAngle());
-        SmartDashboard.putNumber("Navx.pitch", navx.getPitch());
+        SmartDashboard.putNumber("Teleop.yaw", Subsystems.gyro.getYawDegrees());
+        SmartDashboard.putNumber("Teleop.pitch", Subsystems.gyro.getPitchDegrees());
+        SmartDashboard.putNumber("Teleop.roll", Subsystems.gyro.getRollDegrees());
     }
 
 }
