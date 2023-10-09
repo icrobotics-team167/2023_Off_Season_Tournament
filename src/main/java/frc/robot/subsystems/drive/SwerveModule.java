@@ -42,6 +42,8 @@ public class SwerveModule {
 
     private double angleOffset;
 
+    private double targetAngle = 0;
+
     /**
      * Constructs a new Swerve module.
      * 
@@ -112,42 +114,26 @@ public class SwerveModule {
     }
 
     /**
-     * Constructs a new Swerve module.
-     * 
-     * @param driveMotorID The CAN ID of the drive motor.
-     * @param turnMotorID  The CAN ID of the turning motor.
-     * @param encoderID    The analog port ID of the turn encoder. Also doubles as a
-     *                     module ID.
-     */
-    public SwerveModule(int driveMotorID, int turnMotorID, int encoderID) {
-        this(driveMotorID, turnMotorID, encoderID, 0.0);
-    }
-
-    /**
      * Moves the swerve module.
      * 
      * @param state The desired SwerveModuleState
      */
     public void move(SwerveModuleState state) {
         // Optimize the module state
-        state = SwerveModuleState.optimize(state, Rotation2d.fromDegrees(getAngle()));
+        state = SwerveModuleState.optimize(state, Rotation2d.fromDegrees(getCurrentAngle()));
+        targetAngle = state.angle.getDegrees();
         // Calculate a PID for the turn motor, clamp the pid to -1/1, and set the motor
         // power to that
-        var pidOutput = turnPID.calculate(getAngle(), state.angle.getDegrees());
+        var pidOutput = turnPID.calculate(getCurrentAngle(), targetAngle);
         double turnPIDOutput = MathUtil.clamp(pidOutput, -1, 1);
         if (turnPID.atSetpoint()) {
             turnPIDOutput = 0;
         }
         turnMotor.set(turnPIDOutput);
-        SmartDashboard.putNumber("Module " + moduleName + " turnMotor power", turnPIDOutput);
         // Give the drive motor's PID controller a target velocity and let it calculate
         // motor power from that
         drivePID.setReference(state.speedMetersPerSecond, CANSparkMax.ControlType.kVelocity);
-        SmartDashboard.putNumber("Module " + moduleName + " driveMotor power", driveMotor.get());
-
-        // Debug statements
-        SmartDashboard.putNumber("Module " + moduleName + " current angle (degrees)", getAngle());
-        SmartDashboard.putNumber("Module " + moduleName + " desired angle (degrees)", state.angle.getDegrees());
+        
     }
 
     /**
@@ -166,7 +152,7 @@ public class SwerveModule {
      *         angle.
      */
     public SwerveModulePosition getPosition() {
-        return new SwerveModulePosition(getDistanceDriven(), Rotation2d.fromDegrees(getAngle()));
+        return new SwerveModulePosition(getDistanceDriven(), Rotation2d.fromDegrees(getCurrentAngle()));
     }
 
     /**
@@ -177,14 +163,33 @@ public class SwerveModule {
     }
 
     /**
-     * Gets the current angle of the module. Filtered to smooth out noise.
+     * Gets the current angle of the module.
      * 
      * @return Current angle in degrees, from -180 to 180.
      */
-    public double getAngle() {
+    public double getCurrentAngle() {
         double rawEncoder = turnEncoder.getAbsolutePosition();
         double rawAngle = rawEncoder * 360 - 180;
         return Rotation2d.fromDegrees(rawAngle).rotateBy(Rotation2d.fromDegrees(angleOffset)).getDegrees();
+    }
+
+    /**
+     * Gets the current target angle of the module.
+     * 
+     * @return Target angle in degrees, from -180 to 180.
+     */
+    public double getTargetAngle() {
+        return targetAngle;
+    }
+
+    /**
+     * Sends module telemetry to SmartDashboard.
+     */
+    public void sendTelemetry() {
+        SmartDashboard.putNumber("Module " + moduleName + " turnMotor power", turnMotor.get());
+        SmartDashboard.putNumber("Module " + moduleName + " driveMotor power", driveMotor.get());
+        SmartDashboard.putNumber("Module " + moduleName + " current angle (degrees)", getCurrentAngle());
+        SmartDashboard.putNumber("Module " + moduleName + " desired angle (degrees)", targetAngle);
     }
 
     /**

@@ -24,8 +24,11 @@ public class Config {
         public static final ControllerType TERTIARY_CONTROLLER_TYPE = ControllerType.JOYSTICK;
         public static final ControllerType QUATERNARY_CONTROLLER_TYPE = ControllerType.JOYSTICK;
 
+        public static final boolean FIELD_ORIENTED_DRIVE = true;
+
         // CPU period (seconds)
         public static final double CPU_PERIOD = 0.02;
+
 
         /**
          * Drivebase speed limits.
@@ -71,6 +74,8 @@ public class Config {
         // main control system components
         // public static final int RoboRio = 0
         // public static final int PDP = 1
+
+        public static final int PIGEON = 10;
 
         /**
          * Drivebase ports.

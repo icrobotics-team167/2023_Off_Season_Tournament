@@ -94,7 +94,7 @@ public class SwerveDriveBase {
         }
 
         // Update the whole chassis's odometry using the individual module's odometry
-        odometry.update(Rotation2d.fromDegrees(Subsystems.navx.getAngle()), moduleOdometry);
+        odometry.update(Subsystems.gyro.getYaw(), moduleOdometry);
         // odometry.update(Rotation2d.fromDegrees(0), modulePositions);
 
         // DEBUG
@@ -135,7 +135,16 @@ public class SwerveDriveBase {
             modules[i].resetPosition();
             moduleOdometry[i] = modules[i].getPosition();
         }
-        odometry.update(Rotation2d.fromDegrees(Subsystems.navx.getAngle()), moduleOdometry);
+        odometry.update(Subsystems.gyro.getYaw(), moduleOdometry);
         // odometry.update(Rotation2d.fromDegrees(0), modulePositions);
+    }
+
+    /**
+     * Sends module telemetry to SmartDashboard.
+     */
+    public void sendTelemetry() {
+        for (SwerveModule module : modules) {
+            module.sendTelemetry();
+        }
     }
 }

@@ -18,8 +18,6 @@ public class Teleop {
     private static final double MAX_TURN_SPEED = Config.Settings.SwerveDrive.MAX_TURN_SPEED;
     private static final double SLOWMODE_MULT = Config.Settings.SwerveDrive.SLOWMODE_MULT;
 
-    // private LimeLight limeLight;
-    private AHRS navx = Subsystems.navx;
     private LimeLight limeLight = Subsystems.limeLight;
     private Turret turret = Subsystems.turret;
     private Claw claw = Subsystems.claw;
@@ -60,13 +58,16 @@ public class Teleop {
         SmartDashboard.putNumber("Teleop.sideVel", sideVel);
         SmartDashboard.putNumber("Teleop.turnVel", turnVel);
 
-        Subsystems.driveBase.fieldOrientedDrive(forwardsVel, // Forward/backwards velocity
-                sideVel, // Left/right velocity
-                turnVel, // Turn velocity
-                Rotation2d.fromDegrees(-navx.getYaw())); // Current orientation
-
-        // PUT DEBUG STATEMENTS BELOW THIS LINE
-        SmartDashboard.putNumber("Teleop.navxYaw", -navx.getYaw());
+        if (Config.Settings.FIELD_ORIENTED_DRIVE) {
+            Subsystems.driveBase.fieldOrientedDrive(forwardsVel, // Forward/backwards city
+                    sideVel, // Left/right velocity
+                    turnVel, // Turn velocity
+                    Subsystems.gyro.getYaw()); // Current orientation
+        } else {
+            Subsystems.driveBase.drive(forwardsVel,
+                    sideVel,
+                    turnVel);
+        }
 
         if (controls.toggleLimelight()) {
             limeLight.toggleMode();
@@ -86,8 +87,8 @@ public class Teleop {
             targetState = TurretPosition.HIGH;
         } else if (controls.doAutoMid()) {
             targetState = TurretPosition.MID;
-        } 
-        
+        }
+
         if (Math.abs(controls.getArmPivot()) > 0 || Math.abs(controls.getArmExtend()) > 0) {
             targetState = null;
             turret.move(controls.getArmPivot(), controls.getArmExtend());
@@ -111,8 +112,6 @@ public class Teleop {
         // PUT DEBUG STATEMENTS HERE
         SmartDashboard.putNumber("Pivot.position", Subsystems.turret.getPosition().pivotAngle());
         SmartDashboard.putNumber("ExtendRetract.position", Subsystems.turret.getPosition().extensionPosition());
-        SmartDashboard.putNumber("Navx.yaw", navx.getAngle());
-        SmartDashboard.putNumber("Navx.pitch", navx.getPitch());
     }
 
 }

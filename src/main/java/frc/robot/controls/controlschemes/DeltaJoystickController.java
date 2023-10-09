@@ -71,16 +71,12 @@ public class DeltaJoystickController extends ControlScheme {
 
     @Override
     public double getArmPivot() {
-        return (Math.abs(tertiary.getLeftStickY()) >= Config.Tolerances.TERTIARY_CONTROLLER_DEADZONE_SIZE
-                ? tertiary.getLeftStickY()
-                : 0);
+        return MathUtils.deadZone(tertiary.getLeftStickY(), Config.Tolerances.TERTIARY_CONTROLLER_DEADZONE_SIZE);
     }
 
     @Override
     public double getArmExtend() {
-        return (Math.abs(quaternary.getLeftStickY()) >= Config.Tolerances.QUATERNARY_CONTROLLER_DEADZONE_SIZE
-                ? quaternary.getLeftStickY()
-                : 0);
+        return MathUtils.deadZone(quaternary.getLeftStickY(), Config.Tolerances.QUATERNARY_CONTROLLER_DEADZONE_SIZE);
     }
 
     @Override
