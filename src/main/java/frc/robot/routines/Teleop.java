@@ -58,10 +58,16 @@ public class Teleop {
         SmartDashboard.putNumber("Teleop.sideVel", sideVel);
         SmartDashboard.putNumber("Teleop.turnVel", turnVel);
 
-        Subsystems.driveBase.fieldOrientedDrive(forwardsVel, // Forward/backwards velocity
-                sideVel, // Left/right velocity
-                turnVel, // Turn velocity
-                Subsystems.gyro.getYaw()); // Current orientation
+        if (Config.Settings.FIELD_ORIENTED_DRIVE) {
+            Subsystems.driveBase.fieldOrientedDrive(forwardsVel, // Forward/backwards city
+                    sideVel, // Left/right velocity
+                    turnVel, // Turn velocity
+                    Subsystems.gyro.getYaw()); // Current orientation
+        } else {
+            Subsystems.driveBase.drive(forwardsVel,
+                    sideVel,
+                    turnVel);
+        }
 
         if (controls.toggleLimelight()) {
             limeLight.toggleMode();
@@ -81,8 +87,8 @@ public class Teleop {
             targetState = TurretPosition.HIGH;
         } else if (controls.doAutoMid()) {
             targetState = TurretPosition.MID;
-        } 
-        
+        }
+
         if (Math.abs(controls.getArmPivot()) > 0 || Math.abs(controls.getArmExtend()) > 0) {
             targetState = null;
             turret.move(controls.getArmPivot(), controls.getArmExtend());
