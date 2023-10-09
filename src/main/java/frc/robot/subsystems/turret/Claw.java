@@ -9,7 +9,7 @@ import frc.robot.Config;
 public class Claw {
     private CANSparkMax intakeMotor;
 
-    private static final double INTAKE_SPEED = 0.75;
+    private static final double INTAKE_SPEED = 1;
     private static final double OUTTAKE_SPEED = 0.4;
 
     private boolean overCurrent;
