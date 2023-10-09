@@ -59,7 +59,7 @@ public class Gyro {
      * @return The current yaw, as a Rotation2d object.
      */
     public Rotation2d getYaw() {
-        return Rotation2d.fromDegrees(pigeon.getAbsoluteCompassHeading()).minus(yawOffset);
+        return Rotation2d.fromDegrees(pigeon.getYaw()).minus(yawOffset);
     }
 
     /**
