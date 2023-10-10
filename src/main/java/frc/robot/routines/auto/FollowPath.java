@@ -4,14 +4,20 @@ import frc.robot.Config;
 import frc.robot.routines.Action;
 import frc.robot.subsystems.Subsystems;
 import frc.robot.util.PeriodicTimer;
+
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 
 public class FollowPath extends Action {
 
@@ -37,15 +43,15 @@ public class FollowPath extends Action {
 
     private HolonomicDriveController driveController;
 
-    public FollowPath(PathPlannerTrajectory path, double timeout) {
+    public FollowPath(String path, double timeout) {
         super();
-        this.path = path;
+        this.path = PathPlanner.loadPath(path, 4, 1); // Temp values
         this.timeout = timeout;
         xController = new PIDController(xP, xI, xD);
         yController = new PIDController(yP, yI, yD);
-        rotController = new ProfiledPIDController(rotP, rotI, rotD, 
+        rotController = new ProfiledPIDController(rotP, rotI, rotD,
                 new TrapezoidProfile.Constraints(Config.Settings.SwerveDrive.MAX_TURN_SPEED, 0));
-        driveController = new HolonomicDriveController(xController, yController, null);
+        driveController = new HolonomicDriveController(xController, yController, rotController);
         timer = new PeriodicTimer();
     }
 
@@ -57,6 +63,8 @@ public class FollowPath extends Action {
     @Override
     public void periodic() {
         PathPlannerState state = (PathPlannerState) path.sample(timer.get());
+        Rotation2d heading = null; // TODO: Figure out the math for this
+        Subsystems.driveBase.drive(driveController.calculate(Subsystems.driveBase.getPose(), state, state.poseMeters.getRotation()));
 
     }
 

@@ -1,5 +1,6 @@
 package frc.robot.subsystems.drive;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -125,6 +126,15 @@ public class SwerveDriveBase {
      */
     public void stop() {
         drive(0, 0, 0);
+    }
+
+    /**
+     * Gets the current odometry of the robot, as a Pose2d
+     * 
+     * @return The current position of a robot, as a Pose2d
+     */
+    public Pose2d getPose() {
+        return odometry.getPoseMeters();
     }
 
     /**

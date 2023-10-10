@@ -35,7 +35,7 @@ public class Config {
          */
         public static final class SwerveDrive {
             // TODO: Figure out max movement speeds
-            public static final double MAX_MOVE_SPEED = 1.0; // m/s;
+            public static final double MAX_MOVE_SPEED = 4; // m/s;
             public static final double MAX_TURN_SPEED = Units.rotationsToRadians(1); // rotations/s
             public static final double MAX_TURN_ACCEL = 1; // Radians/s^2
 

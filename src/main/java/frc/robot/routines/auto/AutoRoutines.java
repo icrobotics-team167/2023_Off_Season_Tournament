@@ -18,6 +18,9 @@ public enum AutoRoutines {
 
         NOTHING("Nothing", new Routine(new Action[] {
                         new NullAction(),
+        })),
+        FOLLOW_PATH_TEST("Follow Path Test", new Routine(new Action[] {
+                new FollowPath("Test Path 1", 1000),
         }));
 
         public String name;
