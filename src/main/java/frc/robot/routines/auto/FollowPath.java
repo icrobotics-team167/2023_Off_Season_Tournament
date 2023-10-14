@@ -13,6 +13,7 @@ import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -27,25 +28,25 @@ public class FollowPath extends Action {
 
     // TODO: Tune PIDs, this is definitely not gonna work
     private PIDController xController;
-    private final double xP = 1;
+    private final double xP = 0;
     private final double xI = 0;
-    private final double xD = 0.5;
+    private final double xD = 0;
 
     private PIDController yController;
-    private final double yP = 1;
+    private final double yP = 0;
     private final double yI = 0;
-    private final double yD = 0.5;
+    private final double yD = 0;
 
     private ProfiledPIDController rotController;
-    private final double rotP = 1;
+    private final double rotP = 0;
     private final double rotI = 0;
-    private final double rotD = 0.5;
+    private final double rotD = 0;
 
     private HolonomicDriveController driveController;
 
     public FollowPath(String path, double timeout) {
         super();
-        this.path = PathPlanner.loadPath(path, 4, 1); // Temp values
+        this.path = PathPlanner.loadPath(path, 1, .4); // Temp values
         this.timeout = timeout;
         xController = new PIDController(xP, xI, xD);
         yController = new PIDController(yP, yI, yD);
@@ -57,6 +58,7 @@ public class FollowPath extends Action {
 
     @Override
     public void init() {
+        Subsystems.driveBase.resetPosition();
         timer.reset();
     }
 
@@ -64,12 +66,15 @@ public class FollowPath extends Action {
     public void periodic() {
         PathPlannerState state = (PathPlannerState) path.sample(timer.get());
         Subsystems.driveBase.drive(driveController.calculate(Subsystems.driveBase.getPose(), state, state.poseMeters.getRotation()));
+        SmartDashboard.putNumber("CurrentPosX", Subsystems.driveBase.getPose().getX());
+        SmartDashboard.putNumber("CurrentPosY", Subsystems.driveBase.getPose().getY());
+        SmartDashboard.putNumber("CurrentRot", Subsystems.driveBase.getPose().getRotation().getDegrees());
 
     }
 
     @Override
     public boolean isDone() {
-        return timer.get() >= timeout;
+        return timer.get() >= path.getTotalTimeSeconds();
     }
 
     @Override
