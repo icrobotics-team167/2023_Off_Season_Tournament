@@ -63,7 +63,6 @@ public class FollowPath extends Action {
     @Override
     public void periodic() {
         PathPlannerState state = (PathPlannerState) path.sample(timer.get());
-        Rotation2d heading = null; // TODO: Figure out the math for this
         Subsystems.driveBase.drive(driveController.calculate(Subsystems.driveBase.getPose(), state, state.poseMeters.getRotation()));
 
     }
@@ -75,8 +74,7 @@ public class FollowPath extends Action {
 
     @Override
     public void done() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'done'");
+        Subsystems.driveBase.stop();
     }
 
 }
