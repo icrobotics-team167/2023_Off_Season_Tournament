@@ -81,7 +81,6 @@ public class DeltaJoystickController extends ControlScheme {
 
     @Override
     public boolean doLimitOverride() {
-        // TODO Auto-generated method stub
         return false;
     }
 

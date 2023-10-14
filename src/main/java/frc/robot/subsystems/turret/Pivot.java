@@ -5,7 +5,6 @@ import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Config;
 
@@ -27,8 +26,6 @@ public class Pivot {
     private static final double MIN_PIVOT_ANGLE = -35;
 
     private boolean overrideAngleLimits = false;
-
-    private final double SLOW_TURN_MULT = 0.3;
 
     // Singleton
     public static Pivot instance;
@@ -77,14 +74,12 @@ public class Pivot {
         initialEncoderPosition = pivotEncoder.getPosition();
 
         extendRetract = ExtendRetract.getInstance();
-
-        // pivotSwitch = new DigitalInput(Config.Ports.Arm.PIVOT_SWITCH);
     }
 
     /**
      * Pivots the arm.
-     * Stops the motor if speed tries to move it past a limit switch (Ex. trying to
-     * pivot up while the top limit switch is hit)
+     * Stops the motor if speed tries to move it past a limit (Ex. trying to
+     * pivot up while the top limit is hit)
      * 
      * @param speed How fast it should pivot. Positive speed values pivot up,
      *              negative values pivot down.

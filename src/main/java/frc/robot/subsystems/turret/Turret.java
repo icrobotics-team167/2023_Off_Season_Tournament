@@ -1,8 +1,5 @@
 package frc.robot.subsystems.turret;
 
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Config;
 import frc.robot.util.MathUtils;
 
 public class Turret {
