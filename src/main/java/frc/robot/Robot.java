@@ -39,46 +39,13 @@ public class Robot extends TimedRobot {
         }
         SmartDashboard.putData("Autonomous Routines", autoChooser);
 
-        Controller primaryController = null;
-        switch (Config.Settings.PRIMARY_CONTROLLER_TYPE) {
-            case JOYSTICK:
-                primaryController = new ThrustMasterController(Config.Ports.PRIMARY_CONTROLLER);
-                break;
-            case NONE:
-                primaryController = null;
-                break;
-        }
-        Controller secondaryController = null;
-        switch (Config.Settings.SECONDARY_CONTROLLER_TYPE) {
-            case JOYSTICK:
-                secondaryController = new ThrustMasterController(Config.Ports.SECONDARY_CONTROLLER);
-                break;
-            case NONE:
-                secondaryController = null;
-                break;
-        }
-
-        Controller tertiaryController = null;
-        if (Config.Settings.TERTIARY_CONTROLLER_TYPE == ControllerType.JOYSTICK) {
-            tertiaryController = new ThrustMasterController(Config.Ports.TERTIARY_CONTROLLER);
-        }
-
-        Controller quaternaryController = null;
-        if (Config.Settings.QUATERNARY_CONTROLLER_TYPE == ControllerType.JOYSTICK) {
-            quaternaryController = new ThrustMasterController(Config.Ports.QUATERNARY_CONTROLLER);
-        }
-
-        if (primaryController == null && secondaryController == null) {
-            controls = new NullController();
-        } else if (Config.Settings.PRIMARY_CONTROLLER_TYPE == ControllerType.JOYSTICK) {
-            // If the first contorller is a JOYSTICK type, assume we have four joysticks.
-            controls = new DeltaJoystickController(primaryController, secondaryController, tertiaryController,
-                    quaternaryController);
-        } else {
-            // Fallback
-            // This should be unreachable in normal conditions
-            // This could only occur if the secondary controller is configured but the
-            // primary controller isn't
+        try { // If all 4 controllers are properly initialized, create a control scheme with
+              // those 4 controllers
+            controls = new DeltaJoystickController(new ThrustMasterController(Config.Ports.PRIMARY_CONTROLLER),
+                    new ThrustMasterController(Config.Ports.SECONDARY_CONTROLLER),
+                    new ThrustMasterController(Config.Ports.TERTIARY_CONTROLLER),
+                    new ThrustMasterController(Config.Ports.QUATERNARY_CONTROLLER));
+        } catch (Exception e) { // Otherwise, make a null control scheme
             controls = new NullController();
         }
 
@@ -96,6 +63,7 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("Robot.pitch", Subsystems.gyro.getPitchDegrees());
         SmartDashboard.putNumber("Robot.roll", Subsystems.gyro.getRollDegrees());
         Subsystems.driveBase.sendTelemetry();
+
     }
 
     @Override
