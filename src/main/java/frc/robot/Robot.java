@@ -1,14 +1,15 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.controls.controllers.*;
 import frc.robot.controls.controlschemes.*;
 import frc.robot.routines.Action;
 import frc.robot.routines.auto.*;
 import frc.robot.routines.Teleop;
+import frc.robot.routines.Test;
 import frc.robot.subsystems.LimeLight;
 import frc.robot.subsystems.Subsystems;
 
@@ -18,6 +19,7 @@ public class Robot extends TimedRobot {
     private ControlScheme controls;
     private Action auto;
     private Teleop teleop;
+    private Test test;
     private LimeLight limeLight;
 
     public Robot() {
@@ -53,6 +55,7 @@ public class Robot extends TimedRobot {
 
         Subsystems.setInitialStates();
         teleop = new Teleop(controls);
+        test = new Test(controls);
     }
 
     @Override
@@ -92,10 +95,12 @@ public class Robot extends TimedRobot {
 
     @Override
     public void testInit() {
+        test.init();
     }
 
     @Override
     public void testPeriodic() {
+        test.periodic();
     }
 
     @Override

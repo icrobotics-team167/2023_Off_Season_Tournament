@@ -44,4 +44,7 @@ public abstract class ControlScheme {
     public abstract boolean doAutoPickup();
 
     public abstract boolean doPlayerStation();
+
+    // Misc
+    public abstract boolean getRawButton(int controller, int buttonId);
 }

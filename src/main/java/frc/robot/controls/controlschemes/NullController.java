@@ -80,4 +80,9 @@ public class NullController extends ControlScheme {
     public boolean doPlayerStation() {
         return false;
     }
+
+    @Override
+    public boolean getRawButton(int controller, int buttonId) {
+        return false;
+    }
 }

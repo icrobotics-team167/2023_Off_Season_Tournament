@@ -112,4 +112,20 @@ public class DeltaJoystickController extends ControlScheme {
         return quaternary.getButtonById(6);   
     }
 
+    @Override
+    public boolean getRawButton(int controller, int buttonId) {
+        switch (controller) {
+            case 0:
+                return primary.getButtonById(buttonId);
+            case 1:
+                return secondary.getButtonById(buttonId);
+            case 2:
+                return tertiary.getButtonById(buttonId);
+            case 3:
+                return quaternary.getButtonById(buttonId);
+            default:
+                return false;
+        }
+    }
+
 }
