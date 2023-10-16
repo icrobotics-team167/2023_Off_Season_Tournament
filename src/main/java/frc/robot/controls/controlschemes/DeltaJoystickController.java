@@ -88,27 +88,52 @@ public class DeltaJoystickController extends ControlScheme {
     public boolean doResetTurret() {
         return quaternary.getButtonById(2);
     }
-
+    
     @Override
-    public boolean doAutoHigh() {
-        // return quaternary.getButtonById(8);    
-        return false;
+    public boolean doConeHigh() {
+        return quaternary.getButtonById(6);    
+        
     }
 
     @Override
-    public boolean doAutoMid() {
-        // return quaternary.getButtonById(9);
-        return false;
+    public boolean doConeMid() {
+        return quaternary.getButtonById(9);
+        
     }
 
     @Override
     public boolean doAutoPickup() {
-        return quaternary.getButtonById(10);    
+        return quaternary.getButtonById(8);    
     }
 
     @Override
     public boolean doPlayerStation() {
-        return quaternary.getButtonById(6);   
+        return quaternary.getButtonById(7);   
     }
+
+    @Override
+    public boolean doCubeMid() {
+        // TODO Auto-generated method stub
+        return quaternary.getButtonById(10);
+    }
+
+    @Override
+    public boolean corbinLock() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean spencerLock() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean doCubeHigh() {
+        // TODO Auto-generated method stub
+        return quaternary.getButtonById(5);
+    }
+    
 
 }

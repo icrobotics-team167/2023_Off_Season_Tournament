@@ -38,7 +38,7 @@ public class FollowPath extends Action {
     private final double yD = 0;
 
     private ProfiledPIDController rotController;
-    private final double rotP = 0;
+    private final double rotP = 1;
     private final double rotI = 0;
     private final double rotD = 0;
 
@@ -65,7 +65,7 @@ public class FollowPath extends Action {
     @Override
     public void periodic() {
         PathPlannerState state = (PathPlannerState) path.sample(timer.get());
-        Subsystems.driveBase.drive(driveController.calculate(Subsystems.driveBase.getPose(), state, state.poseMeters.getRotation()));
+        Subsystems.driveBase.fieldOrientedDrive(driveController.calculate(Subsystems.driveBase.getPose(), state, state.poseMeters.getRotation()), Subsystems.gyro.getYaw());
         SmartDashboard.putNumber("CurrentPosX", Subsystems.driveBase.getPose().getX());
         SmartDashboard.putNumber("CurrentPosY", Subsystems.driveBase.getPose().getY());
         SmartDashboard.putNumber("CurrentRot", Subsystems.driveBase.getPose().getRotation().getDegrees());

@@ -82,10 +82,14 @@ public class Teleop {
             targetState = TurretPosition.INTAKE;
         } else if (controls.doPlayerStation()) {
             targetState = TurretPosition.PLAYER_STATION;
-        } else if (controls.doAutoHigh()) {
-            targetState = TurretPosition.HIGH;
-        } else if (controls.doAutoMid()) {
-            targetState = TurretPosition.MID;
+        } else if (controls.doConeHigh()) {
+            targetState = TurretPosition.CONE_HIGH;
+        } else if (controls.doConeMid()) {
+            targetState = TurretPosition.CONE_MID;
+        } else if (controls.doCubeMid()) {
+            targetState = TurretPosition.CUBE_MID;
+        } else if (controls.doCubeHigh()) {
+            targetState = TurretPosition.CUBE_HIGH;
         }
 
         if (Math.abs(controls.getArmPivot()) > 0 || Math.abs(controls.getArmExtend()) > 0) {

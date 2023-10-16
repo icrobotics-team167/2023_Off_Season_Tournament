@@ -120,6 +120,10 @@ public class SwerveDriveBase {
         drive(ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, vr, angle));
     }
 
+    public void fieldOrientedDrive(ChassisSpeeds chassisSpeeds, Rotation2d angle) {
+        drive(ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds, angle));
+    }
+
     /**
      * Stops the robot.
      * Equivalent to running drive(0, 0, 0).

@@ -17,10 +17,14 @@ public record TurretPosition(double pivotAngle, double extensionPosition) {
     public static final TurretPosition PLAYER_STATION = new TurretPosition(29.75, 33.4);
 
     //TODO: Actually find this value
-    public static final TurretPosition HIGH = new TurretPosition(33, 51.3);
+    public static final TurretPosition CONE_HIGH = new TurretPosition(35.2, 52.0);
 
     //TODO: Actually find this value
-    public static final TurretPosition MID = new TurretPosition(17.3, 30.2);
+    public static final TurretPosition CONE_MID = new TurretPosition(27.0, 35.3);
+
+    public static final TurretPosition CUBE_MID = new TurretPosition(12.49, 27.2);
+
+    public static final TurretPosition CUBE_HIGH = new TurretPosition(26.0,49.0);
 
     // public static final TurretPosition HIGH_RIGHT = new TurretPosition(33, 15.19, 56);
     // public static final TurretPosition HIGH_LEFT = HIGH_RIGHT.withSwivel(-18);
