@@ -82,6 +82,11 @@ public class NullController extends ControlScheme {
     }
 
     @Override
+    public boolean getRawButton(int controller, int buttonId) {
+        return false;
+    }
+
+    @Override
     public boolean doCubeMid() {
         // TODO Auto-generated method stub
         return false;

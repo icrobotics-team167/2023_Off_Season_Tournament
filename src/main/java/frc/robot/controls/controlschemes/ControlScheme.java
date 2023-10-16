@@ -49,6 +49,9 @@ public abstract class ControlScheme {
 
     public abstract boolean doPlayerStation();
 
+    // Misc
+    public abstract boolean getRawButton(int controller, int buttonId);
+
     public abstract boolean corbinLock();
 
     public abstract boolean spencerLock();
