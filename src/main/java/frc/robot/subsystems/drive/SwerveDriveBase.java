@@ -1,5 +1,7 @@
 package frc.robot.subsystems.drive;
 
+//import java.util.Arrays;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -129,7 +131,9 @@ public class SwerveDriveBase {
      * Equivalent to running drive(0, 0, 0).
      */
     public void stop() {
-        drive(0, 0, 0);
+        for(int i = 0; i < modules.length; i++) {
+            modules[i].stop();
+        }
     }
 
     /**
