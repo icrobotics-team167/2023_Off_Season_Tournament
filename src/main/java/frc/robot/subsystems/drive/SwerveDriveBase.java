@@ -165,4 +165,15 @@ public class SwerveDriveBase {
             module.sendTelemetry();
         }
     }
+
+    /**
+     * Get a specific module for testing.
+     * 
+     * @param id The ID of the module. 0 is front left, 1 is front right, 2 is back
+     *           left, 3 is back right.
+     * @return The specified module.
+     */
+    public SwerveModule getModule(int id) {
+        return modules[id];
+    }
 }
