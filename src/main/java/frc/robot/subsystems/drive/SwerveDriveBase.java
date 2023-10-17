@@ -131,8 +131,8 @@ public class SwerveDriveBase {
      * Equivalent to running drive(0, 0, 0).
      */
     public void stop() {
-        for(int i = 0; i < modules.length; i++) {
-            modules[i].stop();
+        for (SwerveModule module : modules) {
+            module.stop();
         }
     }
 

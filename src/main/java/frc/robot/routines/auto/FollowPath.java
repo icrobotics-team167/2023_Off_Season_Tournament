@@ -38,7 +38,7 @@ public class FollowPath extends Action {
     private final double yD = 0;
 
     private ProfiledPIDController rotController;
-    private final double rotP = 1.0/180.0;
+    private final double rotP = 100.0/180.0;
     private final double rotI = 0;
     private final double rotD = 0;
 
