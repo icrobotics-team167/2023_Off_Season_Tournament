@@ -28,19 +28,19 @@ public class FollowPath extends Action {
 
     // TODO: Tune PIDs, this is definitely not gonna work
     private PIDController xController;
-    private final double xP = 0;
+    private final double xP = 100/180.0;
     private final double xI = 0;
-    private final double xD = 0;
+    private final double xD = 1/180.0;
 
     private PIDController yController;
-    private final double yP = 0;
+    private final double yP = 100/180.0;
     private final double yI = 0;
-    private final double yD = 0;
+    private final double yD = 1/180.0;
 
     private ProfiledPIDController rotController;
     private final double rotP = 100.0/180.0;
     private final double rotI = 0;
-    private final double rotD = 0;
+    private final double rotD = 1/180.0;
 
     private HolonomicDriveController driveController;
 
