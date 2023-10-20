@@ -15,6 +15,7 @@ import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 
 public class FollowPath extends Action {
 
@@ -43,7 +44,7 @@ public class FollowPath extends Action {
     public FollowPath(String path) {
         super();
         this.pathName = path;
-        this.trajectory = new PathPlannerTrajectory(PathPlannerPath.fromPathFile(path), null);
+        this.trajectory = new PathPlannerTrajectory(PathPlannerPath.fromPathFile(path), new ChassisSpeeds());
         this.xController = new PIDController(xP, xI, xD);
         this.yController = new PIDController(yP, yI, yD);
         this.rotController = new ProfiledPIDController(rotP, rotI, rotD, new Constraints(
