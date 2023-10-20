@@ -5,20 +5,15 @@ import frc.robot.routines.Action;
 import frc.robot.subsystems.Subsystems;
 import frc.robot.util.PeriodicTimer;
 
-import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
 
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 
 public class FollowPath extends Action {
 
@@ -45,11 +40,11 @@ public class FollowPath extends Action {
 
     public FollowPath(String path) {
         super();
-        this.path = PathPlanner.loadPath(path, Config.Settings.SwerveDrive.MAX_MOVE_SPEED, Config.Settings.SwerveDrive.MAX_MOVE_ACCEL); // Temp values
+        this.path = PathPlanner.loadPath(path, Config.Settings.SwerveDrive.MAX_MOVE_SPEED, Config.Settings.SwerveDrive.MAX_MOVE_ACCEL); 
         xController = new PIDController(xP, xI, xD);
         yController = new PIDController(yP, yI, yD);
         rotController = new ProfiledPIDController(rotP, rotI, rotD,
-                new TrapezoidProfile.Constraints(Config.Settings.SwerveDrive.MAX_TURN_SPEED, 1));
+                new TrapezoidProfile.Constraints(Config.Settings.SwerveDrive.MAX_TURN_SPEED, Config.Settings.SwerveDrive.MAX_TURN_ACCEL));
         driveController = new HolonomicDriveController(xController, yController, rotController);
         timer = new PeriodicTimer();
     }
