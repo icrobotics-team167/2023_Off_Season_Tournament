@@ -145,6 +145,10 @@ public class SwerveDriveBase {
         return odometry.getPoseMeters();
     }
 
+    public void setPose(Pose2d pose) {
+        odometry = new SwerveDriveOdometry(kinematics, Subsystems.gyro.getYaw(), moduleOdometry, pose);
+    }
+
     /**
      * Resets the odometry of the robot.
      */

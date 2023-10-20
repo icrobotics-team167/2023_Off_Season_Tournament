@@ -20,7 +20,10 @@ public enum AutoRoutines {
                         new NullAction(),
         })),
         FOLLOW_PATH_TEST("Follow Path Test", new Routine(new Action[] {
-                new FollowPath("New Path", 1000),
+                new FollowPath("New Path"),
+        })),
+        GO_FORWARD_2_METERS("Go Forward 2 meters", new Routine(new Action[] {
+                new FollowPath("Go Forward 2 Meters"),
         }));
 
         public String name;

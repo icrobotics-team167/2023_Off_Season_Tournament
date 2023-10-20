@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import frc.robot.controls.controllers.ControllerType;
+import frc.robot.util.MathUtils;
 
 /**
  * Configuration settings file.
@@ -29,18 +30,21 @@ public class Config {
         // CPU period (seconds)
         public static final double CPU_PERIOD = 0.02;
 
-
         /**
          * Drivebase speed limits.
          */
         public static final class SwerveDrive {
             // TODO: Figure out max movement speeds
-            public static final double MAX_MOVE_SPEED = 4; // m/s;
+            public static final double MAX_MOVE_SPEED = 3; // m/s, lower than actual max speed to allow for some
+                                                           // headroom to turn while moving
+            public static final double MAX_MOVE_ACCEL = 3;
             public static final double MAX_TURN_SPEED = Units.rotationsToRadians(1); // rotations/s
             public static final double MAX_TURN_ACCEL = 1; // Radians/s^2
 
             public static final double SLOWMODE_MULT = 0.4; // 40%
         }
+
+        public static final boolean WATER_GAME = true;
     }
 
     /**
@@ -48,10 +52,10 @@ public class Config {
      */
     public static final class Tolerances {
         // Primary controller deadzone size
-        public static final double PRIMARY_CONTROLLER_DEADZONE_SIZE = 0.125;
+        public static final double PRIMARY_CONTROLLER_DEADZONE_SIZE = 0.1;
 
         // Secondary controller deadzone size
-        public static final double SECONDARY_CONTROLLER_DEADZONE_SIZE = 0.175;
+        public static final double SECONDARY_CONTROLLER_DEADZONE_SIZE = 0.1;
 
         // Tertiary controller deadzone size
         public static final double TERTIARY_CONTROLLER_DEADZONE_SIZE = 0.09;
@@ -93,12 +97,21 @@ public class Config {
 
             // TODO: Measure actual positions of modules
             // Measured in meters
-            public static final double robotLength = Units.inchesToMeters(23 - 2 * 3.25); // 16.5 in
-            public static final double robotWidth = Units.inchesToMeters(23 - 2 * 3.25); // 16.5 in
-            public static final Translation2d FRONT_LEFT_POS = new Translation2d(-robotLength / 2.0, -robotWidth / 2.0);
-            public static final Translation2d FRONT_RIGHT_POS = new Translation2d(-robotLength / 2.0, robotWidth / 2.0);
-            public static final Translation2d BACK_LEFT_POS = new Translation2d(robotLength / 2.0, -robotWidth / 2.0);
-            public static final Translation2d BACK_RIGHT_POS = new Translation2d(robotLength / 2.0, robotWidth / 2.0);
+            private static final double robotLength = 30;
+            private static final double robotWidth = 29;
+            private static final double moduleCenterOfRotationDistanceFromEdge = 2.625;
+            private static final double moduleForwardDistanceFromCenter = Units
+                    .inchesToMeters(robotLength - 2 * moduleCenterOfRotationDistanceFromEdge); // 16.5 in
+            private static final double moduleSideDistanceFromCenter = Units
+                    .inchesToMeters(robotWidth - 2 * moduleCenterOfRotationDistanceFromEdge); // 16.5 in
+            public static final Translation2d FRONT_LEFT_POS = new Translation2d(-moduleForwardDistanceFromCenter / 2.0,
+                    -moduleSideDistanceFromCenter / 2.0);
+            public static final Translation2d FRONT_RIGHT_POS = new Translation2d(
+                    -moduleForwardDistanceFromCenter / 2.0, moduleSideDistanceFromCenter / 2.0);
+            public static final Translation2d BACK_LEFT_POS = new Translation2d(moduleForwardDistanceFromCenter / 2.0,
+                    -moduleSideDistanceFromCenter / 2.0);
+            public static final Translation2d BACK_RIGHT_POS = new Translation2d(moduleForwardDistanceFromCenter / 2.0,
+                    moduleSideDistanceFromCenter / 2.0);
 
             // Drivebase Analog Encoder Ports
             public static final int FRONT_LEFT_ENCODER = 0;

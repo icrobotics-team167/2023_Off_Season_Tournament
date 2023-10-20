@@ -23,58 +23,60 @@ import edu.wpi.first.math.geometry.Rotation2d;
 public class FollowPath extends Action {
 
     private PathPlannerTrajectory path;
-    private double timeout;
     private PeriodicTimer timer;
 
     // TODO: Tune PIDs, this is definitely not gonna work
     private PIDController xController;
-    private final double xP = 100/180.0;
+    private final double xP = 0;
     private final double xI = 0;
-    private final double xD = 1/180.0;
+    private final double xD = 0;
 
     private PIDController yController;
-    private final double yP = 100/180.0;
+    private final double yP = 0;
     private final double yI = 0;
-    private final double yD = 1/180.0;
+    private final double yD = 0;
 
     private ProfiledPIDController rotController;
-    private final double rotP = 100.0/180.0;
+    private final double rotP = 0;
     private final double rotI = 0;
-    private final double rotD = 1/180.0;
+    private final double rotD = 0;
 
     private HolonomicDriveController driveController;
 
-    public FollowPath(String path, double timeout) {
+    public FollowPath(String path) {
         super();
-        this.path = PathPlanner.loadPath(path, 1, .4); // Temp values
-        this.timeout = timeout;
+        this.path = PathPlanner.loadPath(path, Config.Settings.SwerveDrive.MAX_MOVE_SPEED, Config.Settings.SwerveDrive.MAX_MOVE_ACCEL); // Temp values
         xController = new PIDController(xP, xI, xD);
         yController = new PIDController(yP, yI, yD);
         rotController = new ProfiledPIDController(rotP, rotI, rotD,
-                new TrapezoidProfile.Constraints(Config.Settings.SwerveDrive.MAX_TURN_SPEED, 0));
+                new TrapezoidProfile.Constraints(Config.Settings.SwerveDrive.MAX_TURN_SPEED, 1));
         driveController = new HolonomicDriveController(xController, yController, rotController);
         timer = new PeriodicTimer();
     }
 
     @Override
     public void init() {
-        Subsystems.driveBase.resetPosition();
+        Subsystems.driveBase.setPose(path.getInitialPose());
         timer.reset();
+        SmartDashboard.putNumber("StartXPos", Subsystems.driveBase.getPose().getX());
+        SmartDashboard.putNumber("StartYPos", Subsystems.driveBase.getPose().getY());
     }
 
     @Override
     public void periodic() {
         PathPlannerState state = (PathPlannerState) path.sample(timer.get());
-        Subsystems.driveBase.fieldOrientedDrive(driveController.calculate(Subsystems.driveBase.getPose(), state, state.poseMeters.getRotation()), Subsystems.gyro.getYaw());
-        SmartDashboard.putNumber("CurrentPosX", Subsystems.driveBase.getPose().getX());
-        SmartDashboard.putNumber("CurrentPosY", Subsystems.driveBase.getPose().getY());
-        SmartDashboard.putNumber("CurrentRot", Subsystems.driveBase.getPose().getRotation().getDegrees());
+        Subsystems.driveBase.fieldOrientedDrive(
+                driveController.calculate(Subsystems.driveBase.getPose(), state, state.poseMeters.getRotation()),
+                Subsystems.gyro.getYaw());
+        SmartDashboard.putNumber("xPosWant", state.poseMeters.getX());
+        SmartDashboard.putNumber("yPosWant", state.poseMeters.getY());
 
     }
 
     @Override
     public boolean isDone() {
-        return timer.get() >= path.getTotalTimeSeconds();
+        // return timer.get() >= path.getTotalTimeSeconds();
+        return false;
     }
 
     @Override
