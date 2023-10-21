@@ -10,6 +10,7 @@ import com.pathplanner.lib.path.PathPlannerTrajectory;
 import com.pathplanner.lib.path.PathPlannerTrajectory.State;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.controller.PIDController;
@@ -44,7 +45,14 @@ public class FollowPath extends Action {
     public FollowPath(String path) {
         super();
         this.pathName = path;
-        this.trajectory = new PathPlannerTrajectory(PathPlannerPath.fromPathFile(path), new ChassisSpeeds());
+        PathPlannerPath pathFile = PathPlannerPath.fromPathFile(path);
+        // Debug
+        if (pathFile == null) {
+            DriverStation.reportWarning("FollowPath: " + pathName +".path failed to load!", false);
+        } else {
+            System.out.println("FollowPath: Loaded " + pathName + ".path");
+        }
+        this.trajectory = new PathPlannerTrajectory(pathFile, new ChassisSpeeds());
         this.xController = new PIDController(xP, xI, xD);
         this.yController = new PIDController(yP, yI, yD);
         this.rotController = new ProfiledPIDController(rotP, rotI, rotD, new Constraints(

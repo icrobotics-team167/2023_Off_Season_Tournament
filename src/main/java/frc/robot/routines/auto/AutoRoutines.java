@@ -19,9 +19,6 @@ public enum AutoRoutines {
         NOTHING("Nothing", new Routine(new Action[] {
                         new NullAction(),
         })),
-        FOLLOW_PATH_TEST("Follow Path Test", new Routine(new Action[] {
-                new FollowPath("New Path"),
-        })),
         GO_FORWARD_2_METERS("Go Forward 2 meters", new Routine(new Action[] {
                 new FollowPath("Go Forward 2 Meters"),
         }));
