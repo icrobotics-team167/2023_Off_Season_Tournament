@@ -24,6 +24,8 @@ public class SwerveDriveBase {
     private SwerveModulePosition[] moduleOdometry;
     private SwerveDriveOdometry odometry;
 
+    private Pose2d previousPos;
+
     /**
      * Only allows one instance of SwerveDriveBase to exist at once.
      * 
@@ -96,7 +98,8 @@ public class SwerveDriveBase {
             moduleOdometry[i] = modules[i].getPosition();
         }
 
-        // Update the whole chassis's odometry using the individual module's odometry
+        // Update the whole chassis's odometry using the individual module's odometry'
+        previousPos = odometry.getPoseMeters();
         odometry.update(Subsystems.gyro.getYaw(), moduleOdometry);
         // odometry.update(Rotation2d.fromDegrees(0), modulePositions);
 
@@ -168,6 +171,17 @@ public class SwerveDriveBase {
         for (SwerveModule module : modules) {
             module.sendTelemetry();
         }
+    }
+
+    public ChassisSpeeds getVelocity() {
+        Pose2d currentPose = getPose();
+        double deltaX = currentPose.getX() - previousPos.getX();
+        double velX = deltaX * 50;
+        double deltaY = currentPose.getY() - previousPos.getY();
+        double velY = deltaY * 50;
+        Rotation2d deltaRot = currentPose.getRotation().minus(previousPos.getRotation());
+        double velRot = deltaRot.times(50).getRadians();
+        return new ChassisSpeeds(velX, velY, velRot);
     }
 
     /**

@@ -21,6 +21,10 @@ public enum AutoRoutines {
         })),
         GO_FORWARD_2_METERS("Go Forward 2 meters", new Routine(new Action[] {
                 new FollowPath("Go Forward 2 Meters"),
+        })),
+        GO_SIDEWAYS_2_METERS("Go Sideways 2 meters", new Routine(new Action[] {
+                
+                new FollowPath("Go Sideways 2 Meters"),
         }));
 
         public String name;

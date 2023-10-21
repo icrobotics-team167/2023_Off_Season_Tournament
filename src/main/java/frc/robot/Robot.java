@@ -1,5 +1,7 @@
 package frc.robot;
 
+import com.pathplanner.lib.util.PPLibTelemetry;
+
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;

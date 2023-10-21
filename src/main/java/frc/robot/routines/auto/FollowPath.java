@@ -8,6 +8,7 @@ import frc.robot.util.PeriodicTimer;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.PathPlannerTrajectory;
 import com.pathplanner.lib.path.PathPlannerTrajectory.State;
+import com.pathplanner.lib.util.PPLibTelemetry;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -15,28 +16,30 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 
 public class FollowPath extends Action {
 
     private String pathName;
+    private PathPlannerPath pathFile;
     private PathPlannerTrajectory trajectory;
     private PeriodicTimer timer;
 
     // TODO: Tune PIDs, this is definitely not gonna work
     private PIDController xController;
-    private final double xP = 0;
+    private final double xP = 2;
     private final double xI = 0;
     private final double xD = 0;
 
     private PIDController yController;
-    private final double yP = 0;
+    private final double yP = 2;
     private final double yI = 0;
     private final double yD = 0;
 
     private ProfiledPIDController rotController;
-    private final double rotP = 0;
+    private final double rotP = 1.5;
     private final double rotI = 0;
     private final double rotD = 0;
 
@@ -45,13 +48,14 @@ public class FollowPath extends Action {
     public FollowPath(String path) {
         super();
         this.pathName = path;
-        PathPlannerPath pathFile = PathPlannerPath.fromPathFile(path);
+        pathFile = PathPlannerPath.fromPathFile(path);
         // Debug
         if (pathFile == null) {
-            DriverStation.reportWarning("FollowPath: " + pathName +".path failed to load!", false);
+            DriverStation.reportWarning("FollowPath: " + pathName + ".path failed to load!", false);
         } else {
             System.out.println("FollowPath: Loaded " + pathName + ".path");
         }
+        PPLibTelemetry.registerHotReloadPath(pathName, pathFile);
         this.trajectory = new PathPlannerTrajectory(pathFile, new ChassisSpeeds());
         this.xController = new PIDController(xP, xI, xD);
         this.yController = new PIDController(yP, yI, yD);
@@ -63,25 +67,32 @@ public class FollowPath extends Action {
 
     @Override
     public void init() {
-        Translation2d initPos = trajectory.sample(0).positionMeters;
+        Pose2d initPos = new Pose2d(trajectory.sample(0).positionMeters, trajectory.sample(0).targetHolonomicRotation);
+        Subsystems.driveBase.setPose(initPos);
         SmartDashboard.putString("FollowPath.path", pathName);
-        SmartDashboard.putNumber("FollowPath.PathStartX", initPos.getX());
-        SmartDashboard.putNumber("FollowPath.PathStartY", initPos.getY());
         timer.reset();
+        PPLibTelemetry.setCurrentPath(pathFile);
+        PPLibTelemetry.setCurrentPose(initPos);
     }
 
     @Override
     public void periodic() {
         State state = trajectory.sample(timer.get());
-        Subsystems.driveBase.fieldOrientedDrive(
-                driveController.calculate(
-                        Subsystems.driveBase.getPose(), // Current Pose
-                        state.getTargetHolonomicPose(), // Target Pose
-                        state.velocityMps, // Drive velocity
-                        state.targetHolonomicRotation), // Target rotation
-                Subsystems.gyro.getYaw()); // Current rotation
-        SmartDashboard.putNumber("FollowPath.targetX", state.positionMeters.getX());
-        SmartDashboard.putNumber("FollowPath.targetY", state.positionMeters.getY());
+        ChassisSpeeds driveCommands = driveController.calculate(
+                Subsystems.driveBase.getPose(), // Current Pose
+                state.getTargetHolonomicPose(), // Target Pose
+                state.velocityMps, // Drive velocity
+                state.targetHolonomicRotation);
+        Subsystems.driveBase.drive(driveCommands); // Target rotation
+        // Subsystems.gyro.getYaw()); // Current rotation
+        ChassisSpeeds robotVelocities = Subsystems.driveBase.getVelocity();
+        PPLibTelemetry.setVelocities(
+                new Translation2d(robotVelocities.vxMetersPerSecond, robotVelocities.vyMetersPerSecond).getNorm(),
+                new Translation2d(driveCommands.vxMetersPerSecond, driveCommands.vyMetersPerSecond).getNorm(),
+                robotVelocities.omegaRadiansPerSecond,
+                driveCommands.omegaRadiansPerSecond);
+        PPLibTelemetry
+                .setPathInaccuracy(state.positionMeters.getDistance(Subsystems.driveBase.getPose().getTranslation()));
     }
 
     @Override

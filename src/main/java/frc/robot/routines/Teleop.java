@@ -32,7 +32,6 @@ public class Teleop {
      * Runs once at the start of teleop
      */
     public void init() {
-        driveBase.resetPosition();
         holdState = turret.getPosition();
     }
 
