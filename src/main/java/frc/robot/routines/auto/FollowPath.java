@@ -85,6 +85,8 @@ public class FollowPath extends Action {
                 state.targetHolonomicRotation);
         Subsystems.driveBase.drive(driveCommands); // Target rotation
         // Subsystems.gyro.getYaw()); // Current rotation
+
+        // Telemetry
         ChassisSpeeds robotVelocities = Subsystems.driveBase.getVelocity();
         PPLibTelemetry.setVelocities(
                 new Translation2d(robotVelocities.vxMetersPerSecond, robotVelocities.vyMetersPerSecond).getNorm(),
@@ -93,6 +95,7 @@ public class FollowPath extends Action {
                 driveCommands.omegaRadiansPerSecond);
         PPLibTelemetry
                 .setPathInaccuracy(state.positionMeters.getDistance(Subsystems.driveBase.getPose().getTranslation()));
+        PPLibTelemetry.setCurrentPose(Subsystems.driveBase.getPose());
     }
 
     @Override
