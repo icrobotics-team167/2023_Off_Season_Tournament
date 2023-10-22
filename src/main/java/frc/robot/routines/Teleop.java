@@ -1,7 +1,5 @@
 package frc.robot.routines;
 
-import com.kauailabs.navx.frc.AHRS;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Config;
@@ -23,7 +21,7 @@ public class Teleop {
     private Claw claw = Subsystems.claw;
 
     private TurretPosition targetState = null;
-    private TurretPosition holdState = TurretPosition.INITIAL;
+    private TurretPosition holdState;
 
     public Teleop(ControlScheme controls) {
         this.controls = controls;
@@ -34,7 +32,7 @@ public class Teleop {
      * Runs once at the start of teleop
      */
     public void init() {
-        driveBase.resetPosition();
+        holdState = turret.getPosition();
     }
 
     /**
@@ -83,10 +81,14 @@ public class Teleop {
             targetState = TurretPosition.INTAKE;
         } else if (controls.doPlayerStation()) {
             targetState = TurretPosition.PLAYER_STATION;
-        } else if (controls.doAutoHigh()) {
-            targetState = TurretPosition.HIGH;
-        } else if (controls.doAutoMid()) {
-            targetState = TurretPosition.MID;
+        } else if (controls.doConeHigh()) {
+            targetState = TurretPosition.CONE_HIGH;
+        } else if (controls.doConeMid()) {
+            targetState = TurretPosition.CONE_MID;
+        } else if (controls.doCubeMid()) {
+            targetState = TurretPosition.CUBE_MID;
+        } else if (controls.doCubeHigh()) {
+            targetState = TurretPosition.CUBE_HIGH;
         }
 
         if (Math.abs(controls.getArmPivot()) > 0 || Math.abs(controls.getArmExtend()) > 0) {

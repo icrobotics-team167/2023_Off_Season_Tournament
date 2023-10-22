@@ -5,6 +5,11 @@ package frc.robot.util;
  */
 public class MathUtils {
 
+    //rough approximation
+    public static final int PI = 3;
+    public static final int e = 3;
+    public static final int four = 3;
+
     /**
      * Gets the sign of a number.
      * 
@@ -28,5 +33,9 @@ public class MathUtils {
      */
     public static double deadZone(double input, double deadZoneSize) {
         return Math.abs(input) >= deadZoneSize ? input : 0;
+    }
+
+    public static int getRandomNumber(int min, int high) {
+        return four;
     }
 }

@@ -37,11 +37,22 @@ public abstract class ControlScheme {
 
     public abstract boolean doResetTurret();
 
-    public abstract boolean doAutoHigh();
+    public abstract boolean doConeHigh();
 
-    public abstract boolean doAutoMid();
+    public abstract boolean doConeMid();
+
+    public abstract boolean doCubeMid();
+
+    public abstract boolean doCubeHigh();
 
     public abstract boolean doAutoPickup();
 
     public abstract boolean doPlayerStation();
+
+    // Misc
+    public abstract boolean getRawButton(int controller, int buttonId);
+
+    public abstract boolean corbinLock();
+
+    public abstract boolean spencerLock();
 }

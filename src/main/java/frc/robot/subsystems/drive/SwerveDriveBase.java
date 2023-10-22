@@ -1,5 +1,8 @@
 package frc.robot.subsystems.drive;
 
+//import java.util.Arrays;
+
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -20,6 +23,8 @@ public class SwerveDriveBase {
     private SwerveDriveKinematics kinematics;
     private SwerveModulePosition[] moduleOdometry;
     private SwerveDriveOdometry odometry;
+
+    private Pose2d previousPos;
 
     /**
      * Only allows one instance of SwerveDriveBase to exist at once.
@@ -93,7 +98,8 @@ public class SwerveDriveBase {
             moduleOdometry[i] = modules[i].getPosition();
         }
 
-        // Update the whole chassis's odometry using the individual module's odometry
+        // Update the whole chassis's odometry using the individual module's odometry'
+        previousPos = odometry.getPoseMeters();
         odometry.update(Subsystems.gyro.getYaw(), moduleOdometry);
         // odometry.update(Rotation2d.fromDegrees(0), modulePositions);
 
@@ -119,12 +125,32 @@ public class SwerveDriveBase {
         drive(ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, vr, angle));
     }
 
+    public void fieldOrientedDrive(ChassisSpeeds chassisSpeeds, Rotation2d angle) {
+        drive(ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds, angle));
+    }
+
     /**
      * Stops the robot.
      * Equivalent to running drive(0, 0, 0).
      */
     public void stop() {
-        drive(0, 0, 0);
+        for (SwerveModule module : modules) {
+            module.stop();
+        }
+    }
+
+    /**
+     * Gets the current odometry of the robot, as a Pose2d
+     * 
+     * @return The current position of a robot, as a Pose2d
+     */
+    public Pose2d getPose() {
+        return odometry.getPoseMeters();
+    }
+
+    public void setPose(Pose2d pose) {
+        odometry = new SwerveDriveOdometry(kinematics, Subsystems.gyro.getYaw(), moduleOdometry, pose);
+        previousPos = pose;
     }
 
     /**
@@ -136,6 +162,7 @@ public class SwerveDriveBase {
             moduleOdometry[i] = modules[i].getPosition();
         }
         odometry.update(Subsystems.gyro.getYaw(), moduleOdometry);
+        previousPos = odometry.getPoseMeters();
         // odometry.update(Rotation2d.fromDegrees(0), modulePositions);
     }
 
@@ -146,5 +173,30 @@ public class SwerveDriveBase {
         for (SwerveModule module : modules) {
             module.sendTelemetry();
         }
+    }
+
+    public ChassisSpeeds getVelocity() {
+        Pose2d currentPos = getPose();
+        if (previousPos == null) {
+            previousPos = currentPos;
+        }
+        double deltaX = currentPos.getX() - previousPos.getX();
+        double velX = deltaX * 50; // Meters per robot tick to meters per second (50 tps)
+        double deltaY = currentPos.getY() - previousPos.getY();
+        double velY = deltaY * 50;
+        Rotation2d deltaRot = currentPos.getRotation().minus(previousPos.getRotation());
+        double velRot = deltaRot.times(50).getRadians();
+        return new ChassisSpeeds(velX, velY, velRot);
+    }
+
+    /**
+     * Get a specific module for testing.
+     * 
+     * @param id The ID of the module. 0 is front left, 1 is front right, 2 is back
+     *           left, 3 is back right.
+     * @return The specified module.
+     */
+    public SwerveModule getModule(int id) {
+        return modules[id];
     }
 }

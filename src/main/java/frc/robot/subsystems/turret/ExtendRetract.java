@@ -5,7 +5,6 @@ import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Config;
 
 /**
@@ -100,9 +99,6 @@ public class ExtendRetract {
         }
         if (!retractSwitch.get()) {
             initialEncoderPosition = extendRetractEncoder.getPosition();
-            return true;
-        }
-        if (getPositionInches() <= MIN_EXTENSON) {
             return true;
         }
         return getPositionInches() <= MIN_EXTENSON;

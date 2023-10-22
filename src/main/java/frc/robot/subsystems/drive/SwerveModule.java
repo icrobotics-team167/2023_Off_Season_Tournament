@@ -36,7 +36,7 @@ public class SwerveModule {
     private final double TURN_I = 0;
     private final double TURN_D = 0;
 
-    private final double WHEEL_DIAMETER = 4;
+    private final double WHEEL_DIAMETER = Units.inchesToMeters(4.0);
     // Swerve Drive Specialties MK4i L2
     private final double DRIVE_GEAR_RATIO = 6.75;
 
@@ -73,7 +73,7 @@ public class SwerveModule {
         this.driveEncoder.setPositionConversionFactor(WHEEL_DIAMETER * Math.PI / DRIVE_GEAR_RATIO);
         // Convert from "rotations per minute of motor" to "meters per second of wheel"
         this.driveEncoder
-                .setVelocityConversionFactor(Units.inchesToMeters(WHEEL_DIAMETER * Math.PI / DRIVE_GEAR_RATIO / 60.0));
+                .setVelocityConversionFactor(WHEEL_DIAMETER * Math.PI / DRIVE_GEAR_RATIO / 60.0);
 
         // Set up the PID controller for the drive motor
         this.drivePID = this.driveMotor.getPIDController();
@@ -133,7 +133,6 @@ public class SwerveModule {
         // Give the drive motor's PID controller a target velocity and let it calculate
         // motor power from that
         drivePID.setReference(state.speedMetersPerSecond, CANSparkMax.ControlType.kVelocity);
-        
     }
 
     /**
@@ -187,7 +186,7 @@ public class SwerveModule {
      */
     public void sendTelemetry() {
         SmartDashboard.putNumber("Module " + moduleName + " turnMotor power", turnMotor.get());
-        SmartDashboard.putNumber("Module " + moduleName + " driveMotor power", driveMotor.get());
+        SmartDashboard.putNumber("Module " + moduleName + " driveMotor power", driveMotor.getAppliedOutput());
         SmartDashboard.putNumber("Module " + moduleName + " current angle (degrees)", getCurrentAngle());
         SmartDashboard.putNumber("Module " + moduleName + " desired angle (degrees)", targetAngle);
     }

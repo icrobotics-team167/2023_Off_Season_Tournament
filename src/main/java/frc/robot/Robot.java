@@ -1,14 +1,17 @@
 package frc.robot;
 
+import com.pathplanner.lib.util.PPLibTelemetry;
+
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.controls.controllers.*;
 import frc.robot.controls.controlschemes.*;
 import frc.robot.routines.Action;
 import frc.robot.routines.auto.*;
 import frc.robot.routines.Teleop;
+import frc.robot.routines.Test;
 import frc.robot.subsystems.LimeLight;
 import frc.robot.subsystems.Subsystems;
 
@@ -18,6 +21,7 @@ public class Robot extends TimedRobot {
     private ControlScheme controls;
     private Action auto;
     private Teleop teleop;
+    private Test test;
     private LimeLight limeLight;
 
     public Robot() {
@@ -39,46 +43,13 @@ public class Robot extends TimedRobot {
         }
         SmartDashboard.putData("Autonomous Routines", autoChooser);
 
-        Controller primaryController = null;
-        switch (Config.Settings.PRIMARY_CONTROLLER_TYPE) {
-            case JOYSTICK:
-                primaryController = new ThrustMasterController(Config.Ports.PRIMARY_CONTROLLER);
-                break;
-            case NONE:
-                primaryController = null;
-                break;
-        }
-        Controller secondaryController = null;
-        switch (Config.Settings.SECONDARY_CONTROLLER_TYPE) {
-            case JOYSTICK:
-                secondaryController = new ThrustMasterController(Config.Ports.SECONDARY_CONTROLLER);
-                break;
-            case NONE:
-                secondaryController = null;
-                break;
-        }
-
-        Controller tertiaryController = null;
-        if (Config.Settings.TERTIARY_CONTROLLER_TYPE == ControllerType.JOYSTICK) {
-            tertiaryController = new ThrustMasterController(Config.Ports.TERTIARY_CONTROLLER);
-        }
-
-        Controller quaternaryController = null;
-        if (Config.Settings.QUATERNARY_CONTROLLER_TYPE == ControllerType.JOYSTICK) {
-            quaternaryController = new ThrustMasterController(Config.Ports.QUATERNARY_CONTROLLER);
-        }
-
-        if (primaryController == null && secondaryController == null) {
-            controls = new NullController();
-        } else if (Config.Settings.PRIMARY_CONTROLLER_TYPE == ControllerType.JOYSTICK) {
-            // If the first contorller is a JOYSTICK type, assume we have four joysticks.
-            controls = new DeltaJoystickController(primaryController, secondaryController, tertiaryController,
-                    quaternaryController);
-        } else {
-            // Fallback
-            // This should be unreachable in normal conditions
-            // This could only occur if the secondary controller is configured but the
-            // primary controller isn't
+        try { // If all 4 controllers are properly initialized, create a control scheme with
+              // those 4 controllers
+            controls = new DeltaJoystickController(new ThrustMasterController(Config.Ports.PRIMARY_CONTROLLER),
+                    new ThrustMasterController(Config.Ports.SECONDARY_CONTROLLER),
+                    new ThrustMasterController(Config.Ports.TERTIARY_CONTROLLER),
+                    new ThrustMasterController(Config.Ports.QUATERNARY_CONTROLLER));
+        } catch (Exception e) { // Otherwise, make a null control scheme
             controls = new NullController();
         }
 
@@ -86,6 +57,7 @@ public class Robot extends TimedRobot {
 
         Subsystems.setInitialStates();
         teleop = new Teleop(controls);
+        test = new Test(controls);
     }
 
     @Override
@@ -96,6 +68,9 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("Robot.pitch", Subsystems.gyro.getPitchDegrees());
         SmartDashboard.putNumber("Robot.roll", Subsystems.gyro.getRollDegrees());
         Subsystems.driveBase.sendTelemetry();
+        
+        // Update velocity
+        Subsystems.driveBase.getVelocity();
     }
 
     @Override
@@ -124,10 +99,12 @@ public class Robot extends TimedRobot {
 
     @Override
     public void testInit() {
+        test.init();
     }
 
     @Override
     public void testPeriodic() {
+        test.periodic();
     }
 
     @Override
