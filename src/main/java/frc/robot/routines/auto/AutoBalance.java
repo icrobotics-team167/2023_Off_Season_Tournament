@@ -16,7 +16,7 @@ public class AutoBalance extends Action {
     private double balancedTickCount;
 
     /**
-     * Constructs a new DumbAutobalance auto routine.
+     * Constructs a new Autobalance auto routine.
      */
     public AutoBalance() {
         super();
