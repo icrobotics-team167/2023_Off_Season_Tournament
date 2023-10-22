@@ -26,24 +26,4 @@ public record TurretPosition(double pivotAngle, double extensionPosition) {
 
     public static final TurretPosition CUBE_HIGH = new TurretPosition(26.0,49.0);
 
-    // public static final TurretPosition HIGH_RIGHT = new TurretPosition(33, 15.19, 56);
-    // public static final TurretPosition HIGH_LEFT = HIGH_RIGHT.withSwivel(-18);
-    // public static final TurretPosition HIGH_MID = new TurretPosition(33, 0, 51.3);
-    // public static final TurretPosition MID_RIGHT = new TurretPosition(25, 21.2, 35);
-    // public static final TurretPosition MID_LEFT = new TurretPosition(28.7, -28, 38.5);
-    // public static final TurretPosition MID_MID = new TurretPosition(17.3, 0,30.2);
-
-    // // max extension can reach 2 more mid scoring positions PLEASE TEST THESE TOO
-    // // (LOW PRIORITY)
-    // public static final TurretPosition FAR_MID_RIGHT = new TurretPosition(35, 46, 42);
-    // public static final TurretPosition FAR_MID_LEFT = FAR_MID_RIGHT.flipSwivelSign();
-
-    // // positions for auto only
-    // public static final TurretPosition HIGH_GOAL_CUBE_BLUE = new TurretPosition(34, -4.97, 52); // positioning for auto
-    // public static final TurretPosition HIGH_GOAL_CUBE_RED = HIGH_GOAL_CUBE_BLUE.flipSwivelSign(); // positioning for
-    //                                                                                               // auto
-    // public static final TurretPosition HIGH_GOAL_CONE_BLUE = new TurretPosition(34, 4.97, 51); // positioning for auto
-    // public static final TurretPosition HIGH_GOAL_CONE_RED = HIGH_GOAL_CONE_BLUE.flipSwivelSign(); // positioning for
-                                                                                                  // auto
-
 }

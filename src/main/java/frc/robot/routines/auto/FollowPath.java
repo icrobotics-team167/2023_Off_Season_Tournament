@@ -28,6 +28,8 @@ public class FollowPath extends Action {
     private PathPlannerTrajectory trajectory;
     private PeriodicTimer timer;
 
+    private boolean firstMove;
+
     // TODO: Tune PIDs, this is definitely not gonna work
     private PIDController xController;
     private final double xP = 2;
@@ -51,7 +53,7 @@ public class FollowPath extends Action {
 
     private boolean runIntake = false;
 
-    public FollowPath(String path) {
+    public FollowPath(String path, boolean firstMove) {
         super();
         this.pathName = path;
         pathFile = PathPlannerPath.fromPathFile(path);
@@ -68,7 +70,12 @@ public class FollowPath extends Action {
         this.rotController = new ProfiledPIDController(rotP, rotI, rotD, new Constraints(
                 Config.Settings.SwerveDrive.MAX_TURN_SPEED, Config.Settings.SwerveDrive.MAX_TURN_ACCEL));
         this.driveController = new HolonomicDriveController(xController, yController, rotController);
+        this.firstMove = firstMove;
         this.timer = new PeriodicTimer();
+    }
+
+    public FollowPath(String path) {
+        this(path, false);
     }
 
     public FollowPath withIntake() {
@@ -84,12 +91,14 @@ public class FollowPath extends Action {
 
     @Override
     public void init() {
-        Pose2d initPos = new Pose2d(trajectory.sample(0).positionMeters, trajectory.sample(0).targetHolonomicRotation);
-        Subsystems.driveBase.setPose(initPos);
+        if (firstMove) {
+            Pose2d initPos = trajectory.getInitialTargetHolonomicPose();
+            Subsystems.driveBase.setPose(initPos);
+            PPLibTelemetry.setCurrentPose(initPos);
+        }
         SmartDashboard.putString("FollowPath.path", pathName);
         timer.reset();
         PPLibTelemetry.setCurrentPath(pathFile);
-        PPLibTelemetry.setCurrentPose(initPos);
     }
 
     @Override
@@ -97,9 +106,10 @@ public class FollowPath extends Action {
         State state = trajectory.sample(timer.get() / 2);
         ChassisSpeeds driveCommands = driveController.calculate(
                 Subsystems.driveBase.getPose(), // Current Pose
-                state.getTargetHolonomicPose(), // Target Pose
+                new Pose2d(state.getTargetHolonomicPose().getX(), state.getTargetHolonomicPose().getY(), state.heading), // Target
+                                                                                                                         // Pose
                 state.velocityMps, // Drive velocity
-                state.targetHolonomicRotation); // Target rotation
+                state.targetHolonomicRotation);
 
         ChassisSpeeds robotVelocities = Subsystems.driveBase.getVelocity();
         double velocityError = new Translation2d(robotVelocities.vxMetersPerSecond, robotVelocities.vyMetersPerSecond)
@@ -116,23 +126,28 @@ public class FollowPath extends Action {
         PPLibTelemetry.setCurrentPose(Subsystems.driveBase.getPose());
         SmartDashboard.putNumber("FollowPath.xPIDOut", driveCommands.vxMetersPerSecond);
         SmartDashboard.putNumber("FollowPath.yPIDOut", driveCommands.vyMetersPerSecond);
+        SmartDashboard.putNumber("FollowPath.rotPIDOut", driveCommands.omegaRadiansPerSecond);
         SmartDashboard.putNumber("FollowPath.velocityError", velocityError);
+        SmartDashboard.putNumber("FollowPath.rotVelError",
+                driveCommands.omegaRadiansPerSecond - robotVelocities.omegaRadiansPerSecond);
 
         // driveCommands.vxMetersPerSecond /= velocityError;
         // driveCommands.vyMetersPerSecond /= velocityError;
         Subsystems.driveBase.drive(driveCommands);
 
-        if(targetState != null && !turretDone) {
+        if (targetState != null && !turretDone) {
             turretDone = Subsystems.turret.moveTo(targetState);
         } else {
             Subsystems.turret.stop();
         }
 
-        if(runIntake) {
+        if (runIntake) {
             Subsystems.claw.intake();
         } else {
             Subsystems.claw.stop();
         }
+
+        
     }
 
     @Override

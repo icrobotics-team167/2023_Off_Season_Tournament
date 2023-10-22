@@ -108,19 +108,17 @@ public class DeltaJoystickController extends ControlScheme {
 
     @Override
     public boolean doPlayerStation() {
-        return quaternary.getButtonById(6);   
+        return quaternary.getButtonById(7);   
     }
 
     @Override
     public boolean doCubeMid() {
-        // TODO Auto-generated method stub
-        return false;
+        return quaternary.getButtonById(10);
     }
 
     @Override
     public boolean doCubeHigh() {
-        // TODO Auto-generated method stub
-        return false;
+        return quaternary.getButtonById(5);
     }
 
     @Override
