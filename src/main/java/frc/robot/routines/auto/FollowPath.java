@@ -3,6 +3,7 @@ package frc.robot.routines.auto;
 import frc.robot.Config;
 import frc.robot.routines.Action;
 import frc.robot.subsystems.Subsystems;
+import frc.robot.subsystems.turret.TurretPosition;
 import frc.robot.util.PeriodicTimer;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
@@ -37,6 +38,11 @@ public class FollowPath extends Action {
 
     private HolonomicDriveController driveController;
 
+    private TurretPosition targetState = null;
+    private boolean turretDone = true;
+
+    private boolean runIntake = false;
+
     public FollowPath(PathPlannerTrajectory path, double timeout) {
         super();
         this.path = path;
@@ -49,6 +55,17 @@ public class FollowPath extends Action {
         timer = new PeriodicTimer();
     }
 
+    public FollowPath withIntake() {
+        runIntake = true;
+        return this;
+    }
+
+    public FollowPath withTurret(TurretPosition target) {
+        targetState = target;
+        turretDone = false;
+        return this;
+    }
+
     @Override
     public void init() {
         timer.reset();
@@ -57,18 +74,29 @@ public class FollowPath extends Action {
     @Override
     public void periodic() {
         PathPlannerState state = (PathPlannerState) path.sample(timer.get());
+        if(targetState != null && !turretDone) {
+            turretDone = Subsystems.turret.moveTo(targetState);
+        } else {
+            Subsystems.turret.stop();
+        }
 
+        if(runIntake) {
+            Subsystems.claw.intake();
+        } else {
+            Subsystems.turret.stop();
+        }
     }
 
     @Override
     public boolean isDone() {
-        return timer.get() >= timeout;
+        return timer.get() >= timeout && turretDone;
     }
 
     @Override
     public void done() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'done'");
+        Subsystems.driveBase.stop();
+        Subsystems.turret.stop();
+        Subsystems.claw.stop();
     }
 
 }
