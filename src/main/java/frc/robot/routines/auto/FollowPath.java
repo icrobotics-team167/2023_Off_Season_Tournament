@@ -120,7 +120,7 @@ public class FollowPath extends Action {
                 new Translation2d(robotVelocities.vxMetersPerSecond, robotVelocities.vyMetersPerSecond).getNorm(),
                 new Translation2d(driveCommands.vxMetersPerSecond, driveCommands.vyMetersPerSecond).getNorm(),
                 robotVelocities.omegaRadiansPerSecond,
-                driveCommands.omegaRadiansPerSecond);
+                -driveCommands.omegaRadiansPerSecond);
         PPLibTelemetry
                 .setPathInaccuracy(state.positionMeters.getDistance(Subsystems.driveBase.getPose().getTranslation()));
         PPLibTelemetry.setCurrentPose(Subsystems.driveBase.getPose());
