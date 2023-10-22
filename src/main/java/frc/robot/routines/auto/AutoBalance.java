@@ -48,7 +48,7 @@ public class AutoBalance extends Action {
         if (Math.abs(pitch) <= SENSITIVITY_THRESHOLD) { // If we're not balanced
             // If we're balanced for more than 2 seconds, lower the dampening factor in
             // case we get knocked off balance
-            if ((double) balancedTickCount / 50.0 >= 2 && dampeningFactor >= 1) {
+            if (balancedTickCount / 50.0 >= 2 && dampeningFactor >= 1) {
                 dampeningFactor -= 0.01;
             }
             balancedTickCount++;
