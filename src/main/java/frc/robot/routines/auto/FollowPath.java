@@ -3,6 +3,7 @@ package frc.robot.routines.auto;
 import frc.robot.Config;
 import frc.robot.routines.Action;
 import frc.robot.subsystems.Subsystems;
+import frc.robot.subsystems.turret.TurretPosition;
 import frc.robot.util.PeriodicTimer;
 
 import com.pathplanner.lib.path.PathPlannerPath;
@@ -45,6 +46,11 @@ public class FollowPath extends Action {
 
     private HolonomicDriveController driveController;
 
+    private TurretPosition targetState = null;
+    private boolean turretDone = true;
+
+    private boolean runIntake = false;
+
     public FollowPath(String path) {
         super();
         this.pathName = path;
@@ -63,6 +69,17 @@ public class FollowPath extends Action {
                 Config.Settings.SwerveDrive.MAX_TURN_SPEED, Config.Settings.SwerveDrive.MAX_TURN_ACCEL));
         this.driveController = new HolonomicDriveController(xController, yController, rotController);
         this.timer = new PeriodicTimer();
+    }
+
+    public FollowPath withIntake() {
+        this.runIntake = true;
+        return this;
+    }
+
+    public FollowPath withTurret(TurretPosition targetState) {
+        this.targetState = targetState;
+        this.turretDone = false;
+        return this;
     }
 
     @Override
@@ -104,16 +121,30 @@ public class FollowPath extends Action {
         // driveCommands.vxMetersPerSecond /= velocityError;
         // driveCommands.vyMetersPerSecond /= velocityError;
         Subsystems.driveBase.drive(driveCommands);
+
+        if(targetState != null && !turretDone) {
+            turretDone = Subsystems.turret.moveTo(targetState);
+        } else {
+            Subsystems.turret.stop();
+        }
+
+        if(runIntake) {
+            Subsystems.claw.intake();
+        } else {
+            Subsystems.claw.stop();
+        }
     }
 
     @Override
     public boolean isDone() {
-        return timer.get() >= trajectory.getTotalTimeSeconds();
+        return timer.get() >= trajectory.getTotalTimeSeconds() && turretDone;
     }
 
     @Override
     public void done() {
         Subsystems.driveBase.stop();
+        Subsystems.turret.stop();
+        Subsystems.claw.stop();
     }
 
 }
