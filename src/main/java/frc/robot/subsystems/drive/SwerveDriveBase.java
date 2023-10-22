@@ -150,6 +150,7 @@ public class SwerveDriveBase {
 
     public void setPose(Pose2d pose) {
         odometry = new SwerveDriveOdometry(kinematics, Subsystems.gyro.getYaw(), moduleOdometry, pose);
+        previousPos = pose;
     }
 
     /**
@@ -161,6 +162,7 @@ public class SwerveDriveBase {
             moduleOdometry[i] = modules[i].getPosition();
         }
         odometry.update(Subsystems.gyro.getYaw(), moduleOdometry);
+        previousPos = odometry.getPoseMeters();
         // odometry.update(Rotation2d.fromDegrees(0), modulePositions);
     }
 
@@ -174,12 +176,15 @@ public class SwerveDriveBase {
     }
 
     public ChassisSpeeds getVelocity() {
-        Pose2d currentPose = getPose();
-        double deltaX = currentPose.getX() - previousPos.getX();
-        double velX = deltaX * 50;
-        double deltaY = currentPose.getY() - previousPos.getY();
+        Pose2d currentPos = getPose();
+        if (previousPos == null) {
+            previousPos = currentPos;
+        }
+        double deltaX = currentPos.getX() - previousPos.getX();
+        double velX = deltaX * 50; // Meters per robot tick to meters per second (50 tps)
+        double deltaY = currentPos.getY() - previousPos.getY();
         double velY = deltaY * 50;
-        Rotation2d deltaRot = currentPose.getRotation().minus(previousPos.getRotation());
+        Rotation2d deltaRot = currentPos.getRotation().minus(previousPos.getRotation());
         double velRot = deltaRot.times(50).getRadians();
         return new ChassisSpeeds(velX, velY, velRot);
     }

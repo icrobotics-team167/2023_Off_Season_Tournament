@@ -68,7 +68,9 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("Robot.pitch", Subsystems.gyro.getPitchDegrees());
         SmartDashboard.putNumber("Robot.roll", Subsystems.gyro.getRollDegrees());
         Subsystems.driveBase.sendTelemetry();
-
+        
+        // Update velocity
+        Subsystems.driveBase.getVelocity();
     }
 
     @Override

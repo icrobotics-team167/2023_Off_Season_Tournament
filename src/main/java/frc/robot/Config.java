@@ -16,7 +16,7 @@ public class Config {
     public static final class Settings {
 
         // Joysticks
-        public static final boolean EXPONENTIAL_JOYSTICKS = true;
+        public static final boolean EXPONENTIAL_JOYSTICKS = false; // NOT IMPLEMENTED
         public static final double JOYSTICKS_EXPONENT = 2;
 
         // Controllers

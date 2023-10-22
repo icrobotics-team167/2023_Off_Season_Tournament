@@ -39,7 +39,7 @@ public class FollowPath extends Action {
     private final double yD = 0;
 
     private ProfiledPIDController rotController;
-    private final double rotP = 1.5;
+    private final double rotP = -2;
     private final double rotI = 0;
     private final double rotD = 0;
 
@@ -82,12 +82,13 @@ public class FollowPath extends Action {
                 Subsystems.driveBase.getPose(), // Current Pose
                 state.getTargetHolonomicPose(), // Target Pose
                 state.velocityMps, // Drive velocity
-                state.targetHolonomicRotation);
-        Subsystems.driveBase.drive(driveCommands); // Target rotation
-        // Subsystems.gyro.getYaw()); // Current rotation
+                state.targetHolonomicRotation); // Target rotation
 
-        // Telemetry
         ChassisSpeeds robotVelocities = Subsystems.driveBase.getVelocity();
+        double velocityError = new Translation2d(robotVelocities.vxMetersPerSecond, robotVelocities.vyMetersPerSecond)
+                .getNorm()
+                / new Translation2d(driveCommands.vxMetersPerSecond, driveCommands.vyMetersPerSecond).getNorm();
+        // Telemetry
         PPLibTelemetry.setVelocities(
                 new Translation2d(robotVelocities.vxMetersPerSecond, robotVelocities.vyMetersPerSecond).getNorm(),
                 new Translation2d(driveCommands.vxMetersPerSecond, driveCommands.vyMetersPerSecond).getNorm(),
@@ -96,6 +97,13 @@ public class FollowPath extends Action {
         PPLibTelemetry
                 .setPathInaccuracy(state.positionMeters.getDistance(Subsystems.driveBase.getPose().getTranslation()));
         PPLibTelemetry.setCurrentPose(Subsystems.driveBase.getPose());
+        SmartDashboard.putNumber("FollowPath.xPIDOut", driveCommands.vxMetersPerSecond);
+        SmartDashboard.putNumber("FollowPath.yPIDOut", driveCommands.vyMetersPerSecond);
+        SmartDashboard.putNumber("FollowPath.velocityError", velocityError);
+
+        // driveCommands.vxMetersPerSecond /= velocityError;
+        // driveCommands.vyMetersPerSecond /= velocityError;
+        Subsystems.driveBase.drive(driveCommands);
     }
 
     @Override

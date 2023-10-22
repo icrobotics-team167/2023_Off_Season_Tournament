@@ -32,7 +32,7 @@ public class SwerveModule {
     private final double DRIVE_FF = 0.025;
 
     private PIDController turnPID;
-    private final double TURN_P = -(1.0 / 90.0);
+    private final double TURN_P = -(1.0 / 180.0);
     private final double TURN_I = 0;
     private final double TURN_D = 0;
 

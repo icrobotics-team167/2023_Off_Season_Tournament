@@ -1,28 +1,17 @@
 <xml version="1.0">
 <dashboard>
+	<widget field="FollowPath.velocityError" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="144" y="143"/>
+	</widget>
+	<widget field="FollowPath.yPIDOut" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
+		<location x="736" y="437"/>
+	</widget>
+	<widget field="FollowPath.xPIDOut" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
+		<location x="336" y="436"/>
+	</widget>
 	<widget field="SwerveDriveBase.xPosMeters" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="544" y="48"/>
 		<width>208</width>
-	</widget>
-	<widget field="Module Front Left drive velocity" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
-		<location x="736" y="132"/>
-	</widget>
-	<widget field="Module Back Right drive velocity" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="3" y="339"/>
-	</widget>
-	<widget field="Module Back Left drive velocity" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="309"/>
-	</widget>
-	<widget field="Module Front Right drive velocity" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="1" y="292"/>
-	</widget>
-	<widget field="FollowPath.PathStartY" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="144" y="160"/>
-		<width>192</width>
-	</widget>
-	<widget field="FollowPath.PathStartX" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="144" y="144"/>
-		<width>192</width>
 	</widget>
 	<widget field="FollowPath.path" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="144" y="128"/>
@@ -152,4 +141,10 @@
 </dashboard>
 <live-window>
 </live-window>
+	<hidden field="Module Back Right drive velocity"/>
+	<hidden field="FollowPath.PathStartX"/>
+	<hidden field="Module Back Left drive velocity"/>
+	<hidden field="FollowPath.PathStartY"/>
+	<hidden field="Module Front Right drive velocity"/>
+	<hidden field="Module Front Left drive velocity"/>
 </xml>
