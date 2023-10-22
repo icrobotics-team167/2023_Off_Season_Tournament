@@ -77,7 +77,7 @@ public class FollowPath extends Action {
 
     @Override
     public void periodic() {
-        State state = trajectory.sample(timer.get());
+        State state = trajectory.sample(timer.get() / 2);
         ChassisSpeeds driveCommands = driveController.calculate(
                 Subsystems.driveBase.getPose(), // Current Pose
                 state.getTargetHolonomicPose(), // Target Pose
@@ -108,7 +108,7 @@ public class FollowPath extends Action {
 
     @Override
     public boolean isDone() {
-        return timer.get() >= trajectory.getTotalTimeSeconds();
+        return timer.get() / 2 >= trajectory.getTotalTimeSeconds();
     }
 
     @Override

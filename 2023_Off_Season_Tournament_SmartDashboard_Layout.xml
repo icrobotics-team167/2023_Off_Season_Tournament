@@ -1,7 +1,9 @@
 <xml version="1.0">
 <dashboard>
-	<widget field="FollowPath.velocityError" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="144" y="143"/>
+	<widget field="FollowPath.velocityError" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
+		<location x="740" y="138"/>
+		<property name="Autoscale Y Values" value="false"/>
+		<property name="Maximum Y Value" value="2"/>
 	</widget>
 	<widget field="FollowPath.yPIDOut" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
 		<location x="736" y="437"/>
@@ -141,10 +143,4 @@
 </dashboard>
 <live-window>
 </live-window>
-	<hidden field="Module Back Right drive velocity"/>
-	<hidden field="FollowPath.PathStartX"/>
-	<hidden field="Module Back Left drive velocity"/>
-	<hidden field="FollowPath.PathStartY"/>
-	<hidden field="Module Front Right drive velocity"/>
-	<hidden field="Module Front Left drive velocity"/>
 </xml>
