@@ -1,5 +1,17 @@
 <xml version="1.0">
 <dashboard>
+	<widget field="FollowPath.rotVelError" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="325"/>
+	</widget>
+	<widget field="FollowPath.rotPIDOut" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="304"/>
+	</widget>
+	<widget field="Claw.Voltage" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="283"/>
+	</widget>
+	<widget field="Claw.overCurrent" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="262"/>
+	</widget>
 	<widget field="FollowPath.velocityError" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
 		<location x="740" y="138"/>
 		<property name="Autoscale Y Values" value="false"/>
