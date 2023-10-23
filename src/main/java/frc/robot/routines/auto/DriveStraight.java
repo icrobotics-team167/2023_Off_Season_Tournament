@@ -81,7 +81,7 @@ public class DriveStraight extends Action {
         }
 
         Translation2d travelVector = targetPose.getTranslation().minus(Subsystems.driveBase.getPose().getTranslation());
-        Rotation2d travelDir = travelVector.getAngle();
+        Rotation2d travelDir = new Rotation2d(travelVector.getY(), travelVector.getX());
 
         path = new PathPlannerPath(
                 PathPlannerPath.bezierFromPoses(
