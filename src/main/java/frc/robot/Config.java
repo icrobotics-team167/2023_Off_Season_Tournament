@@ -42,6 +42,20 @@ public class Config {
             public static final double MAX_TURN_ACCEL = MAX_TURN_SPEED / 0.25; // Second until max speed
 
             public static final double SLOWMODE_MULT = 0.4; // 40%
+
+            public static final class AutoPIDs {
+                public static final double xP = 2;
+                public static final double xI = 0;
+                public static final double xD = 0;
+
+                public static final double yP = 2;
+                public static final double yI = 0;
+                public static final double yD = 0;
+
+                public static final double rotP = -2;
+                public static final double rotI = 0;
+                public static final double rotD = 0;
+            }
         }
 
         public static final boolean WATER_GAME = true;

@@ -1,5 +1,7 @@
 package frc.robot.routines;
 
+import com.pathplanner.lib.util.PPLibTelemetry;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Config;
@@ -49,12 +51,16 @@ public class Teleop {
         SmartDashboard.putNumber("Teleop.moveSpeed", moveSpeed);
         SmartDashboard.putNumber("Teleop.turnSpeed", turnSpeed);
 
-        double forwardsVel = controls.getSwerveY() * moveSpeed;
-        double sideVel = controls.getSwerveX() * moveSpeed;
+        double forwardsVel = controls.getSwerveFW() * moveSpeed;
+        double sideVel = controls.getSwerveSide() * moveSpeed;
         double turnVel = controls.getSwerveTurn() * turnSpeed;
         SmartDashboard.putNumber("Teleop.forwardsVel", forwardsVel);
         SmartDashboard.putNumber("Teleop.sideVel", sideVel);
         SmartDashboard.putNumber("Teleop.turnVel", turnVel);
+
+        if (controls.fixForward()) {
+            Subsystems.gyro.resetYaw();
+        }
 
         if (Config.Settings.FIELD_ORIENTED_DRIVE) {
             Subsystems.driveBase.fieldOrientedDrive(forwardsVel, // Forward/backwards city
@@ -114,6 +120,7 @@ public class Teleop {
         // PUT DEBUG STATEMENTS HERE
         SmartDashboard.putNumber("Pivot.position", Subsystems.turret.getPosition().pivotAngle());
         SmartDashboard.putNumber("ExtendRetract.position", Subsystems.turret.getPosition().extensionPosition());
+        PPLibTelemetry.setCurrentPose(Subsystems.driveBase.getPose());
     }
 
 }

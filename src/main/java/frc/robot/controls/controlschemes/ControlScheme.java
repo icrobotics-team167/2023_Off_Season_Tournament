@@ -13,9 +13,9 @@ package frc.robot.controls.controlschemes;
 public abstract class ControlScheme {
 
     // Driving (Primary driver's controller)
-    public abstract double getSwerveX();
+    public abstract double getSwerveSide();
 
-    public abstract double getSwerveY();
+    public abstract double getSwerveFW();
 
     public abstract double getSwerveTurn();
 
@@ -55,4 +55,6 @@ public abstract class ControlScheme {
     public abstract boolean corbinLock();
 
     public abstract boolean spencerLock();
+
+    public abstract boolean fixForward();
 }

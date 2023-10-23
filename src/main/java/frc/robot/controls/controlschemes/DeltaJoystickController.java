@@ -35,23 +35,23 @@ public class DeltaJoystickController extends ControlScheme {
     }
 
     @Override
-    public double getSwerveX() {
-        return MathUtils.deadZone(primary.getLeftStickX(), Config.Tolerances.PRIMARY_CONTROLLER_DEADZONE_SIZE);
+    public double getSwerveSide() {
+        return MathUtils.deadZone(primary.getStickX(), Config.Tolerances.PRIMARY_CONTROLLER_DEADZONE_SIZE);
     }
 
     @Override
-    public double getSwerveY() {
-        return MathUtils.deadZone(primary.getLeftStickY(), Config.Tolerances.PRIMARY_CONTROLLER_DEADZONE_SIZE);
+    public double getSwerveFW() {
+        return MathUtils.deadZone(primary.getStickY(), Config.Tolerances.PRIMARY_CONTROLLER_DEADZONE_SIZE);
     }
 
     @Override
     public double getSwerveTurn() {
-        return -MathUtils.deadZone(secondary.getLeftStickX(), Config.Tolerances.SECONDARY_CONTROLLER_DEADZONE_SIZE);
+        return -MathUtils.deadZone(secondary.getStickX(), Config.Tolerances.SECONDARY_CONTROLLER_DEADZONE_SIZE);
     }
 
     @Override
     public boolean doSlowMode() {
-        return primary.getLeftTrigger();
+        return primary.getTrigger();
     }
 
     @Override
@@ -71,12 +71,12 @@ public class DeltaJoystickController extends ControlScheme {
 
     @Override
     public double getArmPivot() {
-        return MathUtils.deadZone(tertiary.getLeftStickY(), Config.Tolerances.TERTIARY_CONTROLLER_DEADZONE_SIZE);
+        return MathUtils.deadZone(tertiary.getStickY(), Config.Tolerances.TERTIARY_CONTROLLER_DEADZONE_SIZE);
     }
 
     @Override
     public double getArmExtend() {
-        return MathUtils.deadZone(quaternary.getLeftStickY(), Config.Tolerances.QUATERNARY_CONTROLLER_DEADZONE_SIZE);
+        return MathUtils.deadZone(quaternary.getStickY(), Config.Tolerances.QUATERNARY_CONTROLLER_DEADZONE_SIZE);
     }
 
     @Override
@@ -88,27 +88,27 @@ public class DeltaJoystickController extends ControlScheme {
     public boolean doResetTurret() {
         return quaternary.getButtonById(2);
     }
-    
+
     @Override
     public boolean doConeHigh() {
-        return quaternary.getButtonById(6);    
-        
+        return quaternary.getButtonById(6);
+
     }
 
     @Override
     public boolean doConeMid() {
         return quaternary.getButtonById(9);
-        
+
     }
 
     @Override
     public boolean doAutoPickup() {
-        return quaternary.getButtonById(8);    
+        return quaternary.getButtonById(8);
     }
 
     @Override
     public boolean doPlayerStation() {
-        return quaternary.getButtonById(7);   
+        return quaternary.getButtonById(7);
     }
 
     @Override
@@ -136,6 +136,11 @@ public class DeltaJoystickController extends ControlScheme {
     public boolean spencerLock() {
         // TODO Auto-generated method stub
         return false;
+    }
+
+    @Override
+    public boolean fixForward() {
+        return secondary.getButtonPressedById(3);
     }
 
 }

@@ -13,7 +13,7 @@ public record TurretPosition(double pivotAngle, double extensionPosition) {
     public static final TurretPosition INITIAL = new TurretPosition(60, 17);
     // public static final TurretPosition MID_GOAL = new TurretPosition(36, 0, 20.1);
     // public static final TurretPosition HIGH_GOAL_CENTER = new TurretPosition(35, 0, 39.6);
-    public static final TurretPosition INTAKE = new TurretPosition(-33, 17);
+    public static final TurretPosition INTAKE = new TurretPosition(-40, 17);
     public static final TurretPosition PLAYER_STATION = new TurretPosition(29.75, 33.4);
 
     //TODO: Actually find this value

@@ -1,30 +1,34 @@
 package frc.robot.routines.auto;
 
+import java.util.List;
+
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.path.PathPlannerTrajectory;
+import com.pathplanner.lib.path.PathPlannerTrajectory.State;
+import com.pathplanner.lib.util.PPLibTelemetry;
+
+import edu.wpi.first.math.controller.HolonomicDriveController;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Config;
 import frc.robot.routines.Action;
 import frc.robot.subsystems.Subsystems;
 import frc.robot.subsystems.turret.TurretPosition;
 import frc.robot.util.PeriodicTimer;
 
-import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.path.PathPlannerTrajectory;
-import com.pathplanner.lib.path.PathPlannerTrajectory.State;
-import com.pathplanner.lib.util.PPLibTelemetry;
+public class DriveStraight extends Action {
 
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.math.controller.HolonomicDriveController;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-
-public class FollowPath extends Action {
-
-    private String pathName;
-    private PathPlannerPath pathFile;
+    private Pose2d targetPose;
+    private PathPlannerPath path;
     private PathPlannerTrajectory trajectory;
     private PeriodicTimer timer;
 
@@ -52,40 +56,20 @@ public class FollowPath extends Action {
 
     private boolean runIntake = false;
 
-    public FollowPath(String path, boolean firstMove) {
+    public DriveStraight(Pose2d targetPose) {
+        this(targetPose, false);
+    }
+
+    public DriveStraight(Pose2d targetPose, boolean firstMove) {
         super();
-        this.pathName = path;
-        pathFile = PathPlannerPath.fromPathFile(path);
-        // Debug
-        if (pathFile == null) {
-            DriverStation.reportWarning("FollowPath: " + pathName + ".path failed to load!", false);
-        } else {
-            System.out.println("FollowPath: Loaded " + pathName + ".path");
-        }
-        PPLibTelemetry.registerHotReloadPath(pathName, pathFile);
-        this.trajectory = new PathPlannerTrajectory(pathFile, new ChassisSpeeds());
-        this.xController = new PIDController(xP, xI, xD);
-        this.yController = new PIDController(yP, yI, yD);
-        this.rotController = new ProfiledPIDController(rotP, rotI, rotD, new Constraints(
+        this.targetPose = targetPose;
+        xController = new PIDController(xP, xI, xD);
+        yController = new PIDController(yP, yI, yD);
+        rotController = new ProfiledPIDController(rotP, rotI, rotD, new Constraints(
                 Config.Settings.SwerveDrive.MAX_TURN_SPEED, Config.Settings.SwerveDrive.MAX_TURN_ACCEL));
         this.driveController = new HolonomicDriveController(xController, yController, rotController);
         this.firstMove = firstMove;
         this.timer = new PeriodicTimer();
-    }
-
-    public FollowPath(String path) {
-        this(path, false);
-    }
-
-    public FollowPath withIntake() {
-        this.runIntake = true;
-        return this;
-    }
-
-    public FollowPath withTurret(TurretPosition targetState) {
-        this.targetState = targetState;
-        this.turretDone = false;
-        return this;
     }
 
     @Override
@@ -94,14 +78,39 @@ public class FollowPath extends Action {
             Pose2d initPos = trajectory.getInitialTargetHolonomicPose();
             Subsystems.driveBase.setPose(initPos);
             PPLibTelemetry.setCurrentPose(initPos);
-        } else {
-            PPLibTelemetry.setCurrentPose(Subsystems.driveBase.getPose());
         }
 
-        SmartDashboard.putString("FollowPath.path", pathName);
-        PPLibTelemetry.setCurrentPath(pathFile);
+        Translation2d travelVector = targetPose.getTranslation().minus(Subsystems.driveBase.getPose().getTranslation());
+        Rotation2d travelDir = travelVector.getAngle();
+        List<Translation2d> points = PathPlannerPath.bezierFromPoses(
+                        new Pose2d(Subsystems.driveBase.getPose().getTranslation(), travelDir),
+                        new Pose2d(targetPose.getTranslation(), travelDir.rotateBy(Rotation2d.fromDegrees(180))));
+
+        path = new PathPlannerPath(
+                points,
+                new PathConstraints(
+                        Config.Settings.SwerveDrive.MAX_MOVE_SPEED,
+                        Config.Settings.SwerveDrive.MAX_MOVE_ACCEL,
+                        Config.Settings.SwerveDrive.MAX_TURN_SPEED,
+                        Config.Settings.SwerveDrive.MAX_TURN_ACCEL),
+                new GoalEndState(0, targetPose.getRotation()));
+        trajectory = new PathPlannerTrajectory(path, new ChassisSpeeds());
+
+        SmartDashboard.putString("FollowPath.path", "DriveStraight");
+        PPLibTelemetry.setCurrentPath(path);
 
         timer.reset();
+    }
+
+    public DriveStraight withIntake() {
+        this.runIntake = true;
+        return this;
+    }
+
+    public DriveStraight withTurret(TurretPosition targetState) {
+        this.targetState = targetState;
+        this.turretDone = false;
+        return this;
     }
 
     @Override
@@ -150,7 +159,6 @@ public class FollowPath extends Action {
         } else {
             Subsystems.claw.stop();
         }
-
     }
 
     @Override
