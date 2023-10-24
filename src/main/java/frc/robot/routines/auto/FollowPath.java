@@ -4,6 +4,7 @@ import frc.robot.Config;
 import frc.robot.routines.Action;
 import frc.robot.subsystems.Subsystems;
 import frc.robot.subsystems.turret.TurretPosition;
+import frc.robot.util.MathUtils;
 import frc.robot.util.PeriodicTimer;
 
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
@@ -21,6 +22,7 @@ import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 
@@ -84,6 +86,7 @@ public class FollowPath extends Action {
     @Override
     public void init() {
         if (startPos != null) {
+            startPos = MathUtils.flipPos(startPos);
             Subsystems.driveBase.setPose(startPos);
             PPLibTelemetry.setCurrentPose(startPos);
         } else {
@@ -99,7 +102,7 @@ public class FollowPath extends Action {
     @Override
     public void periodic() {
         // State state = trajectory.sample(timer.get());
-        State state = trajectory.sample(timer.get() / 2);
+        State state = mirrorState(trajectory.sample(timer.get() / 2));
 
         ChassisSpeeds driveCommands = driveController.calculateRobotRelativeSpeeds(Subsystems.driveBase.getPose(),
                 state);
@@ -143,6 +146,35 @@ public class FollowPath extends Action {
         Subsystems.driveBase.stop();
         Subsystems.turret.stop();
         Subsystems.claw.stop();
+    }
+
+    /**
+     * <p>
+     * Flips the X axis and rotation of a state. Does nothing if
+     * Config.Settings.ASYMMETRICAL_FIELD = false or if the robot is on the Blue
+     * Alliance.
+     * <p>
+     * On fields that aren't symmetrical down the X axis, modifying positions to
+     * handle asymmetrical X axes is neccesary when on the Red Alliance.
+     * 
+     * @param state Original state
+     * @return New state
+     */
+    private State mirrorState(State state) {
+        if (!Config.Settings.ASYMMETRICAL_FIELD || DriverStation.getAlliance() == Alliance.Blue) {
+            return state;
+        }
+        State mirroredState = new State();
+        mirroredState.timeSeconds = state.timeSeconds;
+        mirroredState.velocityMps = state.velocityMps;
+        mirroredState.accelerationMpsSq = state.accelerationMpsSq;
+        mirroredState.positionMeters = new Translation2d(Config.Settings.FIELD_WIDTH - state.positionMeters.getX(),
+                state.positionMeters.getY());
+        mirroredState.curvatureRadPerMeter = state.curvatureRadPerMeter;
+        mirroredState.headingAngularVelocityRps = state.headingAngularVelocityRps;
+        mirroredState.targetHolonomicRotation = state.targetHolonomicRotation.unaryMinus()
+                .plus(Rotation2d.fromDegrees(180));
+        return mirroredState;
     }
 
 }

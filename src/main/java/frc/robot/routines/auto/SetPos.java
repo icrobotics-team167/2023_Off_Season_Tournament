@@ -5,6 +5,7 @@ import com.pathplanner.lib.util.PPLibTelemetry;
 import edu.wpi.first.math.geometry.Pose2d;
 import frc.robot.routines.Action;
 import frc.robot.subsystems.Subsystems;
+import frc.robot.util.MathUtils;
 
 public class SetPos extends Action {
 
@@ -16,6 +17,7 @@ public class SetPos extends Action {
 
     @Override
     public void init() {
+        pos = MathUtils.flipPos(pos);
         Subsystems.driveBase.setPose(pos);
         PPLibTelemetry.setCurrentPose(pos);
     }
