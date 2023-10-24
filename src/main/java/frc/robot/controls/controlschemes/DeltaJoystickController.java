@@ -143,4 +143,9 @@ public class DeltaJoystickController extends ControlScheme {
         return secondary.getButtonPressedById(3);
     }
 
+    @Override
+    public boolean doRobotRelative() {
+        return secondary.getTrigger();
+    }
+
 }

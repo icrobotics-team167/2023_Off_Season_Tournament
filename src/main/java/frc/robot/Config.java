@@ -25,7 +25,7 @@ public class Config {
         public static final ControllerType TERTIARY_CONTROLLER_TYPE = ControllerType.JOYSTICK;
         public static final ControllerType QUATERNARY_CONTROLLER_TYPE = ControllerType.JOYSTICK;
 
-        public static final boolean FIELD_ORIENTED_DRIVE = true;
+        public static final boolean FIELD_RELATIVE_DEFAULT = true;
 
         // Stuff for handling fields that don't have X symmetry (Ex 2023)
         public static final double FIELD_WIDTH = 8.02;

@@ -57,4 +57,6 @@ public abstract class ControlScheme {
     public abstract boolean spencerLock();
 
     public abstract boolean fixForward();
+
+    public abstract boolean doRobotRelative();
 }

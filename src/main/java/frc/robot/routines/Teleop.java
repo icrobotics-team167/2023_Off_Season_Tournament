@@ -57,7 +57,8 @@ public class Teleop {
             Subsystems.gyro.resetYaw();
         }
 
-        if (Config.Settings.FIELD_ORIENTED_DRIVE) {
+        boolean useFieldRelative = Config.Settings.FIELD_RELATIVE_DEFAULT ? !controls.doRobotRelative() : controls.doRobotRelative();
+        if (useFieldRelative) {
             Subsystems.driveBase.fieldOrientedDrive(forwardsVel, // Forward/backwards city
                     sideVel, // Left/right velocity
                     turnVel, // Turn velocity
