@@ -87,6 +87,10 @@ public class SwerveDriveBase {
      *                      velocities
      */
     public void drive(ChassisSpeeds chassisSpeeds) {
+        if (chassisSpeeds == new ChassisSpeeds()) {
+            stop();
+            return;
+        }
         // Generates desired states for the modules. May not be optimized.
         SwerveModuleState[] moduleStates = kinematics.toSwerveModuleStates(chassisSpeeds);
 

@@ -23,14 +23,9 @@ public enum AutoRoutines {
         // new NullAction(),
         // })),
 
+        // Always input positions assuming Blue Alliance.
         NOTHING("Nothing", new Routine(new Action[] {
                         new NullAction(),
-        })),
-        GO_FORWARD_2_METERS("Go Forward 2 meters", new Routine(new Action[] {
-                        new FollowPath("Go Forward 2 Meters"),
-        })),
-        GO_SIDEWAYS_2_METERS("Go Sideways 2 meters", new Routine(new Action[] {
-                        new FollowPath("Go Sideways 2 Meters"),
         })),
         GO_FORWARD_2_METERS_AND_MOVE_ARM("Go Forward 2 meters and move arm", new Routine(new Action[] {
                         new FollowPath("Go Forward 2 Meters").withTurret(TurretPosition.INTAKE),
