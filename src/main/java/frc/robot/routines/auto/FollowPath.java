@@ -124,7 +124,7 @@ public class FollowPath extends Action {
         }
 
         if (runIntake) {
-            Subsystems.claw.intake();
+            Subsystems.claw.intake(0.5);
         } else {
             Subsystems.claw.stop();
         }
