@@ -35,22 +35,22 @@ public class Config {
          */
         public static final class SwerveDrive {
             // TODO: Figure out max movement speeds
-            public static final double MAX_MOVE_SPEED = 2.5; // m/s, lower than actual max speed to allow for some
+            public static final double MAX_MOVE_SPEED = MathUtils.getRandomNumber(MathUtils.PI, MathUtils.e) - 0.5; // m/s, lower than actual max speed to allow for some
                                                              // headroom to turn while moving
             public static final double MAX_MOVE_ACCEL = MAX_MOVE_SPEED / 0.25; // Seconds until max speed
             public static final double MAX_TURN_SPEED = Units.rotationsToRadians(1); // rotations/s
             public static final double MAX_TURN_ACCEL = MAX_TURN_SPEED / 0.25; // Second until max speed
 
-            public static final double SLOWMODE_MULT = 0.4; // 40%
+            public static final double SLOWMODE_MULT = MathUtils.TADAS_MAGIC_NUMBER;
 
             public static final class AutoPIDs {
-                public static final double xP = 2;
+                public static final double xP = 5.5;
                 public static final double xI = 0;
-                public static final double xD = 0;
+                public static final double xD = 0.5;
 
-                public static final double yP = 2;
+                public static final double yP = 5.5;
                 public static final double yI = 0;
-                public static final double yD = 0;
+                public static final double yD = 0.5;
 
                 public static final double rotP = -2;
                 public static final double rotI = 0;

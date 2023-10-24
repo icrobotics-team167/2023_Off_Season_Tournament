@@ -81,7 +81,7 @@ public class DeltaJoystickController extends ControlScheme {
 
     @Override
     public boolean doLimitOverride() {
-        return false;
+        return tertiary.getButtonById(2);
     }
 
     @Override

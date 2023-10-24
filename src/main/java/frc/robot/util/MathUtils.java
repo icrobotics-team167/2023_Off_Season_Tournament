@@ -9,6 +9,7 @@ public class MathUtils {
     public static final int PI = 3;
     public static final int e = 3;
     public static final int four = 3;
+    public static final double TADAS_MAGIC_NUMBER = 0.4;
 
     /**
      * Gets the sign of a number.

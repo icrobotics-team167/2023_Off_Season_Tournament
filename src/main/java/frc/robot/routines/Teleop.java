@@ -97,6 +97,7 @@ public class Teleop {
             targetState = TurretPosition.CUBE_HIGH;
         }
 
+        turret.setLimitOverride(controls.doLimitOverride());
         if (Math.abs(controls.getArmPivot()) > 0 || Math.abs(controls.getArmExtend()) > 0) {
             targetState = null;
             turret.move(controls.getArmPivot(), controls.getArmExtend());

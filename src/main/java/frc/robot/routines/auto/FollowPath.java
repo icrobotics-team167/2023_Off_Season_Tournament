@@ -13,6 +13,7 @@ import com.pathplanner.lib.util.PPLibTelemetry;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.controller.PIDController;
@@ -28,7 +29,7 @@ public class FollowPath extends Action {
     private PathPlannerTrajectory trajectory;
     private PeriodicTimer timer;
 
-    private boolean firstMove;
+    private Pose2d startPos;
 
     private PIDController xController;
     private final double xP = Config.Settings.SwerveDrive.AutoPIDs.xP;
@@ -52,7 +53,7 @@ public class FollowPath extends Action {
 
     private boolean runIntake = false;
 
-    public FollowPath(String path, boolean firstMove) {
+    public FollowPath(String path, Pose2d startPos) {
         super();
         this.pathName = path;
         pathFile = PathPlannerPath.fromPathFile(path);
@@ -62,19 +63,19 @@ public class FollowPath extends Action {
         } else {
             System.out.println("FollowPath: Loaded " + pathName + ".path");
         }
-        PPLibTelemetry.registerHotReloadPath(pathName, pathFile);
         this.trajectory = new PathPlannerTrajectory(pathFile, new ChassisSpeeds());
+        
         this.xController = new PIDController(xP, xI, xD);
         this.yController = new PIDController(yP, yI, yD);
         this.rotController = new ProfiledPIDController(rotP, rotI, rotD, new Constraints(
                 Config.Settings.SwerveDrive.MAX_TURN_SPEED, Config.Settings.SwerveDrive.MAX_TURN_ACCEL));
         this.driveController = new HolonomicDriveController(xController, yController, rotController);
-        this.firstMove = firstMove;
+        this.startPos = startPos;
         this.timer = new PeriodicTimer();
     }
 
     public FollowPath(String path) {
-        this(path, false);
+        this(path, null);
     }
 
     public FollowPath withIntake() {
@@ -90,10 +91,9 @@ public class FollowPath extends Action {
 
     @Override
     public void init() {
-        if (firstMove) {
-            Pose2d initPos = trajectory.getInitialTargetHolonomicPose();
-            Subsystems.driveBase.setPose(initPos);
-            PPLibTelemetry.setCurrentPose(initPos);
+        if (startPos != null) {;
+            Subsystems.driveBase.setPose(startPos);
+            PPLibTelemetry.setCurrentPose(startPos);
         } else {
             PPLibTelemetry.setCurrentPose(Subsystems.driveBase.getPose());
         }
@@ -106,7 +106,9 @@ public class FollowPath extends Action {
 
     @Override
     public void periodic() {
+        // State state = trajectory.sample(timer.get());
         State state = trajectory.sample(timer.get() / 2);
+
         ChassisSpeeds driveCommands = driveController.calculate(
                 Subsystems.driveBase.getPose(), // Current Pose
                 new Pose2d(state.getTargetHolonomicPose().getX(), state.getTargetHolonomicPose().getY(), state.heading), // Target
@@ -128,15 +130,7 @@ public class FollowPath extends Action {
                 .setPathInaccuracy(state.positionMeters.getDistance(Subsystems.driveBase.getPose().getTranslation()));
         PPLibTelemetry.setCurrentPose(Subsystems.driveBase.getPose());
         PPLibTelemetry.setTargetPose(state.getTargetHolonomicPose());
-        SmartDashboard.putNumber("FollowPath.xPIDOut", driveCommands.vxMetersPerSecond);
-        SmartDashboard.putNumber("FollowPath.yPIDOut", driveCommands.vyMetersPerSecond);
-        SmartDashboard.putNumber("FollowPath.rotPIDOut", driveCommands.omegaRadiansPerSecond);
-        SmartDashboard.putNumber("FollowPath.velocityError", velocityError);
-        SmartDashboard.putNumber("FollowPath.rotVelError",
-                driveCommands.omegaRadiansPerSecond - robotVelocities.omegaRadiansPerSecond);
 
-        // driveCommands.vxMetersPerSecond /= velocityError;
-        // driveCommands.vyMetersPerSecond /= velocityError;
         Subsystems.driveBase.drive(driveCommands);
 
         if (targetState != null && !turretDone) {
@@ -155,6 +149,7 @@ public class FollowPath extends Action {
 
     @Override
     public boolean isDone() {
+        // return timer.get() >= trajectory.getTotalTimeSeconds() && turretDone;
         return timer.get() / 2 >= trajectory.getTotalTimeSeconds() && turretDone;
     }
 
