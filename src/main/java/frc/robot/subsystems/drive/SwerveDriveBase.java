@@ -58,10 +58,10 @@ public class SwerveDriveBase {
                 new SwerveModulePosition(),
         };
         kinematics = new SwerveDriveKinematics(
-                Config.Ports.SwerveDrive.FRONT_LEFT_POS,
-                Config.Ports.SwerveDrive.FRONT_RIGHT_POS,
-                Config.Ports.SwerveDrive.BACK_LEFT_POS,
-                Config.Ports.SwerveDrive.BACK_RIGHT_POS);
+                Config.Settings.SwerveDrive.ModulesPositions.FRONT_LEFT_POS,
+                Config.Settings.SwerveDrive.ModulesPositions.FRONT_RIGHT_POS,
+                Config.Settings.SwerveDrive.ModulesPositions.BACK_LEFT_POS,
+                Config.Settings.SwerveDrive.ModulesPositions.BACK_RIGHT_POS);
         odometry = new SwerveDriveOdometry(kinematics, new Rotation2d(), moduleOdometry);
     }
 
