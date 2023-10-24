@@ -1,17 +1,11 @@
 package frc.robot.routines.auto;
 
 import frc.robot.routines.Action;
-import frc.robot.routines.auto.*;
 import frc.robot.subsystems.turret.TurretPosition;
 import frc.robot.routines.Routine;
 
-import java.time.Duration;
-
-import com.pathplanner.lib.auto.NamedCommands;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 
 /**
  * An enum for selecting auto routines.

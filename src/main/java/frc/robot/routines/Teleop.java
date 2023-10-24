@@ -2,18 +2,14 @@ package frc.robot.routines;
 
 import com.pathplanner.lib.util.PPLibTelemetry;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Config;
 import frc.robot.controls.controlschemes.ControlScheme;
 import frc.robot.subsystems.*;
-import frc.robot.subsystems.drive.SwerveDriveBase;
 import frc.robot.subsystems.turret.*;
 
 public class Teleop {
     private ControlScheme controls;
-    private SwerveDriveBase driveBase;
-
     private static final double MAX_MOVE_SPEED = Config.Settings.SwerveDrive.MAX_MOVE_SPEED;
     private static final double MAX_TURN_SPEED = Config.Settings.SwerveDrive.MAX_TURN_SPEED;
     private static final double SLOWMODE_MULT = Config.Settings.SwerveDrive.SLOWMODE_MULT;
@@ -27,7 +23,6 @@ public class Teleop {
 
     public Teleop(ControlScheme controls) {
         this.controls = controls;
-        driveBase = Subsystems.driveBase;
     }
 
     /**
