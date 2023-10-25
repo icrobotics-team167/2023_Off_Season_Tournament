@@ -161,15 +161,16 @@ public class FollowPath extends Action {
             return state;
         }
         State mirroredState = new State();
-        mirroredState.timeSeconds = state.timeSeconds;
-        mirroredState.velocityMps = state.velocityMps;
         mirroredState.accelerationMpsSq = state.accelerationMpsSq;
-        mirroredState.positionMeters = new Translation2d(Config.Settings.FIELD_WIDTH - state.positionMeters.getX(),
-                state.positionMeters.getY());
+        mirroredState.constraints = state.constraints;
         mirroredState.curvatureRadPerMeter = state.curvatureRadPerMeter;
         mirroredState.headingAngularVelocityRps = state.headingAngularVelocityRps;
+        mirroredState.positionMeters = new Translation2d(Config.Settings.FIELD_WIDTH - state.positionMeters.getX(),
+                state.positionMeters.getY());
         mirroredState.targetHolonomicRotation = state.targetHolonomicRotation.unaryMinus()
                 .plus(Rotation2d.fromDegrees(180));
+        mirroredState.timeSeconds = state.timeSeconds;
+        mirroredState.velocityMps = state.velocityMps;
         return mirroredState;
     }
 
