@@ -58,15 +58,18 @@ public class Teleop {
         }
 
         boolean useFieldRelative = Config.Settings.FIELD_RELATIVE_DEFAULT ? !controls.doRobotRelative() : controls.doRobotRelative();
+
         if (useFieldRelative) {
             Subsystems.driveBase.fieldOrientedDrive(forwardsVel, // Forward/backwards city
                     sideVel, // Left/right velocity
                     turnVel, // Turn velocity
                     Subsystems.gyro.getYaw()); // Current orientation
+            SmartDashboard.putString("Teleop.controlMode","Field Relative");
         } else {
             Subsystems.driveBase.drive(forwardsVel,
                     sideVel,
                     turnVel);
+            SmartDashboard.putString("Teleop.controlMode","Robot Relative");
         }
 
         if (controls.toggleLimelight()) {
