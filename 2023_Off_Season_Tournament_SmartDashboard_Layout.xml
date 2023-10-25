@@ -1,75 +1,8 @@
 <xml version="1.0">
 <dashboard>
-	<widget field="FollowPath.rotVelError" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="325"/>
-	</widget>
-	<widget field="FollowPath.rotPIDOut" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="304"/>
-	</widget>
-	<widget field="Claw.Voltage" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="283"/>
-	</widget>
-	<widget field="Claw.overCurrent" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="262"/>
-	</widget>
-	<widget field="FollowPath.velocityError" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
-		<location x="740" y="138"/>
-		<property name="Autoscale Y Values" value="false"/>
-		<property name="Maximum Y Value" value="2"/>
-	</widget>
-	<widget field="FollowPath.yPIDOut" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
-		<location x="736" y="437"/>
-	</widget>
-	<widget field="FollowPath.xPIDOut" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
-		<location x="336" y="436"/>
-	</widget>
-	<widget field="SwerveDriveBase.xPosMeters" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="544" y="48"/>
-		<width>208</width>
-	</widget>
-	<widget field="FollowPath.path" type="String" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="144" y="128"/>
-		<width>192</width>
-	</widget>
-	<widget field="ExtendRetract.position" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="544" y="112"/>
-		<width>208</width>
-	</widget>
-	<widget field="Pivot.position" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="544" y="96"/>
-		<width>208</width>
-	</widget>
-	<widget field="Turret.extensionSpeedMultiplier" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="544" y="80"/>
-		<width>208</width>
-	</widget>
-	<widget field="SwerveDriveBase.yPosMeters" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="544" y="64"/>
-		<width>208</width>
-	</widget>
-	<widget field="Teleop.turnVel" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="752" y="64"/>
-		<width>176</width>
-	</widget>
-	<widget field="Teleop.sideVel" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="752" y="48"/>
-		<width>176</width>
-	</widget>
-	<widget field="Teleop.forwardsVel" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="752" y="32"/>
-		<width>176</width>
-	</widget>
-	<widget field="Teleop.turnSpeed" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="752" y="16"/>
-		<width>176</width>
-	</widget>
-	<widget field="Teleop.moveSpeed" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="750" y="0"/>
-	</widget>
-	<widget field="Module Front Left driveMotor power" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
-		<location x="336" y="132"/>
-		<width>400</width>
-		<property name="Minimum Y Value" value="-1"/>
+	<widget field="Module Front Left driveMotor power" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="48"/>
+		<width>272</width>
 	</widget>
 	<widget field="Robot.batteryVoltage" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
 		<location x="1520" y="0"/>
