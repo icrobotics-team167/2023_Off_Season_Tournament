@@ -74,7 +74,7 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         auto = autoChooser.getSelected().actions;
-        limeLight.setVisionMode();
+        limeLight.setCameraMode();
         auto.exec();
         // System.out.println("Auto selected: " + autoChooser.getSelected().name);
     }

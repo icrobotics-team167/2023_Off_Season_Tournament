@@ -83,9 +83,9 @@ public class LimeLight {
      * Sets the LimeLight to vision mode
      */
     public void setVisionMode() {
-        limeLight.getEntry("camMode").setDouble(0); // Set the LimeLight to vision mode (Enable vision processing and
+        limeLight.getEntry("camMode").setNumber(2); // Set the LimeLight to vision mode (Enable vision processing and
                                                     // decrease exposure)
-        limeLight.getEntry("ledMode").setDouble(0); // Turn on the LEDs
+        limeLight.getEntry("ledMode").setNumber(0); // Turn on the LEDs
         cameraMode = false;
     }
 
