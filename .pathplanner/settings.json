@@ -2,6 +2,8 @@
   "robotWidth": 0.889,
   "robotLength": 0.9144,
   "holonomicMode": true,
-  "pathFolders": [],
+  "pathFolders": [
+    "Score then back up"
+  ],
   "autoFolders": []
 }
