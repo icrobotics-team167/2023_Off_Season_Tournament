@@ -7,11 +7,9 @@ import frc.robot.subsystems.turret.TurretPosition;
 import frc.robot.util.MathUtils;
 import frc.robot.util.PeriodicTimer;
 
-import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.PathPlannerTrajectory;
 import com.pathplanner.lib.path.PathPlannerTrajectory.State;
-import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.PPLibTelemetry;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -31,7 +29,22 @@ public class FollowPath extends Action {
 
     private Pose2d startPos;
 
-    private PPHolonomicDriveController driveController;
+    private PIDController xController;
+    private final double xP = Config.Settings.SwerveDrive.AutoPIDs.xP;
+    private final double xI = Config.Settings.SwerveDrive.AutoPIDs.xI;
+    private final double xD = Config.Settings.SwerveDrive.AutoPIDs.xD;
+
+    private PIDController yController;
+    private final double yP = Config.Settings.SwerveDrive.AutoPIDs.yP;
+    private final double yI = Config.Settings.SwerveDrive.AutoPIDs.yI;
+    private final double yD = Config.Settings.SwerveDrive.AutoPIDs.yD;
+
+    private ProfiledPIDController rotController;
+    private final double rotP = Config.Settings.SwerveDrive.AutoPIDs.rotP;
+    private final double rotI = Config.Settings.SwerveDrive.AutoPIDs.rotI;
+    private final double rotD = Config.Settings.SwerveDrive.AutoPIDs.rotD;
+
+    private HolonomicDriveController driveController;
 
     private TurretPosition targetState = null;
     private boolean turretDone = true;
@@ -49,17 +62,12 @@ public class FollowPath extends Action {
             System.out.println("FollowPath: Loaded " + pathName + ".path");
         }
         this.trajectory = new PathPlannerTrajectory(pathFile, new ChassisSpeeds());
-
-        this.driveController = new PPHolonomicDriveController(
-                new PIDConstants(Config.Settings.SwerveDrive.AutoPIDs.moveP,
-                        Config.Settings.SwerveDrive.AutoPIDs.moveI,
-                        Config.Settings.SwerveDrive.AutoPIDs.moveD),
-                new PIDConstants(Config.Settings.SwerveDrive.AutoPIDs.rotP,
-                        Config.Settings.SwerveDrive.AutoPIDs.moveI,
-                        Config.Settings.SwerveDrive.AutoPIDs.rotD),
-                Config.Settings.SwerveDrive.MAX_MOVE_SPEED,
-                Config.Settings.SwerveDrive.ModulesPositions.FRONT_LEFT_POS.getNorm());
-
+        
+        this.xController = new PIDController(xP, xI, xD);
+        this.yController = new PIDController(yP, yI, yD);
+        this.rotController = new ProfiledPIDController(rotP, rotI, rotD, new Constraints(
+                Config.Settings.SwerveDrive.MAX_TURN_SPEED, Config.Settings.SwerveDrive.MAX_TURN_ACCEL));
+        this.driveController = new HolonomicDriveController(xController, yController, rotController);
         this.startPos = startPos;
         this.timer = new PeriodicTimer();
     }
@@ -100,10 +108,17 @@ public class FollowPath extends Action {
         // State state = trajectory.sample(timer.get());
         State state = mirrorState(trajectory.sample(timer.get() / 2));
 
-        ChassisSpeeds driveCommands = driveController.calculateRobotRelativeSpeeds(Subsystems.driveBase.getPose(),
-                state);
+        ChassisSpeeds driveCommands = driveController.calculate(
+                Subsystems.driveBase.getPose(), // Current Pose
+                new Pose2d(state.getTargetHolonomicPose().getX(), state.getTargetHolonomicPose().getY(), state.heading), // Target
+                                                                                                                         // Pose
+                state.velocityMps, // Drive velocity
+                state.targetHolonomicRotation);
 
         ChassisSpeeds robotVelocities = Subsystems.driveBase.getVelocity();
+        double velocityError = new Translation2d(robotVelocities.vxMetersPerSecond, robotVelocities.vyMetersPerSecond)
+                .getNorm()
+                / new Translation2d(driveCommands.vxMetersPerSecond, driveCommands.vyMetersPerSecond).getNorm();
         // Telemetry
         PPLibTelemetry.setVelocities(
                 new Translation2d(robotVelocities.vxMetersPerSecond, robotVelocities.vyMetersPerSecond).getNorm(),
@@ -111,7 +126,7 @@ public class FollowPath extends Action {
                 robotVelocities.omegaRadiansPerSecond,
                 -driveCommands.omegaRadiansPerSecond);
         PPLibTelemetry
-                .setPathInaccuracy(driveController.getPositionalError());
+                .setPathInaccuracy(state.positionMeters.getDistance(Subsystems.driveBase.getPose().getTranslation()));
         PPLibTelemetry.setCurrentPose(Subsystems.driveBase.getPose());
         PPLibTelemetry.setTargetPose(state.getTargetHolonomicPose());
 

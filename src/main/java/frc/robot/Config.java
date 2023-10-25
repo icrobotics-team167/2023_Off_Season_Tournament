@@ -48,9 +48,13 @@ public class Config {
             public static final double SLOWMODE_MULT = MathUtils.TADAS_MAGIC_NUMBER;
 
             public static final class AutoPIDs {
-                public static final double moveP = 5.5;
-                public static final double moveI = 0;
-                public static final double moveD = 0.5;
+                public static final double xP = 5.5;
+                public static final double xI = 0;
+                public static final double xD = 0.5;
+
+                public static final double yP = 5.5;
+                public static final double yI = 0;
+                public static final double yD = 0.5;
 
                 public static final double rotP = -2;
                 public static final double rotI = 0;
