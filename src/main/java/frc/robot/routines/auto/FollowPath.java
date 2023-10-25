@@ -184,8 +184,10 @@ public class FollowPath extends Action {
         mirroredState.constraints = state.constraints;
         mirroredState.curvatureRadPerMeter = state.curvatureRadPerMeter;
         mirroredState.headingAngularVelocityRps = state.headingAngularVelocityRps;
-        mirroredState.positionMeters = new Translation2d(Config.Settings.FIELD_WIDTH - state.positionMeters.getX(),
-                state.positionMeters.getY());
+        mirroredState.positionMeters = new Translation2d(
+            Config.Settings.FIELD_WIDTH - state.positionMeters.getX(),
+            state.positionMeters.getY()
+        );
         mirroredState.targetHolonomicRotation = state.targetHolonomicRotation.unaryMinus()
                 .plus(Rotation2d.fromDegrees(180));
         mirroredState.timeSeconds = state.timeSeconds;
