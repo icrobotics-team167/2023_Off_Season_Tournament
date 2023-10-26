@@ -55,7 +55,7 @@ public class FollowPath extends Action {
                         Config.Settings.SwerveDrive.AutoPIDs.moveI,
                         Config.Settings.SwerveDrive.AutoPIDs.moveD),
                 new PIDConstants(Config.Settings.SwerveDrive.AutoPIDs.rotP,
-                        Config.Settings.SwerveDrive.AutoPIDs.moveI,
+                        Config.Settings.SwerveDrive.AutoPIDs.rotI,
                         Config.Settings.SwerveDrive.AutoPIDs.rotD),
                 Config.Settings.SwerveDrive.MAX_MOVE_SPEED,
                 Config.Settings.SwerveDrive.ModulesPositions.FRONT_LEFT_POS.getNorm());
