@@ -2,6 +2,7 @@ package frc.robot.routines;
 
 import com.pathplanner.lib.util.PPLibTelemetry;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Config;
 import frc.robot.controls.controlschemes.ControlScheme;
@@ -30,6 +31,7 @@ public class Teleop {
      */
     public void init() {
         holdState = turret.getPosition();
+        Subsystems.gyro.setYaw(180);
     }
 
     /**
