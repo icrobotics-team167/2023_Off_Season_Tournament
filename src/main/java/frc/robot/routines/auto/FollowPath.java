@@ -97,8 +97,8 @@ public class FollowPath extends Action {
 
     @Override
     public void periodic() {
-        // State state = trajectory.sample(timer.get());
-        State state = mirrorState(trajectory.sample(timer.get() / 2));
+        State state = mirrorState(trajectory.sample(timer.get()));
+        // State state = mirrorState(trajectory.sample(timer.get() / 2));
 
         ChassisSpeeds driveCommands = driveController.calculateRobotRelativeSpeeds(Subsystems.driveBase.getPose(),
                 state);
@@ -133,8 +133,8 @@ public class FollowPath extends Action {
 
     @Override
     public boolean isDone() {
-        // return timer.get() >= trajectory.getTotalTimeSeconds() && turretDone;
-        return timer.get() / 2 >= trajectory.getTotalTimeSeconds() && turretDone;
+        return timer.get() >= trajectory.getTotalTimeSeconds() && turretDone;
+        // return timer.get() / 2 >= trajectory.getTotalTimeSeconds() && turretDone;
     }
 
     @Override
