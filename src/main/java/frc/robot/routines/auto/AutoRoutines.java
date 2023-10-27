@@ -28,15 +28,18 @@ public enum AutoRoutines {
         })),
         SCORE_CONE_THEN_CUBE("Score Cone then Cube", new Routine(new Action[] {
                         new SetPos(new Pose2d(1.9, 5.0, Rotation2d.fromDegrees(180))),
-                        new MoveArm(TurretPosition.CONE_HIGH),
-                        new Outtake(),
-                        new FollowPath("Score then back up pt 1", new Pose2d(1.9, 5.0, Rotation2d.fromDegrees(-179.9)))
-                                        .withTurret(TurretPosition.INITIAL),
-                        new FollowPath("Score then back up pt 2").withTurret(TurretPosition.INTAKE),
-                        new FollowPath("Score then back up pt 3").withIntake(),
-                        new FollowPath("Score then back up pt 4").withTurret(TurretPosition.INITIAL),
-                        new MoveArm(TurretPosition.CUBE_HIGH),
-                        new Outtake(),
+                        // new MoveArm(TurretPosition.CONE_HIGH),
+                        // new Outtake(),
+                        new FollowPath("Score then back up pt 1", new Pose2d(1.9, 5.0, Rotation2d.fromDegrees(-179.9))),
+                                        // .withTurret(TurretPosition.INITIAL),
+                        new FollowPath("Score then back up pt 2"),
+                        // .withTurret(TurretPosition.INTAKE),
+                        new FollowPath("Score then back up pt 3"),
+                        // .withIntake(),
+                        new FollowPath("Score then back up pt 4"),
+                        // .withTurret(TurretPosition.INITIAL),
+                        // new MoveArm(TurretPosition.CUBE_HIGH),
+                        // new Outtake(),
         }));
 
         public String name;

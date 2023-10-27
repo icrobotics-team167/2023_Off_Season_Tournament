@@ -9,6 +9,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Config;
 import frc.robot.subsystems.Subsystems;
@@ -112,6 +113,23 @@ public class SwerveDriveBase {
         SmartDashboard.putNumber("SwerveDriveBase.yPosMeters", odometry.getPoseMeters().getY());
     }
 
+    public void resetWheels() {
+        SwerveModuleState[] moduleStates = new SwerveModuleState[] {
+            new SwerveModuleState(0.0, new Rotation2d()),
+            new SwerveModuleState(0.0, new Rotation2d()),
+            new SwerveModuleState(0.0, new Rotation2d()),
+            new SwerveModuleState(0.0, new Rotation2d()),
+        };
+        for (int i = 0; i < modules.length; i++) {
+            // Move them to the desired state
+            modules[i].move(moduleStates[i]);
+            // And update their odometry
+            moduleOdometry[i] = modules[i].getPosition();
+        }
+        previousPos = odometry.getPoseMeters();
+        odometry.update(Subsystems.gyro.getYaw(), moduleOdometry);
+    }
+
     /**
      * Drives the robot relative to the driver station.
      * 
@@ -149,6 +167,10 @@ public class SwerveDriveBase {
      * @return The current position of a robot, as a Pose2d
      */
     public Pose2d getPose() {
+        if (previousPos.getTranslation().getDistance(odometry.getPoseMeters().getTranslation()) > 1) {
+            DriverStation.reportWarning("THE ROBOT TELEPORTED, RECALCULATING POSITION", false);
+            setPose(previousPos);
+        }
         return odometry.getPoseMeters();
     }
 

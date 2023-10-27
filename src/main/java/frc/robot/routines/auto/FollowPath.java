@@ -117,7 +117,7 @@ public class FollowPath extends Action {
 
         Subsystems.driveBase.drive(driveCommands);
 
-        if (targetState != null && !turretDone) {
+         if (targetState != null && !turretDone) {
             turretDone = Subsystems.turret.moveTo(targetState);
         } else {
             Subsystems.turret.stop();

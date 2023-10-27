@@ -40,17 +40,20 @@ public class Config {
         public static final class SwerveDrive {
             // Lower than actual max move speed to allow for some motor power headroom to
             // turn
-            public static final double MAX_MOVE_SPEED = MathUtils.getRandomNumber(MathUtils.PI, MathUtils.e) - 0.5;
+            public static final double MAX_MOVE_SPEED = 1;
             public static final double MAX_MOVE_ACCEL = MAX_MOVE_SPEED / 0.25; // Seconds until max speed
             public static final double MAX_TURN_SPEED = Units.rotationsToRadians(1); // rotations/s
             public static final double MAX_TURN_ACCEL = MAX_TURN_SPEED / 0.25; // Second until max speed
 
             public static final double SLOWMODE_MULT = MathUtils.TADAS_MAGIC_NUMBER;
 
+            public static final boolean refBloodLust = false; // Robot keeps trying to kill refs for some reason. Knowing
+                                                             // Mike the reason is very understandable.
+
             public static final class AutoPIDs {
                 public static final double moveP = 8;
                 public static final double moveI = 0;
-                public static final double moveD = 2;
+                public static final double moveD = 0;
 
                 public static final double rotP = -2;
                 public static final double rotI = 0;
