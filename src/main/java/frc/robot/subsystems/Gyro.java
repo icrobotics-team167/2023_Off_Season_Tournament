@@ -19,9 +19,9 @@ public class Gyro {
 
     private Pigeon2 pigeon;
 
-    private Rotation2d yawOffset = new Rotation2d();
-    private Rotation2d pitchOffset = new Rotation2d();
-    private Rotation2d rollOffset = new Rotation2d();
+    private double yawOffset = 0;
+    private double pitchOffset = 0;
+    private double rollOffset = 0;
 
     /**
      * Allows only one instance of Gyro to exist at once.
@@ -38,6 +38,7 @@ public class Gyro {
 
     private Gyro(int CAN_ID) {
         pigeon = new Pigeon2(CAN_ID);
+        // pigeon.configMountPose(-90,0,0);
     }
 
     /**
@@ -59,7 +60,7 @@ public class Gyro {
      * @return The current yaw, as a Rotation2d object. Positive is CCW
      */
     public Rotation2d getYaw() {
-        return Rotation2d.fromDegrees(pigeon.getYaw()).minus(yawOffset);
+        return Rotation2d.fromDegrees(pigeon.getYaw() - yawOffset);
     }
 
     /**
@@ -78,10 +79,10 @@ public class Gyro {
     /**
      * Sets the current yaw.
      * 
-     * @param yaw The new yaw.
+     * @param yaw The new yaw, in degrees.
      */
     public void setYaw(double yaw) {
-        yawOffset = getYaw().minus(Rotation2d.fromDegrees(yaw));
+        yawOffset = pigeon.getYaw() - yaw;
     }
 
     /**
@@ -98,10 +99,10 @@ public class Gyro {
     /**
      * Gets the current pitch, as a Rotation2d object.
      * 
-     * @return The current pitch, as a Rotation2d object.
+     * @return The current pitch, as a Rotation2d object. Positive is tilted up.
      */
     public Rotation2d getPitch() {
-        return Rotation2d.fromDegrees(pigeon.getPitch()).minus(pitchOffset);
+        return Rotation2d.fromDegrees(-pigeon.getPitch() - pitchOffset);
     }
 
     /**
@@ -123,7 +124,7 @@ public class Gyro {
      * @param pitch The new pitch.
      */
     public void setPitch(double pitch) {
-        pitchOffset = getPitch().minus(Rotation2d.fromDegrees(pitch));
+        pitchOffset = -pigeon.getPitch() - pitch;
     }
 
     /**
@@ -140,10 +141,10 @@ public class Gyro {
     /**
      * Gets the current roll, as a Rotation2d object.
      * 
-     * @return The current roll, as a Rotation2d object.
+     * @return The current roll, as a Rotation2d object. Positive is CCW.
      */
     public Rotation2d getRoll() {
-        return Rotation2d.fromDegrees(pigeon.getRoll()).minus(rollOffset);
+        return Rotation2d.fromDegrees(-pigeon.getRoll() - rollOffset);
     }
 
     /**
@@ -165,7 +166,7 @@ public class Gyro {
      * @param roll The new roll.
      */
     public void setRoll(double roll) {
-        rollOffset = getPitch().minus(Rotation2d.fromDegrees(roll));
+        rollOffset = -pigeon.getRoll() - roll;
     }
 
     /**

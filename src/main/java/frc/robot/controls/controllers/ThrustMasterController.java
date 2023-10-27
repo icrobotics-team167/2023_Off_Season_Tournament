@@ -28,183 +28,35 @@ public class ThrustMasterController implements Controller {
     }
 
     @Override
-    public double getLeftTriggerValue() {
+    public double getTriggerValue() {
 
         return 0;
     }
 
     @Override
-    public boolean getLeftTrigger() {
+    public boolean getTrigger() {
         return joystick.getTrigger();
     }
 
     @Override
-    public boolean getLeftTriggerPressed() {
+    public boolean getTriggerPressed() {
         return joystick.getTriggerPressed();
     }
 
     @Override
-    public boolean getLeftBumper() {
-
-        return false;
-    }
-
-    @Override
-    public boolean getLeftBumperPressed() {
-
-        return false;
-    }
-
-    @Override
-    public double getRightTriggerValue() {
-
-        return 0;
-    }
-
-    @Override
-    public boolean getRightTrigger() {
-
-        return false;
-    }
-
-    @Override
-    public boolean getRightTriggerPressed() {
-
-        return false;
-    }
-
-    @Override
-    public boolean getRightBumper() {
-        return false;
-    }
-
-    @Override
-    public boolean getRightBumperToggled() {
-
-        return false;
-    }
-
-    @Override
-    public double getLeftStickX() {
+    public double getStickX() {
         return -joystick.getX();
     }
 
     @Override
-    public double getLeftStickY() {
+    public double getStickY() {
 
         return -joystick.getY();
     }
 
     @Override
-    public double getLeftStickZ() {
+    public double getStickZ() {
         return joystick.getZ();
-    }
-
-    @Override
-    public boolean getLeftStickButton() {
-
-        return false;
-    }
-
-    @Override
-    public boolean getLeftStickButtonPressed() {
-
-        return false;
-    }
-
-    @Override
-    public double getRightStickX() {
-        throw new UnsupportedOperationException("no right stick on a joystick :-)");
-    }
-
-    @Override
-    public double getRightStickY() {
-
-        return 0;
-    }
-
-    @Override
-    public boolean getRightStickButton() {
-
-        return false;
-    }
-
-    @Override
-    public boolean getRightStickButtonPressed() {
-
-        return false;
-    }
-
-    @Override
-    public boolean getAButton() {
-
-        return false;
-    }
-
-    @Override
-    public boolean getAButtonPressed() {
-
-        return false;
-    }
-
-    @Override
-    public boolean getBButton() {
-
-        return false;
-    }
-
-    @Override
-    public boolean getBButtonPressed() {
-
-        return false;
-    }
-
-    @Override
-    public boolean getXButton() {
-
-        return false;
-    }
-
-    @Override
-    public boolean getXButtonPressed() {
-
-        return false;
-    }
-
-    @Override
-    public boolean getYButton() {
-
-        return false;
-    }
-
-    @Override
-    public boolean getYButtonPressed() {
-
-        return false;
-    }
-
-    @Override
-    public boolean getBackButton() {
-
-        return false;
-    }
-
-    @Override
-    public boolean getBackButtonPressed() {
-
-        return false;
-    }
-
-    @Override
-    public boolean getStartButton() {
-
-        return false;
-    }
-
-    @Override
-    public boolean getStartButtonPressed() {
-
-        return false;
     }
 
     @Override

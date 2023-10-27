@@ -4,6 +4,7 @@ import frc.robot.Config;
 import frc.robot.routines.Action;
 import frc.robot.subsystems.Subsystems;
 import frc.robot.subsystems.turret.TurretPosition;
+import frc.robot.util.MathUtils;
 import frc.robot.util.PeriodicTimer;
 
 import com.pathplanner.lib.path.PathPlannerPath;
@@ -11,15 +12,17 @@ import com.pathplanner.lib.path.PathPlannerTrajectory;
 import com.pathplanner.lib.path.PathPlannerTrajectory.State;
 import com.pathplanner.lib.util.PPLibTelemetry;
 
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 
 public class FollowPath extends Action {
 
@@ -28,23 +31,22 @@ public class FollowPath extends Action {
     private PathPlannerTrajectory trajectory;
     private PeriodicTimer timer;
 
-    private boolean firstMove;
+    private Pose2d startPos;
 
-    // TODO: Tune PIDs, this is definitely not gonna work
     private PIDController xController;
-    private final double xP = 2;
-    private final double xI = 0;
-    private final double xD = 0;
+    private final double xP = Config.Settings.SwerveDrive.AutoPIDs.xP;
+    private final double xI = Config.Settings.SwerveDrive.AutoPIDs.xI;
+    private final double xD = Config.Settings.SwerveDrive.AutoPIDs.xD;
 
     private PIDController yController;
-    private final double yP = 2;
-    private final double yI = 0;
-    private final double yD = 0;
+    private final double yP = Config.Settings.SwerveDrive.AutoPIDs.yP;
+    private final double yI = Config.Settings.SwerveDrive.AutoPIDs.yI;
+    private final double yD = Config.Settings.SwerveDrive.AutoPIDs.yD;
 
     private ProfiledPIDController rotController;
-    private final double rotP = -2;
-    private final double rotI = 0;
-    private final double rotD = 0;
+    private final double rotP = Config.Settings.SwerveDrive.AutoPIDs.rotP;
+    private final double rotI = Config.Settings.SwerveDrive.AutoPIDs.rotI;
+    private final double rotD = Config.Settings.SwerveDrive.AutoPIDs.rotD;
 
     private HolonomicDriveController driveController;
 
@@ -53,7 +55,7 @@ public class FollowPath extends Action {
 
     private boolean runIntake = false;
 
-    public FollowPath(String path, boolean firstMove) {
+    public FollowPath(String path, Pose2d startPos) {
         super();
         this.pathName = path;
         pathFile = PathPlannerPath.fromPathFile(path);
@@ -63,19 +65,19 @@ public class FollowPath extends Action {
         } else {
             System.out.println("FollowPath: Loaded " + pathName + ".path");
         }
-        PPLibTelemetry.registerHotReloadPath(pathName, pathFile);
         this.trajectory = new PathPlannerTrajectory(pathFile, new ChassisSpeeds());
+        
         this.xController = new PIDController(xP, xI, xD);
         this.yController = new PIDController(yP, yI, yD);
         this.rotController = new ProfiledPIDController(rotP, rotI, rotD, new Constraints(
                 Config.Settings.SwerveDrive.MAX_TURN_SPEED, Config.Settings.SwerveDrive.MAX_TURN_ACCEL));
         this.driveController = new HolonomicDriveController(xController, yController, rotController);
-        this.firstMove = firstMove;
+        this.startPos = startPos;
         this.timer = new PeriodicTimer();
     }
 
     public FollowPath(String path) {
-        this(path, false);
+        this(path, null);
     }
 
     public FollowPath withIntake() {
@@ -91,19 +93,25 @@ public class FollowPath extends Action {
 
     @Override
     public void init() {
-        if (firstMove) {
-            Pose2d initPos = trajectory.getInitialTargetHolonomicPose();
-            Subsystems.driveBase.setPose(initPos);
-            PPLibTelemetry.setCurrentPose(initPos);
+        if (startPos != null) {
+            startPos = MathUtils.flipPos(startPos);
+            Subsystems.driveBase.setPose(startPos);
+            PPLibTelemetry.setCurrentPose(startPos);
+        } else {
+            PPLibTelemetry.setCurrentPose(Subsystems.driveBase.getPose());
         }
+
         SmartDashboard.putString("FollowPath.path", pathName);
-        timer.reset();
         PPLibTelemetry.setCurrentPath(pathFile);
+
+        timer.reset();
     }
 
     @Override
     public void periodic() {
-        State state = trajectory.sample(timer.get() / 2);
+        // State state = trajectory.sample(timer.get());
+        State state = mirrorState(trajectory.sample(timer.get() / 2));
+
         ChassisSpeeds driveCommands = driveController.calculate(
                 Subsystems.driveBase.getPose(), // Current Pose
                 new Pose2d(state.getTargetHolonomicPose().getX(), state.getTargetHolonomicPose().getY(), state.heading), // Target
@@ -124,15 +132,8 @@ public class FollowPath extends Action {
         PPLibTelemetry
                 .setPathInaccuracy(state.positionMeters.getDistance(Subsystems.driveBase.getPose().getTranslation()));
         PPLibTelemetry.setCurrentPose(Subsystems.driveBase.getPose());
-        SmartDashboard.putNumber("FollowPath.xPIDOut", driveCommands.vxMetersPerSecond);
-        SmartDashboard.putNumber("FollowPath.yPIDOut", driveCommands.vyMetersPerSecond);
-        SmartDashboard.putNumber("FollowPath.rotPIDOut", driveCommands.omegaRadiansPerSecond);
-        SmartDashboard.putNumber("FollowPath.velocityError", velocityError);
-        SmartDashboard.putNumber("FollowPath.rotVelError",
-                driveCommands.omegaRadiansPerSecond - robotVelocities.omegaRadiansPerSecond);
+        PPLibTelemetry.setTargetPose(state.getTargetHolonomicPose());
 
-        // driveCommands.vxMetersPerSecond /= velocityError;
-        // driveCommands.vyMetersPerSecond /= velocityError;
         Subsystems.driveBase.drive(driveCommands);
 
         if (targetState != null && !turretDone) {
@@ -142,16 +143,16 @@ public class FollowPath extends Action {
         }
 
         if (runIntake) {
-            Subsystems.claw.intake();
+            Subsystems.claw.intake(0.5);
         } else {
             Subsystems.claw.stop();
         }
 
-        
     }
 
     @Override
     public boolean isDone() {
+        // return timer.get() >= trajectory.getTotalTimeSeconds() && turretDone;
         return timer.get() / 2 >= trajectory.getTotalTimeSeconds() && turretDone;
     }
 
@@ -160,6 +161,36 @@ public class FollowPath extends Action {
         Subsystems.driveBase.stop();
         Subsystems.turret.stop();
         Subsystems.claw.stop();
+    }
+
+    /**
+     * <p>
+     * Flips the X axis and rotation of a state. Does nothing if
+     * Config.Settings.ASYMMETRICAL_FIELD = false or if the robot is on the Blue
+     * Alliance.
+     * <p>
+     * On fields that aren't symmetrical down the X axis, modifying positions to
+     * handle asymmetrical X axes is neccesary when on the Red Alliance.
+     * 
+     * @param state Original state
+     * @return New state
+     */
+    private State mirrorState(State state) {
+        if (!Config.Settings.ASYMMETRICAL_FIELD || DriverStation.getAlliance() == Alliance.Blue) {
+            return state;
+        }
+        State mirroredState = new State();
+        mirroredState.accelerationMpsSq = state.accelerationMpsSq;
+        mirroredState.constraints = state.constraints;
+        mirroredState.curvatureRadPerMeter = state.curvatureRadPerMeter;
+        mirroredState.headingAngularVelocityRps = state.headingAngularVelocityRps;
+        mirroredState.positionMeters = new Translation2d(Config.Settings.FIELD_WIDTH - state.positionMeters.getX(),
+                state.positionMeters.getY());
+        mirroredState.targetHolonomicRotation = state.targetHolonomicRotation.unaryMinus()
+                .plus(Rotation2d.fromDegrees(180));
+        mirroredState.timeSeconds = state.timeSeconds;
+        mirroredState.velocityMps = state.velocityMps;
+        return mirroredState;
     }
 
 }
