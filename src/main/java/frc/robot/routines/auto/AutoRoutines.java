@@ -27,11 +27,11 @@ public enum AutoRoutines {
                         new NullAction(),
         })),
         THE_ONE_PIECE_IS_REAL("One piece auto", new Routine(new Action[] {
-                        new SetPos(new Pose2d(2.1, 4.0, Rotation2d.fromDegrees(180))),
+                        new SetPos(new Pose2d(1.9, 5.0, Rotation2d.fromDegrees(180))),
                         new MoveArm(TurretPosition.CONE_HIGH),
                         new Outtake(),
                         new MoveArm(TurretPosition.INITIAL),
-                        new SimpleDrive(new ChassisSpeeds(1, 0, 0), 2)
+                        new SimpleDrive(new ChassisSpeeds(0.5, 0, 0), 4)
         })),
         GO_FORWARD_2_METERS_AND_MOVE_ARM("Go Forward 2 meters and move arm", new Routine(new Action[] {
                         new FollowPath("Go Forward 2 Meters", true).withTurret(TurretPosition.INTAKE),
