@@ -18,23 +18,23 @@
 		<width>208</width>
 	</widget>
 	<widget field="ExtendRetract.position" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="752" y="64"/>
+		<location x="544" y="109"/>
 		<width>208</width>
 	</widget>
 	<widget field="Pivot.position" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="752" y="48"/>
+		<location x="544" y="93"/>
 		<width>208</width>
 	</widget>
 	<widget field="Turret.extensionSpeedMultiplier" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="752" y="32"/>
+		<location x="544" y="77"/>
 		<width>208</width>
 	</widget>
 	<widget field="SwerveDriveBase.yPosMeters" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="752" y="16"/>
+		<location x="544" y="61"/>
 		<width>208</width>
 	</widget>
 	<widget field="SwerveDriveBase.xPosMeters" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="752" y="0"/>
+		<location x="544" y="48"/>
 		<width>208</width>
 	</widget>
 	<widget field="Teleop.turnVel" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
