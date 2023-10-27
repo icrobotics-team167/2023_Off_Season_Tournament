@@ -16,21 +16,71 @@ public interface Controller {
 
     ControllerType getControllerType();
 
-    double getTriggerValue();
+    double getLeftTriggerValue();
 
-    boolean getTrigger();
+    boolean getLeftTrigger();
 
-    boolean getTriggerPressed();
+    boolean getLeftTriggerPressed();
 
-    double getStickX();
+    boolean getLeftBumper();
 
-    double getStickY();
+    boolean getLeftBumperPressed();
 
-    double getStickZ();
+    double getRightTriggerValue();
+
+    boolean getRightTrigger();
+
+    boolean getRightTriggerPressed();
+
+    boolean getRightBumper();
+
+    boolean getRightBumperToggled();
+
+    double getLeftStickX();
+
+    double getLeftStickY();
+
+    double getLeftStickZ();
+
+    boolean getLeftStickButton();
+
+    boolean getLeftStickButtonPressed();
+
+    double getRightStickX();
+
+    double getRightStickY();
+
+    boolean getRightStickButton();
+
+    boolean getRightStickButtonPressed();
 
     boolean getButtonPressedById(int buttonId);
 
     boolean getButtonById(int buttonId);
+
+    boolean getAButton();
+
+    boolean getAButtonPressed();
+
+    boolean getBButton();
+
+    boolean getBButtonPressed();
+
+    boolean getXButton();
+
+    boolean getXButtonPressed();
+
+    boolean getYButton();
+
+    boolean getYButtonPressed();
+
+    boolean getBackButton();
+
+    boolean getBackButtonPressed();
+
+    boolean getStartButton();
+
+    boolean getStartButtonPressed();
 
     boolean getDPadUp();
 

@@ -1,8 +1,10 @@
 package frc.robot.routines.auto;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.routines.Action;
 import frc.robot.subsystems.Subsystems;
 import frc.robot.util.MathUtils;
+import frc.robot.util.MovingAverage;
 
 public class AutoBalance extends Action {
 

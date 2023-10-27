@@ -25,11 +25,7 @@ public class Config {
         public static final ControllerType TERTIARY_CONTROLLER_TYPE = ControllerType.JOYSTICK;
         public static final ControllerType QUATERNARY_CONTROLLER_TYPE = ControllerType.JOYSTICK;
 
-        public static final boolean FIELD_RELATIVE_DEFAULT = true;
-
-        // Stuff for handling fields that don't have X symmetry (Ex 2023)
-        public static final double FIELD_WIDTH = 8.02;
-        public static final boolean ASYMMETRICAL_FIELD = true;
+        public static final boolean FIELD_ORIENTED_DRIVE = true;
 
         // CPU period (seconds)
         public static final double CPU_PERIOD = 0.02;
@@ -38,50 +34,14 @@ public class Config {
          * Drivebase speed limits.
          */
         public static final class SwerveDrive {
-            // Lower than actual max move speed to allow for some motor power headroom to
-            // turn
-            public static final double MAX_MOVE_SPEED = MathUtils.getRandomNumber(MathUtils.PI, MathUtils.e) - 0.5;
+            // TODO: Figure out max movement speeds
+            public static final double MAX_MOVE_SPEED = 2.5; // m/s, lower than actual max speed to allow for some
+                                                             // headroom to turn while moving
             public static final double MAX_MOVE_ACCEL = MAX_MOVE_SPEED / 0.25; // Seconds until max speed
             public static final double MAX_TURN_SPEED = Units.rotationsToRadians(1); // rotations/s
             public static final double MAX_TURN_ACCEL = MAX_TURN_SPEED / 0.25; // Second until max speed
 
-            public static final double SLOWMODE_MULT = MathUtils.TADAS_MAGIC_NUMBER;
-
-            public static final class AutoPIDs {
-                public static final double xP = 5.5;
-                public static final double xI = 0;
-                public static final double xD = 0.5;
-
-                public static final double yP = 5.5;
-                public static final double yI = 0;
-                public static final double yD = 0.5;
-
-                public static final double rotP = -2;
-                public static final double rotI = 0;
-                public static final double rotD = 0;
-            }
-
-            public static final class ModulesPositions {
-                // Measured in meters
-                private static final double robotLength = 30;
-                private static final double robotWidth = 29;
-                private static final double moduleCenterOfRotationDistanceFromEdge = 2.625;
-                private static final double moduleForwardDistanceFromCenter = Units
-                        .inchesToMeters(robotLength - 2 * moduleCenterOfRotationDistanceFromEdge); // 16.5 in
-                private static final double moduleSideDistanceFromCenter = Units
-                        .inchesToMeters(robotWidth - 2 * moduleCenterOfRotationDistanceFromEdge); // 16.5 in
-                public static final Translation2d FRONT_LEFT_POS = new Translation2d(
-                        -moduleForwardDistanceFromCenter / 2.0,
-                        -moduleSideDistanceFromCenter / 2.0);
-                public static final Translation2d FRONT_RIGHT_POS = new Translation2d(
-                        -moduleForwardDistanceFromCenter / 2.0, moduleSideDistanceFromCenter / 2.0);
-                public static final Translation2d BACK_LEFT_POS = new Translation2d(
-                        moduleForwardDistanceFromCenter / 2.0,
-                        -moduleSideDistanceFromCenter / 2.0);
-                public static final Translation2d BACK_RIGHT_POS = new Translation2d(
-                        moduleForwardDistanceFromCenter / 2.0,
-                        moduleSideDistanceFromCenter / 2.0);
-            }
+            public static final double SLOWMODE_MULT = 0.4; // 40%
         }
 
         public static final boolean WATER_GAME = true;
@@ -134,6 +94,24 @@ public class Config {
             public static final int BACK_LEFT_TURN = 8;
             public static final int BACK_RIGHT_DRIVE = 6;
             public static final int BACK_RIGHT_TURN = 7;
+
+            // TODO: Measure actual positions of modules
+            // Measured in meters
+            private static final double robotLength = 30;
+            private static final double robotWidth = 29;
+            private static final double moduleCenterOfRotationDistanceFromEdge = 2.625;
+            private static final double moduleForwardDistanceFromCenter = Units
+                    .inchesToMeters(robotLength - 2 * moduleCenterOfRotationDistanceFromEdge); // 16.5 in
+            private static final double moduleSideDistanceFromCenter = Units
+                    .inchesToMeters(robotWidth - 2 * moduleCenterOfRotationDistanceFromEdge); // 16.5 in
+            public static final Translation2d FRONT_LEFT_POS = new Translation2d(-moduleForwardDistanceFromCenter / 2.0,
+                    -moduleSideDistanceFromCenter / 2.0);
+            public static final Translation2d FRONT_RIGHT_POS = new Translation2d(
+                    -moduleForwardDistanceFromCenter / 2.0, moduleSideDistanceFromCenter / 2.0);
+            public static final Translation2d BACK_LEFT_POS = new Translation2d(moduleForwardDistanceFromCenter / 2.0,
+                    -moduleSideDistanceFromCenter / 2.0);
+            public static final Translation2d BACK_RIGHT_POS = new Translation2d(moduleForwardDistanceFromCenter / 2.0,
+                    moduleSideDistanceFromCenter / 2.0);
 
             // Drivebase Analog Encoder Ports
             public static final int FRONT_LEFT_ENCODER = 0;

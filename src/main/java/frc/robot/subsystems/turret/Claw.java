@@ -35,7 +35,7 @@ public class Claw {
         overCurrent = false;
     }
 
-    public void intake(double motorPower) {
+    public void intake() {
         SmartDashboard.putBoolean("Claw.overCurrent", overCurrent);
         if (overCurrent) {
             intakeMotor.stopMotor();
@@ -43,11 +43,7 @@ public class Claw {
         }
         SmartDashboard.putNumber("Claw.Voltage", intakeMotor.getBusVoltage());
         overCurrent = intakeMotor.getBusVoltage() < CURRENT_LIMIT;
-        intakeMotor.set(motorPower);
-    }
-
-    public void intake() {
-        intake(INTAKE_SPEED);
+        intakeMotor.set(INTAKE_SPEED);
     }
 
     public void outtake() {

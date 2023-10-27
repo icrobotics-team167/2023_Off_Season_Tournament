@@ -17,12 +17,12 @@ public class NullController extends ControlScheme {
     }
 
     @Override
-    public double getSwerveSide() {
+    public double getSwerveX() {
         return 0;
     }
 
     @Override
-    public double getSwerveFW() {
+    public double getSwerveY() {
         return 0;
     }
 
@@ -107,17 +107,6 @@ public class NullController extends ControlScheme {
     @Override
     public boolean doCubeHigh() {
         // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public boolean fixForward() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public boolean doRobotRelative() {
         return false;
     }
 }

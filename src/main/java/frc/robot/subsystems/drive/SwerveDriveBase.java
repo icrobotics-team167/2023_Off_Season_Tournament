@@ -58,10 +58,10 @@ public class SwerveDriveBase {
                 new SwerveModulePosition(),
         };
         kinematics = new SwerveDriveKinematics(
-                Config.Settings.SwerveDrive.ModulesPositions.FRONT_LEFT_POS,
-                Config.Settings.SwerveDrive.ModulesPositions.FRONT_RIGHT_POS,
-                Config.Settings.SwerveDrive.ModulesPositions.BACK_LEFT_POS,
-                Config.Settings.SwerveDrive.ModulesPositions.BACK_RIGHT_POS);
+                Config.Ports.SwerveDrive.FRONT_LEFT_POS,
+                Config.Ports.SwerveDrive.FRONT_RIGHT_POS,
+                Config.Ports.SwerveDrive.BACK_LEFT_POS,
+                Config.Ports.SwerveDrive.BACK_RIGHT_POS);
         odometry = new SwerveDriveOdometry(kinematics, new Rotation2d(), moduleOdometry);
     }
 
@@ -87,10 +87,6 @@ public class SwerveDriveBase {
      *                      velocities
      */
     public void drive(ChassisSpeeds chassisSpeeds) {
-        if (chassisSpeeds == new ChassisSpeeds()) {
-            stop();
-            return;
-        }
         // Generates desired states for the modules. May not be optimized.
         SwerveModuleState[] moduleStates = kinematics.toSwerveModuleStates(chassisSpeeds);
 
@@ -153,7 +149,6 @@ public class SwerveDriveBase {
     }
 
     public void setPose(Pose2d pose) {
-        Subsystems.gyro.setYaw(pose.getRotation().getDegrees());
         odometry = new SwerveDriveOdometry(kinematics, Subsystems.gyro.getYaw(), moduleOdometry, pose);
         previousPos = pose;
     }
