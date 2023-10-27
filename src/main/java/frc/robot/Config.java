@@ -32,7 +32,7 @@ public class Config {
         public static final boolean ASYMMETRICAL_FIELD = true;
 
         // CPU period (seconds)
-        public static final double CPU_PERIOD = 0.02;
+        public static final double CPU_PERIOD = 0.021;
 
         /**
          * Drivebase speed limits.

@@ -67,6 +67,7 @@ public class SwerveModule {
         driveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
         turnMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
+
         // Set up drive motor encoder
         this.driveEncoder = driveMotor.getEncoder();
         // Convert from "rotations of motor" to "meters driven by wheel"

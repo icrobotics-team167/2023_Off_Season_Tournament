@@ -208,9 +208,9 @@ public class SwerveDriveBase {
             previousPos = currentPos;
         }
         double deltaX = currentPos.getX() - previousPos.getX();
-        double velX = deltaX * 50; // Meters per robot tick to meters per second (50 tps)
+        double velX = deltaX * (1000/Config.Settings.CPU_PERIOD); // Meters per robot tick to meters per second (50 tps)
         double deltaY = currentPos.getY() - previousPos.getY();
-        double velY = deltaY * 50;
+        double velY = deltaY * (1000/Config.Settings.CPU_PERIOD);
         Rotation2d deltaRot = currentPos.getRotation().minus(previousPos.getRotation());
         double velRot = deltaRot.times(50).getRadians();
         return new ChassisSpeeds(velX, velY, velRot);
