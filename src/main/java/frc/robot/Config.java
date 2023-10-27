@@ -27,6 +27,10 @@ public class Config {
 
         public static final boolean FIELD_ORIENTED_DRIVE = true;
 
+        // Stuff for handling fields that don't have X symmetry (Ex 2023)
+        public static final double FIELD_WIDTH = 8.02;
+        public static final boolean ASYMMETRICAL_FIELD = true;
+
         // CPU period (seconds)
         public static final double CPU_PERIOD = 0.02;
 
