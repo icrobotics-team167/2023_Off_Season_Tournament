@@ -62,7 +62,7 @@ public class SwerveDriveBase {
                 Config.Ports.SwerveDrive.FRONT_RIGHT_POS,
                 Config.Ports.SwerveDrive.BACK_LEFT_POS,
                 Config.Ports.SwerveDrive.BACK_RIGHT_POS);
-        odometry = new SwerveDriveOdometry(kinematics, Subsystems.gyro.getYaw(), moduleOdometry);
+        odometry = new SwerveDriveOdometry(kinematics, new Rotation2d(), moduleOdometry);
     }
 
     /**
