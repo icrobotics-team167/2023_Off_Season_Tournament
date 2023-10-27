@@ -207,12 +207,13 @@ public class SwerveDriveBase {
         if (previousPos == null) {
             previousPos = currentPos;
         }
+        double robotTickRate = 1000.0 / Config.Settings.CPU_PERIOD;
         double deltaX = currentPos.getX() - previousPos.getX();
-        double velX = deltaX * (1000/Config.Settings.CPU_PERIOD); // Meters per robot tick to meters per second (50 tps)
+        double velX = deltaX * robotTickRate; // Meters per robot tick to meters per second (50 tps)
         double deltaY = currentPos.getY() - previousPos.getY();
-        double velY = deltaY * (1000/Config.Settings.CPU_PERIOD);
+        double velY = deltaY * robotTickRate;
         Rotation2d deltaRot = currentPos.getRotation().minus(previousPos.getRotation());
-        double velRot = deltaRot.times(50).getRadians();
+        double velRot = deltaRot.times(robotTickRate).getRadians();
         return new ChassisSpeeds(velX, velY, velRot);
     }
 
