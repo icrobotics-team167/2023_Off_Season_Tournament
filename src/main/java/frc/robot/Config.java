@@ -38,10 +38,9 @@ public class Config {
          * Drivebase speed limits.
          */
         public static final class SwerveDrive {
-            // TODO: Figure out max movement speeds
-            public static final double MAX_MOVE_SPEED = 2.5; // m/s, lower than actual max speed to allow for some
+            public static final double MAX_MOVE_SPEED = 7; // m/s, lower than actual max speed to allow for some
                                                              // headroom to turn while moving
-            public static final double MAX_MOVE_ACCEL = MAX_MOVE_SPEED / 0.25; // Seconds until max speed
+            public static final double MAX_MOVE_ACCEL = MAX_MOVE_SPEED / 0.4; // Seconds until max speed
             public static final double MAX_TURN_SPEED = Units.rotationsToRadians(1); // rotations/s
             public static final double MAX_TURN_ACCEL = MAX_TURN_SPEED / 0.25; // Second until max speed
 

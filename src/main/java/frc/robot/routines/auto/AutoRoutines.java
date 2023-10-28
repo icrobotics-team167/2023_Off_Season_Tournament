@@ -31,7 +31,7 @@ public enum AutoRoutines {
                         new MoveArm(TurretPosition.CONE_HIGH),
                         new Outtake(),
                         new MoveArm(TurretPosition.INITIAL),
-                        new SimpleDrive(new ChassisSpeeds(0.5, 0, 0), 4)
+                        new SimpleDrive(new ChassisSpeeds(1.5, 0, 0), 3)
         })),
         GO_FORWARD_2_METERS_AND_MOVE_ARM("Go Forward 2 meters and move arm", new Routine(new Action[] {
                         new FollowPath("Go Forward 2 Meters", true).withTurret(TurretPosition.INTAKE),

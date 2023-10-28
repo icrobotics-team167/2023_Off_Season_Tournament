@@ -60,8 +60,10 @@ public class MathUtils {
     public static Pose2d flipPos(Pose2d pos) {
         if (Config.Settings.ASYMMETRICAL_FIELD && DriverStation.getAlliance() == Alliance.Red) {
             return new Pose2d(Config.Settings.FIELD_WIDTH - pos.getX(), pos.getY(),
-                    pos.getRotation().unaryMinus().plus(Rotation2d.fromDegrees(180)));
+                    pos.getRotation().unaryMinus());
         }
         return pos;
     }
+
+    
 }
