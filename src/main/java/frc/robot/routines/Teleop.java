@@ -13,8 +13,8 @@ public class Teleop {
     private ControlScheme controls;
     private SwerveDriveBase driveBase;
 
-    private static final double MAX_MOVE_SPEED = Config.Settings.SwerveDrive.MAX_MOVE_SPEED;
-    private static final double MAX_TURN_SPEED = Config.Settings.SwerveDrive.MAX_TURN_SPEED;
+    private static final double MAX_MOVE_SPEED = Config.Settings.SwerveDrive.TELEOP_MAX_MOVE_SPEED;
+    private static final double MAX_TURN_SPEED = Config.Settings.SwerveDrive.TELEOP_MAX_TURN_SPEED;
     private static final double SLOWMODE_MULT = Config.Settings.SwerveDrive.SLOWMODE_MULT;
 
     private LimeLight limeLight = Subsystems.limeLight;
