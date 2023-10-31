@@ -27,6 +27,10 @@ public class Config {
 
         public static final boolean FIELD_ORIENTED_DRIVE = true;
 
+        // Stuff for handling fields that don't have X symmetry (Ex 2023)
+        public static final double FIELD_WIDTH = 8.02;
+        public static final boolean ASYMMETRICAL_FIELD = true;
+
         // CPU period (seconds)
         public static final double CPU_PERIOD = 0.02;
 
@@ -34,12 +38,17 @@ public class Config {
          * Drivebase speed limits.
          */
         public static final class SwerveDrive {
-            // TODO: Figure out max movement speeds
-            public static final double MAX_MOVE_SPEED = 2.5; // m/s, lower than actual max speed to allow for some
+            public static final double TELEOP_MAX_MOVE_SPEED = 7; // m/s, lower than actual max speed to allow for some
                                                              // headroom to turn while moving
-            public static final double MAX_MOVE_ACCEL = MAX_MOVE_SPEED / 0.25; // Seconds until max speed
-            public static final double MAX_TURN_SPEED = Units.rotationsToRadians(1); // rotations/s
-            public static final double MAX_TURN_ACCEL = MAX_TURN_SPEED / 0.25; // Second until max speed
+            public static final double TELEOP_MAX_MOVE_ACCEL = TELEOP_MAX_MOVE_SPEED / 0.4; // Seconds until max speed
+            public static final double TELEOP_MAX_TURN_SPEED = Units.rotationsToRadians(1); // rotations/s
+            public static final double TELEOP_MAX_TURN_ACCEL = TELEOP_MAX_TURN_SPEED / 0.25; // Second until max speed
+
+            public static final double AUTO_MAX_MOVE_SPEED = 3; // m/s, lower than actual max speed to allow for some
+                                                             // headroom to turn while moving
+            public static final double AUTO_MAX_MOVE_ACCEL = TELEOP_MAX_MOVE_SPEED / 0.25; // Seconds until max speed
+            public static final double AUTO_MAX_TURN_SPEED = Units.rotationsToRadians(1); // rotations/s
+            public static final double AUTO_MAX_TURN_ACCEL = TELEOP_MAX_TURN_SPEED / 0.25; // Second until max speed
 
             public static final double SLOWMODE_MULT = 0.4; // 40%
         }

@@ -87,6 +87,10 @@ public class SwerveDriveBase {
      *                      velocities
      */
     public void drive(ChassisSpeeds chassisSpeeds) {
+        if (chassisSpeeds.equals(new ChassisSpeeds())) {
+            stop();
+            return;
+        }
         // Generates desired states for the modules. May not be optimized.
         SwerveModuleState[] moduleStates = kinematics.toSwerveModuleStates(chassisSpeeds);
 
@@ -149,6 +153,21 @@ public class SwerveDriveBase {
     }
 
     public void setPose(Pose2d pose) {
+        moduleOdometry = new SwerveModulePosition[] {
+                new SwerveModulePosition(),
+                new SwerveModulePosition(),
+                new SwerveModulePosition(),
+                new SwerveModulePosition(),
+        };
+        for (int i = 0; i < modules.length; i++) {
+            modules[i].resetPosition();
+        }
+        Subsystems.gyro.setYaw(pose.getRotation().getDegrees());
+        kinematics = new SwerveDriveKinematics(
+                Config.Ports.SwerveDrive.FRONT_LEFT_POS,
+                Config.Ports.SwerveDrive.FRONT_RIGHT_POS,
+                Config.Ports.SwerveDrive.BACK_LEFT_POS,
+                Config.Ports.SwerveDrive.BACK_RIGHT_POS);
         odometry = new SwerveDriveOdometry(kinematics, Subsystems.gyro.getYaw(), moduleOdometry, pose);
         previousPos = pose;
     }
@@ -157,13 +176,7 @@ public class SwerveDriveBase {
      * Resets the odometry of the robot.
      */
     public void resetPosition() {
-        for (int i = 0; i < modules.length; i++) {
-            modules[i].resetPosition();
-            moduleOdometry[i] = modules[i].getPosition();
-        }
-        odometry.update(Subsystems.gyro.getYaw(), moduleOdometry);
-        previousPos = odometry.getPoseMeters();
-        // odometry.update(Rotation2d.fromDegrees(0), modulePositions);
+        setPose(new Pose2d());
     }
 
     /**
