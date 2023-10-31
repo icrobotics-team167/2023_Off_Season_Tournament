@@ -138,4 +138,8 @@ public class DeltaJoystickController extends ControlScheme {
         return false;
     }
 
+    @Override
+    public boolean resetYaw() {
+        return secondary.getButtonPressedById(2);
+    }
 }

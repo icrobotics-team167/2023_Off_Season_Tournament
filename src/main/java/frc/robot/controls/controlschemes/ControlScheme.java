@@ -55,4 +55,6 @@ public abstract class ControlScheme {
     public abstract boolean corbinLock();
 
     public abstract boolean spencerLock();
+    
+    public abstract boolean resetYaw();
 }

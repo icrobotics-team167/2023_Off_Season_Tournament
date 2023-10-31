@@ -68,7 +68,7 @@ public class FollowPath extends Action {
         this.xController = new PIDController(xP, xI, xD);
         this.yController = new PIDController(yP, yI, yD);
         this.rotController = new ProfiledPIDController(rotP, rotI, rotD, new Constraints(
-                Config.Settings.SwerveDrive.MAX_TURN_SPEED, Config.Settings.SwerveDrive.MAX_TURN_ACCEL));
+                Config.Settings.SwerveDrive.AUTO_MAX_TURN_SPEED, Config.Settings.SwerveDrive.AUTO_MAX_TURN_ACCEL));
         this.driveController = new HolonomicDriveController(xController, yController, rotController);
         this.firstMove = firstMove;
         this.timer = new PeriodicTimer();
