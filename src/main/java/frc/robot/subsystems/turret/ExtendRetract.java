@@ -6,6 +6,7 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.Config;
+import frc.robot.util.MathUtils;
 
 /**
  * Extends and retracts the arm
@@ -17,8 +18,8 @@ public class ExtendRetract {
 
     private double initialEncoderPosition;
 
-    private static final double MAX_EXTEND_SPEED = 0.75;
-    private static final double START_EXTENSION = 17;
+    private static final double MAX_EXTEND_SPEED = 0.75 * MathUtils.TADAS_MAGIC_NUMBER;
+    private static final double START_EXTENSION = 17 * MathUtils.TADAS_MAGIC_NUMBER;
 
     public static final double MAX_EXTENSION = 56;
     public static final double MIN_EXTENSON = START_EXTENSION;

@@ -7,6 +7,7 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Config;
+import frc.robot.util.MathUtils;
 
 /**
  * Tilts the arm up and down
@@ -20,7 +21,7 @@ public class Pivot {
     private double initialEncoderPosition;
 
     // private DigitalInput pivotSwitch;
-    private static final double MAX_TURN_SPEED = 0.8;
+    private static final double MAX_TURN_SPEED = 0.8 * MathUtils.TADAS_MAGIC_NUMBER;
     private static final double INITIAL_PIVOT_ANGLE = TurretPosition.INITIAL.pivotAngle();
     private static final double MAX_PIVOT_ANGLE = 60;
     private static final double MIN_PIVOT_ANGLE = -35;

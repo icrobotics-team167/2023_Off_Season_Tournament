@@ -12,6 +12,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Config;
 import frc.robot.subsystems.Subsystems;
+import frc.robot.util.MathUtils;
 
 /**
  * A swerve drive.
@@ -91,6 +92,9 @@ public class SwerveDriveBase {
             stop();
             return;
         }
+        chassisSpeeds.vxMetersPerSecond *= MathUtils.TADAS_MAGIC_NUMBER;
+        chassisSpeeds.vyMetersPerSecond *= MathUtils.TADAS_MAGIC_NUMBER;
+        chassisSpeeds.omegaRadiansPerSecond *= MathUtils.TADAS_MAGIC_NUMBER;
         // Generates desired states for the modules. May not be optimized.
         SwerveModuleState[] moduleStates = kinematics.toSwerveModuleStates(chassisSpeeds);
 
